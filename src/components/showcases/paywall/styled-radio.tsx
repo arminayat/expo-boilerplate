@@ -1,4 +1,4 @@
-import { cn, RadioGroup, useRadioGroupContext } from 'heroui-native';
+import { cn, RadioGroup, useRadioGroup } from 'heroui-native';
 import { type FC } from 'react';
 import { View } from 'react-native';
 import { BlurContainer } from './blur-container';
@@ -23,7 +23,7 @@ export const StyledRadio: FC<Props> = ({
   title2,
   description2,
 }) => {
-  const { value: selectedValue } = useRadioGroupContext();
+  const { value: selectedValue } = useRadioGroup();
   const isSelected = selectedValue === value;
 
   return (
@@ -35,20 +35,22 @@ export const StyledRadio: FC<Props> = ({
     >
       <BlurContainer>
         <RadioGroup.Item value={value} className="flex-1 px-6">
-          <RadioGroup.Indicator className="border-white/25" />
+          <RadioGroup.Indicator
+            className={cn('border-white/25', isSelected && 'bg-white')}
+          />
           <View className="flex-1 flex-row items-center justify-between gap-3">
             <View>
-              <RadioGroup.Title className={className.title}>
+              <RadioGroup.Label className={className.title}>
                 {title1}
-              </RadioGroup.Title>
+              </RadioGroup.Label>
               <RadioGroup.Description className={className.description}>
                 {description1}
               </RadioGroup.Description>
             </View>
             <View>
-              <RadioGroup.Title className={className.title}>
+              <RadioGroup.Label className={className.title}>
                 {title2}
-              </RadioGroup.Title>
+              </RadioGroup.Label>
               <RadioGroup.Description className={className.description}>
                 {description2}
               </RadioGroup.Description>

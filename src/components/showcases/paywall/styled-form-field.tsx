@@ -1,4 +1,4 @@
-import { FormField, Switch } from 'heroui-native';
+import { FormField, Switch, useThemeColor } from 'heroui-native';
 import type { FC } from 'react';
 import { BlurContainer } from './blur-container';
 
@@ -11,6 +11,8 @@ export const StyledFormField: FC<Props> = ({
   isSelected,
   onSelectedChange,
 }) => {
+  const themeColorMuted = useThemeColor('muted');
+
   return (
     <BlurContainer className="mb-8">
       <FormField
@@ -24,7 +26,17 @@ export const StyledFormField: FC<Props> = ({
           </FormField.Title>
         </FormField.Content>
         <FormField.Indicator>
-          <Switch />
+          <Switch
+            className="w-10"
+            animation={{ backgroundColor: { value: ['white', 'white'] } }}
+          >
+            <Switch.Thumb
+              className="size-5"
+              animation={{
+                backgroundColor: { value: [themeColorMuted, '#262626'] },
+              }}
+            />
+          </Switch>
         </FormField.Indicator>
       </FormField>
     </BlurContainer>

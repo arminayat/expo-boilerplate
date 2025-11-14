@@ -1,9 +1,9 @@
-import { useHeaderHeight } from "@react-navigation/elements";
-import { cn } from "heroui-native";
-import { type FC, type PropsWithChildren } from "react";
-import { Platform, View, type ScrollViewProps } from "react-native";
-import Animated, { type AnimatedProps } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useHeaderHeight } from '@react-navigation/elements';
+import { cn } from 'heroui-native';
+import { type FC, type PropsWithChildren } from 'react';
+import { Platform, View, type ScrollViewProps } from 'react-native';
+import Animated, { type AnimatedProps } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -21,15 +21,13 @@ export const SafeAreaView: FC<PropsWithChildren<Props>> = ({
   const headerHeight = useHeaderHeight();
   return (
     <AnimatedView
-      className={cn("flex-1 bg-background", className)}
+      className={cn('bg-background', className)}
       style={{
         paddingTop: Platform.select({
-          ios: headerHeight + insets.top,
+          ios: headerHeight,
           android: 0,
         }),
-        paddingBottom: 0,
-        paddingLeft: insets.left + 16,
-        paddingRight: insets.right + 16,
+        paddingBottom: insets.bottom + 32,
       }}
       {...props}
     >

@@ -9,12 +9,14 @@ export default function DialogNativeModalScreen() {
     <View className="pt-24 px-5">
       <Dialog isOpen={isOpen} onOpenChange={setIsOpen}>
         <Dialog.Trigger asChild>
-          <Button variant="tertiary">Basic Dialog</Button>
+          <Button variant="secondary" className="self-center">
+            Basic dialog
+          </Button>
         </Dialog.Trigger>
         <Dialog.Portal>
           <Dialog.Overlay />
           <Dialog.Content>
-            <Dialog.Close className="self-end -mb-2" />
+            <Dialog.Close className="self-end -mb-2 z-50" />
             <View className="mb-5 gap-1.5">
               <Dialog.Title>Confirm Action</Dialog.Title>
               <Dialog.Description>
