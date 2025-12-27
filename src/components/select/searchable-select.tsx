@@ -1,7 +1,7 @@
 import {
   Divider,
   Select,
-  useSelect,
+  useSelectAnimation,
   useThemeColor,
   type SelectTriggerRef,
 } from 'heroui-native';
@@ -12,7 +12,10 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
+import { withUniwind } from 'uniwind';
 import { AppText } from '../app-text';
+
+const StyleAnimatedView = withUniwind(Animated.View);
 
 type SelectOption = {
   value: string;
@@ -28,7 +31,7 @@ const US_STATES: SelectOption[] = [
 ];
 
 const AnimatedTextInputBorder: FC = () => {
-  const { progress } = useSelect();
+  const { progress } = useSelectAnimation();
 
   const rContainerStyle = useAnimatedStyle(() => {
     const opacity = interpolate(progress.value, [0, 1, 2], [0, 1, 0]);
@@ -38,7 +41,7 @@ const AnimatedTextInputBorder: FC = () => {
   });
 
   return (
-    <Animated.View
+    <StyleAnimatedView
       style={[rContainerStyle, styles.focusRing]}
       className="absolute -inset-1 border-2 border-accent rounded-[19px] pointer-events-none"
     />

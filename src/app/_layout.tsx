@@ -35,6 +35,7 @@ const RootRoutes = () => (
       }}
     />
     <Stack.Screen name="(tabs)" />
+    <Stack.Screen name="(demo)" />
     <Stack.Screen
       name="(settings)"
       options={{

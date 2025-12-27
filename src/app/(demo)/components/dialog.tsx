@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -7,21 +8,16 @@ import {
   Dialog,
   ScrollShadow,
   TextField,
-  useDialog,
   useThemeColor,
 } from 'heroui-native';
-import { useState, type FC, type PropsWithChildren } from 'react';
+import { useState } from 'react';
 import { Platform, Text, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   KeyboardAvoidingView,
   KeyboardController,
 } from 'react-native-keyboard-controller';
-import {
-  Extrapolation,
-  interpolate,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
+
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
 import type { UsageVariant } from '../../../components/component-presentation/types';
@@ -30,59 +26,10 @@ import { DialogBlurBackdrop } from '../../../components/dialog-blur-backdrop';
 import { useAppTheme } from '../../../contexts/app-theme-context';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
 
+const StyleScrollView = withUniwind(ScrollView);
 const StyledIonicons = withUniwind(Ionicons);
 
 KeyboardController.preload();
-
-const CustomAnimatedContent: FC<PropsWithChildren> = ({ children }) => {
-  const { height } = useWindowDimensions();
-  const insets = useSafeAreaInsets();
-
-  const insetTop = insets.top + 12;
-  const maxTextInputDialogHeight = (height - insetTop) / 2;
-
-  const { progress, isDragging } = useDialog();
-
-  const rContainerStyle = useAnimatedStyle(() => {
-    if (isDragging.get()) {
-      return {
-        borderRadius: interpolate(
-          progress.get(),
-          [1, 1.25],
-          [18, 42],
-          Extrapolation.CLAMP
-        ),
-      };
-    }
-
-    return {
-      opacity: interpolate(progress.get(), [0, 1, 2], [0, 1, 0]),
-      transform: [
-        {
-          scaleX: interpolate(
-            progress.get(),
-            [0, 1, 2],
-            [0.9, 1, 0.9],
-            Extrapolation.CLAMP
-          ),
-        },
-      ],
-    };
-  });
-
-  return (
-    <Dialog.Content
-      className="bg-surface rounded-3xl"
-      style={[
-        { marginTop: insetTop, height: maxTextInputDialogHeight },
-        rContainerStyle,
-      ]}
-      isDefaultAnimationDisabled
-    >
-      {children}
-    </Dialog.Content>
-  );
-};
 
 const BasicDialogContent = () => {
   const [basicDialogOpen, setBasicDialogOpen] = useState(false);
@@ -113,14 +60,13 @@ const BasicDialogContent = () => {
                 </Dialog.Description>
               </View>
               <View className="flex-row justify-end gap-3">
-                <Dialog.Close asChild>
-                  <Button
-                    variant="tertiary"
-                    className="bg-overlay-foreground/5"
-                  >
-                    Confirm
-                  </Button>
-                </Dialog.Close>
+                <Button
+                  variant="tertiary"
+                  className="bg-overlay-foreground/5"
+                  onPress={() => setBasicDialogOpen(false)}
+                >
+                  Confirm
+                </Button>
               </View>
             </Dialog.Content>
           </Dialog.Portal>
@@ -150,9 +96,7 @@ const BlurBackdropDialogContent = () => {
             <Button variant="secondary">Dialog with blur backdrop</Button>
           </Dialog.Trigger>
           <Dialog.Portal>
-            <Dialog.Overlay isDefaultAnimationDisabled>
-              <DialogBlurBackdrop />
-            </Dialog.Overlay>
+            <DialogBlurBackdrop />
             <Dialog.Content className="max-w-sm mx-auto">
               <Dialog.Close className="self-end -mb-2 z-50" />
               <View className="size-10 items-center justify-center rounded-full bg-overlay-foreground/5 mb-4">
@@ -170,7 +114,7 @@ const BlurBackdropDialogContent = () => {
                 </Dialog.Description>
               </View>
               <View className="gap-3">
-                <Button variant="destructive" onPress={simulatePress}>
+                <Button variant="danger" onPress={simulatePress}>
                   Delete
                 </Button>
                 <Dialog.Close asChild>
@@ -198,6 +142,12 @@ const TextInputDialogContent = () => {
   const [email, setEmail] = useState('');
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
+
+  const { height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+
+  const insetTop = insets.top + 12;
+  const maxTextInputDialogHeight = (height - insetTop) / 2;
 
   const themeColorSurfaceSecondary = useThemeColor('surface-secondary');
   const themeColorMuted = useThemeColor('muted');
@@ -262,19 +212,32 @@ const TextInputDialogContent = () => {
             <Button variant="secondary">Dialog with text input</Button>
           </Dialog.Trigger>
           <Dialog.Portal>
-            <Dialog.Overlay isDefaultAnimationDisabled>
-              <DialogBlurBackdrop />
-            </Dialog.Overlay>
+            <DialogBlurBackdrop />
             <KeyboardAvoidingView
               behavior="padding"
               keyboardVerticalOffset={24}
+              style={{
+                flex: 1,
+                justifyContent: 'flex-start',
+              }}
             >
-              <CustomAnimatedContent>
+              <Dialog.Content
+                className="bg-surface rounded-3xl"
+                animation={{
+                  scale: {
+                    value: [0.85, 1, 0.95],
+                  },
+                }}
+                style={{
+                  marginTop: insetTop,
+                  height: maxTextInputDialogHeight,
+                }}
+              >
                 <Dialog.Close className="self-end" />
                 <Dialog.Title className="mb-6">Update Profile</Dialog.Title>
 
                 <View className="flex-1">
-                  <ScrollView contentContainerClassName="gap-5">
+                  <StyleScrollView contentContainerClassName="gap-5">
                     <TextField isRequired isInvalid={!!nameError}>
                       <TextField.Label isInvalid={false}>
                         Full Name
@@ -290,9 +253,13 @@ const TextInputDialogContent = () => {
                         autoCorrect
                         autoFocus
                         isInvalid={false}
-                        colors={{
-                          blurBackground: themeColorSurfaceSecondary,
-                          focusBackground: themeColorSurfaceSecondary,
+                        animation={{
+                          backgroundColor: {
+                            value: {
+                              blur: themeColorSurfaceSecondary,
+                              focus: themeColorSurfaceSecondary,
+                            },
+                          },
                         }}
                         selectionColor={themeColorMuted}
                       />
@@ -314,9 +281,13 @@ const TextInputDialogContent = () => {
                         }}
                         autoCapitalize="none"
                         isInvalid={false}
-                        colors={{
-                          blurBackground: themeColorSurfaceSecondary,
-                          focusBackground: themeColorSurfaceSecondary,
+                        animation={{
+                          backgroundColor: {
+                            value: {
+                              blur: themeColorSurfaceSecondary,
+                              focus: themeColorSurfaceSecondary,
+                            },
+                          },
                         }}
                         selectionColor={themeColorMuted}
                       />
@@ -324,7 +295,7 @@ const TextInputDialogContent = () => {
                         {emailError}
                       </TextField.ErrorMessage>
                     </TextField>
-                  </ScrollView>
+                  </StyleScrollView>
                 </View>
 
                 <View className="flex-row justify-end gap-3 pt-3">
@@ -346,7 +317,7 @@ const TextInputDialogContent = () => {
                     Update Profile
                   </Button>
                 </View>
-              </CustomAnimatedContent>
+              </Dialog.Content>
             </KeyboardAvoidingView>
           </Dialog.Portal>
         </Dialog>
@@ -384,7 +355,7 @@ const LongContentDialogContent = () => {
                 style={{ height: height * 0.35 }}
                 color={themeColorOverlay}
               >
-                <ScrollView contentContainerClassName="px-6">
+                <StyleScrollView contentContainerClassName="px-6">
                   <Text className="text-foreground/80 text-center">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                     do eiusmod tempor incididunt ut labore et dolore magna
@@ -424,7 +395,7 @@ const LongContentDialogContent = () => {
                     odit aut fugit, sed quia consequuntur magni dolores eos qui
                     ratione voluptatem sequi nesciunt.
                   </Text>
-                </ScrollView>
+                </StyleScrollView>
               </ScrollShadow>
               <Button
                 variant="ghost"

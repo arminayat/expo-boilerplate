@@ -1,5 +1,5 @@
 import Feather from '@expo/vector-icons/Feather';
-import { Divider, Select, useSelect } from 'heroui-native';
+import { Divider, Select, useSelectAnimation } from 'heroui-native';
 import React, { useState, type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
@@ -9,6 +9,7 @@ import Animated, {
 import { withUniwind } from 'uniwind';
 
 const StyledFeather = withUniwind(Feather);
+const StyleAnimatedView = withUniwind(Animated.View);
 
 type SelectOption = {
   value: string;
@@ -23,7 +24,7 @@ const US_STATES: SelectOption[] = [
 ];
 
 const AnimatedTrigger: FC = () => {
-  const { progress } = useSelect();
+  const { progress } = useSelectAnimation();
 
   const rContainerStyle = useAnimatedStyle(() => {
     const opacity = interpolate(progress.value, [0, 1, 2], [0, 1, 0]);
@@ -44,14 +45,14 @@ const AnimatedTrigger: FC = () => {
       className="bg-surface h-[48px] w-[256px] px-3 rounded-2xl justify-center shadow-md shadow-black/5"
       style={styles.borderCurve}
     >
-      <Animated.View
+      <StyleAnimatedView
         style={[rContainerStyle, styles.borderCurve]}
-        className="absolute -inset-1 border-[2.5px] border-accent rounded-[19px] pointer-events-none"
+        className="absolute -inset-1 border-[2.5px] border-accent rounded-[18px] pointer-events-none"
       />
       <Select.Value placeholder="Select a state" />
-      <Animated.View style={rChevronStyle} className="absolute right-3">
+      <StyleAnimatedView style={rChevronStyle} className="absolute right-3">
         <StyledFeather name="chevron-down" size={18} className="text-muted" />
-      </Animated.View>
+      </StyleAnimatedView>
     </View>
   );
 };

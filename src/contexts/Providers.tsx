@@ -16,11 +16,12 @@ export default function Providers({ children }: { children: ReactNode }) {
     <GestureHandlerRootView style={styles.root}>
       <KeyboardProvider>
         <PostHogProvider
-          apiKey={process.env.EXPO_PUBLIC_POSTHOG_API_KEY}
+          apiKey={process.env.EXPO_PUBLIC_POSTHOG_API_KEY ?? "-"}
           autocapture={{
             captureLifecycleEvents: true,
             captureScreens: false, // will be tracked manually
             captureTouches: true,
+            disabled: true,
           }}
           options={{
             host: "https://eu.i.posthog.com",

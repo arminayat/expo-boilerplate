@@ -36,8 +36,8 @@ const VariantsContent = () => {
           <Button variant="secondary">Secondary</Button>
           <Button variant="tertiary">Tertiary</Button>
           <Button variant="ghost">Ghost</Button>
-          <Button variant="destructive">Destructive</Button>
-          <Button variant="destructive-soft">Destructive Soft</Button>
+          <Button variant="danger">Danger</Button>
+          <Button variant="danger-soft">Danger Soft</Button>
         </View>
       </View>
     </View>
@@ -139,7 +139,7 @@ const WithIconsContent = () => {
             />
           </Button>
 
-          <Button variant="destructive" size="sm">
+          <Button variant="danger" size="sm">
             <StyledIonicons
               name="trash"
               size={14}
@@ -178,7 +178,7 @@ const IconOnlyContent = () => {
               />
             </Button.Label>
           </Button>
-          <Button size="lg" variant="destructive" isIconOnly>
+          <Button size="lg" variant="danger" isIconOnly>
             <Button.Label>
               <StyledIonicons
                 name="trash"
@@ -204,14 +204,35 @@ const CustomStylingContent = () => {
         <View className="gap-8 w-full px-8">
           <Button
             className="bg-purple-600"
-            animationConfig={{ highlight: { color: '#c084fc' } }}
+            animation={{
+              highlight: {
+                backgroundColor: {
+                  value: '#c084fc',
+                },
+                opacity: {
+                  value: [0, 1],
+                },
+              },
+            }}
           >
             <Button.Label className="text-white font-semibold">
               Custom Purple
             </Button.Label>
           </Button>
 
-          <Button>
+          <Button
+            feedbackPosition="top"
+            animation={{
+              highlight: {
+                backgroundColor: {
+                  value: '#ec4899',
+                },
+                opacity: {
+                  value: [0, 0.25],
+                },
+              },
+            }}
+          >
             <LinearGradient
               colors={['#0d9488', '#ec4899']}
               start={{ x: 0, y: 0 }}
@@ -227,7 +248,9 @@ const CustomStylingContent = () => {
               'bg-neutral-950 rounded-none',
               isDark && 'bg-neutral-50'
             )}
-            animationConfig={{ highlight: { isDisabled: true } }}
+            animation={{
+              highlight: { backgroundColor: { value: 'transparent' } },
+            }}
           >
             <StyledIonicons
               name="cart-outline"

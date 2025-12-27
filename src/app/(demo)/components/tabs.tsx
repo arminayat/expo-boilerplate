@@ -1,7 +1,6 @@
 import { useHeaderHeight } from '@react-navigation/elements';
 import {
   Button,
-  Checkbox,
   cn,
   FormField,
   RadioGroup,
@@ -15,8 +14,11 @@ import Animated, {
   FadeOut,
   LinearTransition,
 } from 'react-native-reanimated';
+import { withUniwind } from 'uniwind';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+
+const StyleAnimatedView = withUniwind(Animated.View);
 
 const DURATION = 200;
 
@@ -25,13 +27,13 @@ const AnimatedContentContainer = ({
 }: {
   children: React.ReactNode;
 }) => (
-  <Animated.View
+  <StyleAnimatedView
     entering={FadeIn.duration(DURATION)}
     exiting={FadeOut.duration(DURATION)}
     className="gap-6"
   >
     {children}
-  </Animated.View>
+  </StyleAnimatedView>
 );
 
 interface FormErrors {
@@ -42,6 +44,27 @@ interface FormErrors {
 interface TabsContentProps {
   variant: 'pill' | 'line';
 }
+
+interface TabTriggerProps {
+  value: string;
+  label: string;
+}
+
+const TabTrigger = ({ value, label }: TabTriggerProps) => {
+  return (
+    <Tabs.Trigger value={value}>
+      {({ isSelected }) => (
+        <Tabs.Label
+          className={cn(
+            isSelected ? 'text-accent font-medium' : 'text-foreground'
+          )}
+        >
+          {label}
+        </Tabs.Label>
+      )}
+    </Tabs.Trigger>
+  );
+};
 
 const TabsContent = ({ variant }: TabsContentProps) => {
   const [activeTab, setActiveTab] = useState('general');
@@ -93,24 +116,18 @@ const TabsContent = ({ variant }: TabsContentProps) => {
       onValueChange={setActiveTab}
       className={cn('gap-1.5', variant === 'line' && 'gap-0')}
     >
-      <Tabs.List className="border-b-0">
-        <Tabs.ScrollView contentContainerClassName="gap-4">
+      <Tabs.List className={cn('border-b-0', variant === 'line' && 'mx-4')}>
+        <Tabs.ScrollView
+          contentContainerClassName={cn('gap-4', variant === 'line' && 'px-0')}
+        >
           <Tabs.Indicator />
-          <Tabs.Trigger value="general">
-            <Tabs.Label>General</Tabs.Label>
-          </Tabs.Trigger>
-          <Tabs.Trigger value="appearance">
-            <Tabs.Label>Appearance</Tabs.Label>
-          </Tabs.Trigger>
-          <Tabs.Trigger value="notifications">
-            <Tabs.Label>Notifications</Tabs.Label>
-          </Tabs.Trigger>
-          <Tabs.Trigger value="profile">
-            <Tabs.Label>Profile</Tabs.Label>
-          </Tabs.Trigger>
+          <TabTrigger value="general" label="General" />
+          <TabTrigger value="appearance" label="Appearance" />
+          <TabTrigger value="notifications" label="Notifications" />
+          <TabTrigger value="profile" label="Profile" />
         </Tabs.ScrollView>
       </Tabs.List>
-      <Animated.View
+      <StyleAnimatedView
         layout={LinearTransition.duration(DURATION)}
         className={cn(
           'px-2 py-6',
@@ -128,34 +145,28 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             <FormField
               isSelected={showSidebar}
               onSelectedChange={setShowSidebar}
-              alignIndicator="start"
             >
-              <FormField.Indicator>
-                <Checkbox />
-              </FormField.Indicator>
-              <FormField.Content>
-                <FormField.Title>Show sidebar</FormField.Title>
+              <FormField.Indicator variant="checkbox" />
+              <View className="flex-1">
+                <FormField.Label>Show sidebar</FormField.Label>
                 <FormField.Description>
                   Display the sidebar navigation panel
                 </FormField.Description>
-              </FormField.Content>
+              </View>
             </FormField>
 
             {/* Show Status Bar Checkbox */}
             <FormField
               isSelected={showStatusBar}
               onSelectedChange={setShowStatusBar}
-              alignIndicator="start"
             >
-              <FormField.Indicator>
-                <Checkbox />
-              </FormField.Indicator>
-              <FormField.Content>
-                <FormField.Title>Show status bar</FormField.Title>
+              <FormField.Indicator variant="checkbox" />
+              <View className="flex-1">
+                <FormField.Label>Show status bar</FormField.Label>
                 <FormField.Description>
                   Display the status bar at the bottom
                 </FormField.Description>
-              </FormField.Content>
+              </View>
             </FormField>
           </AnimatedContentContainer>
         </Tabs.Content>
@@ -164,7 +175,7 @@ const TabsContent = ({ variant }: TabsContentProps) => {
           <AnimatedContentContainer>
             <RadioGroup value={theme} onValueChange={setTheme} className="mb-6">
               <View className="mb-2">
-                <FormField.Title>Theme</FormField.Title>
+                <FormField.Label>Theme</FormField.Label>
                 <FormField.Description>
                   Select your preferred color theme
                 </FormField.Description>
@@ -187,7 +198,7 @@ const TabsContent = ({ variant }: TabsContentProps) => {
 
             <RadioGroup value={fontSize} onValueChange={setFontSize}>
               <View className="mb-2">
-                <FormField.Title>Font Size</FormField.Title>
+                <FormField.Label>Font Size</FormField.Label>
                 <FormField.Description>
                   Adjust the text size throughout the app
                 </FormField.Description>
@@ -215,65 +226,50 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             <FormField
               isSelected={accountActivity}
               onSelectedChange={setAccountActivity}
-              alignIndicator="start"
             >
-              <FormField.Indicator>
-                <Checkbox />
-              </FormField.Indicator>
-              <FormField.Content>
-                <FormField.Title>Account activity</FormField.Title>
+              <FormField.Indicator variant="checkbox" />
+              <View className="flex-1">
+                <FormField.Label>Account activity</FormField.Label>
                 <FormField.Description>
                   Notifications about your account activity
                 </FormField.Description>
-              </FormField.Content>
+              </View>
             </FormField>
 
-            <FormField
-              isSelected={mentions}
-              onSelectedChange={setMentions}
-              alignIndicator="start"
-            >
-              <FormField.Indicator>
-                <Checkbox />
-              </FormField.Indicator>
-              <FormField.Content>
-                <FormField.Title>Mentions</FormField.Title>
+            <FormField isSelected={mentions} onSelectedChange={setMentions}>
+              <FormField.Indicator variant="checkbox" />
+              <View className="flex-1">
+                <FormField.Label>Mentions</FormField.Label>
                 <FormField.Description>
                   When someone mentions you in a comment
                 </FormField.Description>
-              </FormField.Content>
+              </View>
             </FormField>
 
             <FormField
               isSelected={directMessages}
               onSelectedChange={setDirectMessages}
-              alignIndicator="start"
             >
-              <FormField.Indicator>
-                <Checkbox />
-              </FormField.Indicator>
-              <FormField.Content>
-                <FormField.Title>Direct messages</FormField.Title>
+              <FormField.Indicator variant="checkbox" />
+              <View className="flex-1">
+                <FormField.Label>Direct messages</FormField.Label>
                 <FormField.Description>
                   Notifications for new direct messages
                 </FormField.Description>
-              </FormField.Content>
+              </View>
             </FormField>
 
             <FormField
               isSelected={marketingEmail}
               onSelectedChange={setMarketingEmail}
-              alignIndicator="start"
             >
-              <FormField.Indicator>
-                <Checkbox />
-              </FormField.Indicator>
-              <FormField.Content>
-                <FormField.Title>Marketing email</FormField.Title>
+              <FormField.Indicator variant="checkbox" />
+              <View className="flex-1">
+                <FormField.Label>Marketing email</FormField.Label>
                 <FormField.Description>
                   Receive emails about new features and updates
                 </FormField.Description>
-              </FormField.Content>
+              </View>
             </FormField>
           </AnimatedContentContainer>
         </Tabs.Content>
@@ -324,7 +320,7 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             </Button>
           </AnimatedContentContainer>
         </Tabs.Content>
-      </Animated.View>
+      </StyleAnimatedView>
     </Tabs>
   );
 };

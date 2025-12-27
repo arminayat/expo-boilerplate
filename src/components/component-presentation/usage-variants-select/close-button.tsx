@@ -1,5 +1,12 @@
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Haptics from 'expo-haptics';
-import { Button, useSelect, useThemeColor } from 'heroui-native';
+import {
+  Button,
+  useSelect,
+  useSelectAnimation,
+  useThemeColor,
+} from 'heroui-native';
 import { Platform } from 'react-native';
 import Animated, {
   Extrapolation,
@@ -7,16 +14,15 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { withUniwind } from 'uniwind';
 
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import Ionicons from '@expo/vector-icons/Ionicons';
-
-const AnimatedButton = Animated.createAnimatedComponent(Button);
+const StyleAnimatedView = withUniwind(Animated.View);
 
 export const CloseButton = () => {
   const insets = useSafeAreaInsets();
   const themeColorAccentForeground = useThemeColor('accent-foreground');
-  const { progress, onOpenChange } = useSelect();
+  const { onOpenChange } = useSelect();
+  const { progress } = useSelectAnimation();
 
   const buttonAnimatedStyle = useAnimatedStyle(() => {
     const scale = interpolate(progress.get(), [0, 1, 2], [0, 1, 1]);
@@ -62,11 +68,12 @@ export const CloseButton = () => {
   });
 
   return (
-    <AnimatedButton
+    <Button
       className="absolute right-6"
       style={[{ bottom: insets.bottom + 24 }, buttonAnimatedStyle]}
       size="lg"
       isIconOnly
+      hitSlop={12}
       onPress={() => {
         if (Platform.OS === 'ios') {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -74,7 +81,7 @@ export const CloseButton = () => {
         onOpenChange(false);
       }}
     >
-      <Animated.View
+      <StyleAnimatedView
         className="absolute items-center justify-center"
         style={listIconAnimatedStyle}
       >
@@ -83,13 +90,13 @@ export const CloseButton = () => {
           size={20}
           color={themeColorAccentForeground}
         />
-      </Animated.View>
-      <Animated.View
+      </StyleAnimatedView>
+      <StyleAnimatedView
         className="absolute items-center justify-center"
         style={closeIconAnimatedStyle}
       >
         <Ionicons name="close" size={24} color={themeColorAccentForeground} />
-      </Animated.View>
-    </AnimatedButton>
+      </StyleAnimatedView>
+    </Button>
   );
 };

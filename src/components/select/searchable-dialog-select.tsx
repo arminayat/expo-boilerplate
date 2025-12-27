@@ -64,6 +64,15 @@ export function SearchableDialogSelect() {
         setSearchQuery('');
       }}
       closeDelay={300}
+      animation={{
+        exiting: {
+          type: 'timing',
+          config: {
+            duration: 250,
+            easing: Easing.out(Easing.quad),
+          },
+        },
+      }}
     >
       <Select.Trigger asChild>
         <Button variant="tertiary">
@@ -79,24 +88,11 @@ export function SearchableDialogSelect() {
           )}
         </Button>
       </Select.Trigger>
-      <Select.Portal
-        progressAnimationConfigs={{
-          onClose: {
-            animationType: 'timing',
-            animationConfig: {
-              duration: 250,
-              easing: Easing.out(Easing.quad),
-            },
-          },
-        }}
-      >
-        <Select.Overlay className="bg-transparent" isDefaultAnimationDisabled>
-          <SelectBlurBackdrop />
-        </Select.Overlay>
+      <Select.Portal>
+        <SelectBlurBackdrop />
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={24}>
           <Select.Content
             classNames={{
-              wrapper: 'justify-center',
               content: cn('gap-2 rounded-3xl', isDark && 'bg-surface'),
             }}
             style={{ marginTop: insetTop, height: maxDialogHeight }}
