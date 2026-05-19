@@ -30,6 +30,7 @@
 - HeroUI Native 1.0.3 uses standalone field subcomponents: `TextField` wraps standalone `Label`, `Input`, `Description`, and `FieldError`; `ControlField` replaces the older `FormField` root; `Separator` replaces the older `Divider` component.
 - For HeroUI 1.0.3 selection controls, `RadioGroup.Item` wraps standalone `Radio`, `Radio.Indicator`, and `Radio.IndicatorThumb`; do not use the removed `RadioGroup.Label`, `RadioGroup.Description`, `RadioGroup.ErrorMessage`, or `RadioGroup.Indicator` API.
 - `Popover.Content` and `Select.Content` should declare `presentation` (`popover`, `dialog`, or `bottom-sheet`) explicitly. `Select` value handlers often need local option-type casts because the library exposes a generic `SelectOption`.
+- `SafeAreaView` is an animated `View` wrapper. Use `ScreenScrollView` for scroll-view props such as `contentContainerClassName`.
 
 ## Data Fetching Patterns
 
@@ -88,6 +89,7 @@
 - `npm run reset-project` references a missing `scripts/reset-project.js`.
 - `src/uniwind-types.d.ts` is generated; do not edit it manually.
 - `heroui-native` is pinned exactly to `1.0.3`; do not reintroduce removed pre-1.0.3 APIs such as `TextField.Input`, `FormField`, `Divider`, `ErrorView`, or `RadioGroup.Label`.
+- SDK 55 rejects the old `android.edgeToEdgeEnabled` app config field and no longer needs an explicit `newArchEnabled` flag.
 
 ## What To Avoid
 

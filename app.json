@@ -7,7 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "heroui-native-example",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.arminayat.heroui-native-example"
@@ -19,7 +18,6 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
@@ -41,7 +39,9 @@
         }
       ],
       "expo-secure-store",
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-font",
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true,

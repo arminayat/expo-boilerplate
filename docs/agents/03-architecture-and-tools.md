@@ -12,19 +12,20 @@ Source of truth: `package.json` and `package-lock.json`.
 
 - Package manager: npm. `package-lock.json` lockfile version 3 is present; no yarn, pnpm, or bun lockfile is present.
 - Entry point: `expo-router/entry`.
-- Expo: `~54.0.34`.
-- Expo Router: `~6.0.23`.
-- React: `19.1.0`.
-- React Native: `0.81.5`.
+- Expo: `^55.0.25`.
+- Expo Router: `~55.0.15`.
+- React: `19.2.0`.
+- React Native: `0.83.6`.
 - TypeScript: `~5.9.2`.
 - HeroUI Native: `1.0.3` pinned exactly.
-- React Native New Architecture: enabled in `app.json`.
+- Supabase JS: `2.58.0` pinned exactly because newer 2.x builds with optional OpenTelemetry dynamic imports fail Hermes bytecode generation during native export.
+- React Native New Architecture: SDK 55 only supports the New Architecture; no explicit `newArchEnabled` flag is needed in `app.json`.
 - Expo experiments: typed routes and React Compiler are enabled in `app.json`.
-- Expo SDK boundary: dependencies are currently held on SDK 54-compatible versions. Do not jump to Expo SDK 55 or React/React Native major changes as a "safe dependency update" without treating it as a framework upgrade.
+- Expo SDK boundary: dependencies are currently held on SDK 55-compatible versions. Do not jump to Expo SDK 56 beta or React/React Native major changes as a "safe dependency update" without treating it as a framework upgrade.
 
 ## Important Config Files
 
-- `app.json`: app identity, Expo plugins, splash config, web static output, New Architecture, typed routes, React Compiler. Current plugins include `expo-router`, `expo-splash-screen`, `expo-secure-store`, and `expo-web-browser`.
+- `app.json`: app identity, Expo plugins, splash config, web static output, typed routes, and React Compiler. Current plugins include `expo-router`, `expo-splash-screen`, `expo-secure-store`, `expo-web-browser`, `expo-font`, and `expo-image`.
 - `package.json`: scripts, dependencies, npm package metadata.
 - `package-lock.json`: npm lockfile.
 - `tsconfig.json`: extends Expo base config, strict mode, `@/*` path alias to `src/*`.
@@ -152,7 +153,8 @@ Listed in `.env.example` but not referenced by current code:
 - No `ios/` directory exists in the current working tree; `npm run pod-install` is not usable until a native iOS project exists.
 - Web command: `npm run web`; `app.json` sets web output to `static`.
 - EAS deployment is described in the README but no `eas.json` exists.
-- `npx expo install --check` and `npx expo-doctor` currently pass for the SDK 54 dependency set.
+- `npx expo install --check` and `npx expo-doctor` currently pass for the SDK 55 dependency set.
+- `npx expo export -p ios --clear --output-dir /private/tmp/expo-boilerplate-export-ios` currently passes.
 - `npx tsc --noEmit` currently passes.
 - `npm run lint` currently passes with warnings, mostly unused demo imports, `Array<T>` style warnings, and hook dependency warnings.
-- `npm audit` currently reports remaining moderate advisories in the Expo/PostCSS chain whose available fix requires Expo SDK 55; this is intentionally not applied as a non-breaking update.
+- `npm audit --audit-level=moderate` currently reports no vulnerabilities.
