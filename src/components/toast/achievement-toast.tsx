@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { Toast, useThemeColor, type ToastComponentProps } from 'heroui-native';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -9,7 +10,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
-import { Toast, useThemeColor, type ToastComponentProps } from 'heroui-native';
 
 const StyleAnimatedView = withUniwind(Animated.View);
 const StyledIonicons = withUniwind(Ionicons);
@@ -134,8 +134,8 @@ export const AchievementToast = (props: ToastComponentProps) => {
   }));
 
   return (
-    <Toast className="bg-[#F5F1E8] border-2 border-orange-200" {...props}>
-      <View className="relative flex-row items-center gap-4 px-4 py-3">
+    <Toast className="bg-[#F5F1E8] p-3 border-2 border-orange-200" {...props}>
+      <View className="flex-row items-center gap-4">
         {/* Confetti decorative elements */}
         <StyleAnimatedView
           className="absolute right-8 top-2 size-2 rounded-full bg-orange-600/60"
@@ -174,7 +174,7 @@ export const AchievementToast = (props: ToastComponentProps) => {
             New achievement!
           </Toast.Title>
           <Toast.Title className="text-base font-bold text-[#2D3748]">
-            {"You're on a 1-day"}
+            You're on a 1-day
           </Toast.Title>
           <Toast.Title className="text-base font-bold text-[#2D3748]">
             study streak
@@ -183,7 +183,7 @@ export const AchievementToast = (props: ToastComponentProps) => {
 
         {/* Close button */}
         <Toast.Close
-          className="absolute right-2 top-2"
+          className="absolute right-0 top-0"
           iconProps={{ color: themeColorWarning }}
         />
       </View>

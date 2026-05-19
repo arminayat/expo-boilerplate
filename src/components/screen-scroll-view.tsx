@@ -20,12 +20,14 @@ export const ScreenScrollView: FC<PropsWithChildren<Props>> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
+  const topInset = Math.max(headerHeight, insets.top);
+
   return (
     <AnimatedScrollView
       className={cn('bg-background', className)}
       contentContainerClassName={cn('px-5', contentContainerClassName)}
       contentContainerStyle={{
-        paddingTop: headerHeight,
+        paddingTop: topInset,
         paddingBottom: insets.bottom + 32,
       }}
       showsVerticalScrollIndicator={false}

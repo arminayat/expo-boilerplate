@@ -1,5 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import {
+  ControlField,
+  Description,
+  Label,
+  Separator,
+  Surface,
+  Switch,
+} from 'heroui-native';
 import React from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -11,14 +19,6 @@ import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import {
-  ControlField,
-  Description,
-  Label,
-  Separator,
-  Surface,
-  Switch,
-} from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 const StyledFontAwesome6 = withUniwind(FontAwesome6);
@@ -38,8 +38,10 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
 }) => (
   <ControlField isSelected={isSelected} onSelectedChange={onSelectedChange}>
     <View className="flex-1">
-      <Label>{title}</Label>
-      <Description>{description}</Description>
+      <Label>
+        <Label.Text maxFontSizeMultiplier={1.4}>{title}</Label.Text>
+      </Label>
+      <Description maxFontSizeMultiplier={1.4}>{description}</Description>
     </View>
     <ControlField.Indicator />
   </ControlField>
@@ -136,8 +138,12 @@ const StatesContent = () => {
               isDisabled={fieldConfigs[key].disabled}
             >
               <View className="flex-1">
-                <Label>{fieldConfigs[key].title}</Label>
-                <Description>
+                <Label>
+                  <Label.Text maxFontSizeMultiplier={1.4}>
+                    {fieldConfigs[key].title}
+                  </Label.Text>
+                </Label>
+                <Description maxFontSizeMultiplier={1.4}>
                   {fieldConfigs[key].description}
                 </Description>
               </View>
@@ -257,7 +263,12 @@ const CustomStylesContent = () => {
                 key="sun"
                 entering={FadeInRight.springify().duration(100)}
               >
-                <AppText className="text-xs font-bold text-white">ON</AppText>
+                <AppText
+                  className="text-xs font-bold text-white"
+                  maxFontSizeMultiplier={1}
+                >
+                  ON
+                </AppText>
               </Animated.View>
             )}
           </Switch.StartContent>
@@ -267,7 +278,12 @@ const CustomStylesContent = () => {
                 key="moon"
                 entering={FadeInLeft.springify().duration(100)}
               >
-                <AppText className="text-xs font-bold text-white">OFF</AppText>
+                <AppText
+                  className="text-xs font-bold text-white"
+                  maxFontSizeMultiplier={1}
+                >
+                  OFF
+                </AppText>
               </Animated.View>
             )}
           </Switch.EndContent>

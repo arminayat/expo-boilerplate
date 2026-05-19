@@ -9,6 +9,7 @@
 - Local persistence adapters live in `src/storage`.
 - Shared UI components live in `src/components`.
 - Demo-specific components live under `src/components/showcases`, `src/components/themes-content`, `src/components/select`, `src/components/toast`, and `src/components/component-presentation`.
+- `src/app/(demo)` is intentionally mirrored from `/Users/armin/Projects/heroui-native-example/src/app/(home)`. When refreshing it, copy that tree exactly and put compatibility fixes in shared support files instead of editing mirrored route files.
 - Project assets are split between root `assets/` and `src/assets/`; current auth screens use `src/assets/images/logo.png`, while app/demo config and showcases use root `assets/`.
 
 ## Imports And Naming
@@ -30,7 +31,7 @@
 - HeroUI Native 1.0.3 uses standalone field subcomponents: `TextField` wraps standalone `Label`, `Input`, `Description`, and `FieldError`; `ControlField` replaces the older `FormField` root; `Separator` replaces the older `Divider` component.
 - For HeroUI 1.0.3 selection controls, `RadioGroup.Item` wraps standalone `Radio`, `Radio.Indicator`, and `Radio.IndicatorThumb`; do not use the removed `RadioGroup.Label`, `RadioGroup.Description`, `RadioGroup.ErrorMessage`, or `RadioGroup.Indicator` API.
 - `Popover.Content` and `Select.Content` should declare `presentation` (`popover`, `dialog`, or `bottom-sheet`) explicitly. `Select` value handlers often need local option-type casts because the library exposes a generic `SelectOption`.
-- `SafeAreaView` is an animated `View` wrapper. Use `ScreenScrollView` for scroll-view props such as `contentContainerClassName`.
+- `SafeAreaView` is an animated `View` wrapper. `SafeAreaView` and `ScreenScrollView` pad the top by `Math.max(useHeaderHeight(), insets.top)` so headerless tab screens still stay below the status area. Use `ScreenScrollView` for scroll-view props such as `contentContainerClassName`.
 
 ## Data Fetching Patterns
 
@@ -59,7 +60,8 @@
 
 - `AuthProvider` owns session state and subscribes to Supabase auth changes.
 - Supabase Auth persistence uses an AsyncStorage-compatible adapter over encrypted MMKV.
-- The MMKV session encryption key is generated with Expo Crypto and stored in Expo SecureStore.
+- MMKV stores are created with the v4 `createMMKV()` API. Use `mode: "multi-process"` for shared local stores and `storage.remove(key)` for deletes.
+- The MMKV session store uses id `session-v4`, `encryptionType: "AES-256"`, and a 32-character key generated with Expo Crypto and stored in Expo SecureStore. Older v3 sessions are intentionally not migrated, so users may need to sign in once after the v4 change.
 - On sign-in, `AuthProvider` redirects to the configured entrance tab, logs in to RevenueCat, and identifies the user in PostHog.
 - On sign-out, `AuthProvider` redirects to `/(auth)/sign-in`.
 - Root `src/app/index.tsx` currently bypasses auth gating for unauthenticated users; do not assume auth protection is enforced by root routing.
@@ -90,6 +92,7 @@
 - `src/uniwind-types.d.ts` is generated; do not edit it manually.
 - `heroui-native` is pinned exactly to `1.0.3`; do not reintroduce removed pre-1.0.3 APIs such as `TextField.Input`, `FormField`, `Divider`, `ErrorView`, or `RadioGroup.Label`.
 - SDK 55 rejects the old `android.edgeToEdgeEnabled` app config field and no longer needs an explicit `newArchEnabled` flag.
+- The mirrored HeroUI Native example uses plain string `router.push()` values. Keep `src/types/expo-router-relaxed.d.ts` unless the mirrored source switches to strict `Href` values.
 
 ## What To Avoid
 
@@ -110,5 +113,5 @@
 - PostHog provider exists, but autocapture is disabled.
 - Supabase profile read path still needs schema alignment before being treated as production-ready; `useUser()` reads Supabase Auth user data rather than selecting the `profile` table.
 - Fonts referenced in some demo/toast styles include Inter and Lora, but root font loading currently loads Roboto Slab only.
-- `npm run lint` currently passes with warnings, mostly unused demo imports, `Array<T>` style warnings, one `require()` style import, and hook dependency warnings.
+- `npm run lint` currently passes with warnings, mostly copied demo/example warnings, `Array<T>` style warnings, one `require()` style import, and hook dependency warnings.
 - `npx tsc --noEmit` currently passes.

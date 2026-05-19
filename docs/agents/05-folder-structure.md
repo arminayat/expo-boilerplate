@@ -63,7 +63,10 @@ Shared UI and demo UI live here.
 
 - Put reusable app components directly under `src/components` or a focused subfolder.
 - Put auth-specific shared UI under `src/components/auth`.
+- Put bottom-sheet-specific shared demo pieces under `src/components/bottom-sheet`.
+- Put icon-only shared demo components under `src/components/icons`.
 - Put select-specific shared demo/control pieces under `src/components/select`.
+- Put showcase carousel pieces under `src/components/showcase-carousel`.
 - Put toast-specific shared UI under `src/components/toast`.
 - Put showcase-only implementation pieces under `src/components/showcases`.
 - Put theme preview content under `src/components/themes-content`.
@@ -87,6 +90,7 @@ Reusable hooks live here.
 - Put shared app hooks here when they are used across routes/components.
 - Keep route-only hooks local unless there is a clear reuse boundary.
 - Existing hooks cover entrance path, user/profile access, onboarding flags, and recent updates.
+- Demo metadata for mirrored HeroUI Native examples lives in `src/helpers/data`.
 
 ## `src/lib`
 
@@ -131,7 +135,7 @@ Use this folder for generic helpers, not feature-specific business logic.
 
 ## Asset Folders
 
-- Root `assets/` is used by `app.json`, demo layouts, and showcase screens.
+- Root `assets/` is used by `app.json`, demo layouts, home preview cards, and showcase screens.
 - `src/assets/` currently contains the auth logo used through the `@/assets/...` alias.
 
 Before adding assets, prefer the folder already used by the feature you are changing. If consolidating asset locations, update imports and memory docs in the same turn.

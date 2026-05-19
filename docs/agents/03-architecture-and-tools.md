@@ -18,10 +18,10 @@ Source of truth: `package.json` and `package-lock.json`.
 - React Native: `0.83.6`.
 - TypeScript: `~5.9.2`.
 - HeroUI Native: `1.0.3` pinned exactly.
-- Supabase JS: `2.58.0` pinned exactly because newer 2.x builds with optional OpenTelemetry dynamic imports fail Hermes bytecode generation during native export.
+- Supabase JS: `2.106.0` pinned exactly.
 - React Native New Architecture: SDK 55 only supports the New Architecture; no explicit `newArchEnabled` flag is needed in `app.json`.
 - Expo experiments: typed routes and React Compiler are enabled in `app.json`.
-- Expo SDK boundary: dependencies are currently held on SDK 55-compatible versions. Do not jump to Expo SDK 56 beta or React/React Native major changes as a "safe dependency update" without treating it as a framework upgrade.
+- Expo SDK boundary: dependencies are currently held on SDK 55-compatible versions. SDK 55 uses React Native `0.83.x`; do not jump to React Native `0.85.x` or Expo SDK 56-era native package versions as a "safe dependency update" without treating it as a framework upgrade.
 
 ## Important Config Files
 
@@ -32,7 +32,8 @@ Source of truth: `package.json` and `package-lock.json`.
 - `babel.config.js`: Expo preset and module-resolver alias `@` to `./src/`.
 - `metro.config.js`: Expo Metro config wrapped by `withUniwindConfig`, with `global.css`, generated Uniwind types, and extra themes.
 - `global.css`: imports Tailwind CSS, Uniwind, HeroUI Native styles, and project theme files.
-- `eslint.config.js`: Expo flat ESLint config, ignores `dist/*`.
+- `eslint.config.js`: Expo flat ESLint config, ignores `dist/*`, registers `eslint-plugin-react-native`, and disables `react/no-unescaped-entities` for copied demo/example copy.
+- `src/types/expo-router-relaxed.d.ts`: local type shim that lets `useRouter()` accept plain string hrefs used by mirrored HeroUI Native example routes while `app.json` typed routes remain enabled.
 - `.prettierrc`: enables `prettier-plugin-tailwindcss`.
 - `.env.example`: documents environment variable names.
 
@@ -71,7 +72,7 @@ Implemented provider order:
 - Recent updates: `useGetRecentUpdates()` reads `received_emails`, but it is unused by routes.
 - Local config: `configStorage` MMKV instance stores app config such as intended `usage_priorities`.
 - Local onboarding: `onboardingStorage` MMKV instance stores device and push-notification onboarding flags.
-- Session persistence: Supabase Auth uses `src/storage/session.ts`, an AsyncStorage-like wrapper over encrypted MMKV. The encryption key is stored in Expo SecureStore.
+- Session persistence: Supabase Auth uses `src/storage/session.ts`, an AsyncStorage-like wrapper over encrypted MMKV v4. The AES-256 encryption key is stored in Expo SecureStore.
 - Signed URLs: `SignedUrlCacheProvider` caches Supabase Storage signed URLs in memory only.
 
 ## Backend, API, And Database Status
@@ -114,8 +115,9 @@ Backend types available but mostly not implemented in UI:
 - PostHog: provider configured with EU host. Autocapture is currently disabled with `autocapture={false}`, while lifecycle capture is enabled through `options.captureAppLifecycleEvents`.
 - RevenueCat: helper functions configure/login/logout and fetch offerings. iOS API key is supported; Android configuration is commented out.
 - Apple Authentication: iOS sign-in with Supabase ID token.
-- Expo SecureStore: stores MMKV encryption key for session storage.
-- React Native MMKV: local session, onboarding, and config stores.
+- Expo SecureStore: stores the MMKV v4 AES-256 encryption key for session storage.
+- React Native MMKV v4: local session, onboarding, and config stores.
+- React Native Nitro Modules: native runtime peer required by React Native MMKV v4.
 - Expo Network: informs TanStack Query online manager.
 - Remote HeroUI asset host: demo cards/showcases load images from `https://heroui-assets.nyc3.cdn.digitaloceanspaces.com`.
 
@@ -156,5 +158,5 @@ Listed in `.env.example` but not referenced by current code:
 - `npx expo install --check` and `npx expo-doctor` currently pass for the SDK 55 dependency set.
 - `npx expo export -p ios --clear --output-dir /private/tmp/expo-boilerplate-export-ios` currently passes.
 - `npx tsc --noEmit` currently passes.
-- `npm run lint` currently passes with warnings, mostly unused demo imports, `Array<T>` style warnings, and hook dependency warnings.
+- `npm run lint` currently passes with warnings from copied demo/example code, mostly unused demo variables, unused `react-native/no-inline-styles` disable comments, `Array<T>` style warnings, one `require()` style import, and hook dependency warnings.
 - `npm audit --audit-level=moderate` currently reports no vulnerabilities.

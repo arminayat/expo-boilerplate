@@ -1,22 +1,22 @@
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { LinearGradient } from 'expo-linear-gradient';
+import {
+  Button,
+  Label,
+  ScrollShadow,
+  Select,
+  Separator,
+  useThemeColor,
+} from 'heroui-native';
 import React, { useState } from 'react';
 import { Platform, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
 import { PlacementSelect } from '../../../components/select/placement-select';
 import { SearchableDialogSelect } from '../../../components/select/searchable-dialog-select';
 import { SelectButtonTrigger } from '../../../components/select/select-button-trigger';
-import {
-  Button,
-  cn,
-  Popover,
-  Select,
-  Separator,
-  useThemeColor,
-} from 'heroui-native';
 
 type SelectOption = {
   value: string;
@@ -57,10 +57,26 @@ const COUNTRIES: CountryOption[] = [
 
 // ------------------------------------------------------------------------------
 
-const BasicUsageWithButtonTriggerContent = () => {
+const BasicUsageSingleSelectContent = () => {
   return (
-    <View className="flex-1 px-5 items-center justify-center">
+    <View className="flex-1 px-5 justify-center">
+      <Label className="ml-1.5 mb-1" isRequired>
+        State
+      </Label>
       <SelectButtonTrigger />
+    </View>
+  );
+};
+
+// ------------------------------------------------------------------------------
+
+const BasicUsageMultipleSelectContent = () => {
+  return (
+    <View className="flex-1 px-5 justify-center">
+      <Label className="ml-1.5 mb-1" isRequired>
+        States
+      </Label>
+      <SelectButtonTrigger selectionMode="multiple" />
     </View>
   );
 };
@@ -69,46 +85,51 @@ const BasicUsageWithButtonTriggerContent = () => {
 
 const PresentationContent = () => {
   const [popoverValue, setPopoverValue] = useState<CountryOption | undefined>();
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [bottomSheetValue, setBottomSheetValue] = useState<
     CountryOption | undefined
   >();
 
-  const insets = useSafeAreaInsets();
-  const themeColorMuted = useThemeColor('muted');
+  const themeColorOverlay = useThemeColor('overlay');
 
   return (
-    <View className="flex-1 px-5 items-center justify-center">
-      <View className="flex-row items-center justify-center gap-4">
+    <View className="flex-1 px-5 justify-center">
+      <View className="flex-row gap-4">
         <Select
           value={popoverValue}
           onValueChange={(value) => {
-            const selectedValue = value as CountryOption | undefined;
-            const country = COUNTRIES.find(
-              (c) => c.value === selectedValue?.value
-            );
+            const country = COUNTRIES.find((c) => c.value === value?.value);
             setPopoverValue(country);
           }}
+          className="flex-1"
         >
-          <Select.Trigger asChild>
+          <Select.Trigger variant="unstyled" asChild>
             <Button variant="secondary">
               {popoverValue ? (
                 <View className="flex-row items-center gap-2">
-                  <AppText className="text-base">{popoverValue.flag}</AppText>
-                  <AppText className="text-sm text-accent font-medium">
+                  <AppText className="text-base" maxFontSizeMultiplier={1}>
+                    {popoverValue.flag}
+                  </AppText>
+                  <AppText
+                    className="text-sm text-accent font-medium"
+                    maxFontSizeMultiplier={1.2}
+                  >
                     {popoverValue.code}
                   </AppText>
                 </View>
               ) : (
-                <AppText className="text-accent">Popover</AppText>
+                <AppText className="text-accent" maxFontSizeMultiplier={1}>
+                  Popover
+                </AppText>
               )}
             </Button>
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
             <Select.Content
+              presentation="popover"
               width={300}
               className="aspect-[1.2]"
-              presentation="popover"
               placement="top"
               align="start"
               alignOffset={-20}
@@ -121,11 +142,19 @@ const PresentationContent = () => {
                     label={country.label}
                   >
                     <View className="flex-1 flex-row items-center gap-3">
-                      <AppText className="text-2xl">{country.flag}</AppText>
-                      <AppText className="text-sm text-muted w-10">
+                      <AppText className="text-2xl" maxFontSizeMultiplier={1}>
+                        {country.flag}
+                      </AppText>
+                      <AppText
+                        className="text-sm text-muted w-10"
+                        maxFontSizeMultiplier={1}
+                      >
                         {country.code}
                       </AppText>
-                      <AppText className="text-base text-foreground flex-1">
+                      <AppText
+                        className="text-base text-foreground flex-1"
+                        maxFontSizeMultiplier={1}
+                      >
                         {country.label}
                       </AppText>
                     </View>
@@ -140,88 +169,97 @@ const PresentationContent = () => {
         <SearchableDialogSelect />
 
         <Select
+          presentation="bottom-sheet"
+          isOpen={isBottomSheetOpen}
+          onOpenChange={setIsBottomSheetOpen}
           value={bottomSheetValue}
           onValueChange={(value) => {
-            const selectedValue = value as CountryOption | undefined;
-            const country = COUNTRIES.find(
-              (c) => c.value === selectedValue?.value
-            );
+            const country = COUNTRIES.find((c) => c.value === value?.value);
             setBottomSheetValue(country);
           }}
+          className="flex-1"
         >
-          <Select.Trigger asChild>
+          <Select.Trigger variant="unstyled" asChild>
             <Button variant="secondary">
               {bottomSheetValue ? (
                 <View className="flex-row items-center gap-2">
-                  <AppText className="text-base">
+                  <AppText className="text-base" maxFontSizeMultiplier={1}>
                     {bottomSheetValue.flag}
                   </AppText>
-                  <AppText className="text-sm text-accent font-medium">
+                  <AppText
+                    className="text-sm text-accent font-medium"
+                    maxFontSizeMultiplier={1}
+                  >
                     {bottomSheetValue.code}
                   </AppText>
                 </View>
               ) : (
-                <AppText className="text-accent">Sheet</AppText>
+                <AppText className="text-accent" maxFontSizeMultiplier={1}>
+                  Sheet
+                </AppText>
               )}
             </Button>
           </Select.Trigger>
-          <Select.Portal>
-            <Select.Overlay className="bg-black/15" />
+          <Select.Portal disableFullWindowOverlay>
+            <Select.Overlay className="bg-black/10" />
             <Select.Content
               presentation="bottom-sheet"
-              snapPoints={['35%']}
+              snapPoints={['35%', '50%']}
               detached
               enableDynamicSizing={false}
               enableOverDrag={false}
-              backgroundStyle={{
-                backgroundColor: 'transparent',
-              }}
-              handleStyle={{
-                height: 8,
-              }}
-              handleIndicatorStyle={{
-                width: 42,
-                backgroundColor: themeColorMuted,
-              }}
-              contentContainerClassName={cn(
-                'h-full mx-2 border border-divider/20 bg-overlay overflow-hidden',
-                Platform.OS === 'ios'
-                  ? 'rounded-t-4xl rounded-b-[54px]'
-                  : 'rounded-4xl'
-              )}
+              backgroundClassName="bg-transparent shadow-none"
+              handleClassName="h-1"
+              handleIndicatorClassName="w-12 h-[3px]"
+              contentContainerClassName="h-full pt-1 pb-1 mx-2.5 rounded-t-4xl border border-separator/20 bg-overlay overflow-hidden"
               contentContainerProps={{
                 style: {
-                  padding: 0,
+                  borderCurve: 'continuous',
                 },
               }}
-              bottomInset={Platform.OS === 'ios' ? 8 : insets.bottom + 4}
             >
-              <BottomSheetScrollView
-                contentContainerClassName="p-4"
-                showsVerticalScrollIndicator={false}
+              <ScrollShadow
+                LinearGradientComponent={LinearGradient}
+                color={themeColorOverlay}
               >
-                {COUNTRIES.map((country, index) => (
-                  <React.Fragment key={country.value}>
-                    <Select.Item
-                      value={country.value}
-                      label={country.label}
-                      className="py-5 px-3"
-                    >
-                      <View className="flex-row items-center gap-3 flex-1">
-                        <AppText className="text-2xl">{country.flag}</AppText>
-                        <AppText className="text-sm text-muted font-medium w-10">
-                          {country.code}
-                        </AppText>
-                        <AppText className="text-base text-foreground flex-1">
-                          {country.label}
-                        </AppText>
-                      </View>
-                      <Select.ItemIndicator />
-                    </Select.Item>
-                    {index < COUNTRIES.length - 1 && <Separator />}
-                  </React.Fragment>
-                ))}
-              </BottomSheetScrollView>
+                <BottomSheetScrollView
+                  contentContainerClassName="p-4"
+                  showsVerticalScrollIndicator={false}
+                >
+                  {COUNTRIES.map((country, index) => (
+                    <React.Fragment key={country.value}>
+                      <Select.Item
+                        value={country.value}
+                        label={country.label}
+                        className="py-5 px-3"
+                      >
+                        <View className="flex-row items-center gap-3 flex-1">
+                          <AppText
+                            className="text-2xl"
+                            maxFontSizeMultiplier={1}
+                          >
+                            {country.flag}
+                          </AppText>
+                          <AppText
+                            className="text-sm text-muted font-medium w-10"
+                            maxFontSizeMultiplier={1}
+                          >
+                            {country.code}
+                          </AppText>
+                          <AppText
+                            className="text-base text-foreground flex-1"
+                            maxFontSizeMultiplier={1}
+                          >
+                            {country.label}
+                          </AppText>
+                        </View>
+                        <Select.ItemIndicator />
+                      </Select.Item>
+                      {index < COUNTRIES.length - 1 && <Separator />}
+                    </React.Fragment>
+                  ))}
+                </BottomSheetScrollView>
+              </ScrollShadow>
             </Select.Content>
           </Select.Portal>
         </Select>
@@ -255,20 +293,26 @@ const PlacementOptionsContent = () => {
 const AlignmentOptionsContent = () => {
   return (
     <View className="flex-1 px-5 items-center justify-center">
-      <View className="flex-row justify-center gap-4">
-        <Select>
-          <Select.Trigger asChild>
-            <Button variant="secondary" className="w-24">
+      <View className="flex-row gap-4">
+        <Select className="flex-1">
+          <Select.Trigger variant="unstyled" asChild>
+            <Button variant="secondary">
               <Select.Value
                 placeholder="Start"
                 numberOfLines={1}
                 className="text-accent"
+                maxFontSizeMultiplier={1}
               />
             </Button>
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
-            <Select.Content presentation="popover" width={200} placement="top" align="start">
+            <Select.Content
+              presentation="popover"
+              width={200}
+              placement="top"
+              align="start"
+            >
               {US_STATES.slice(0, 3).map((state) => (
                 <Select.Item
                   key={state.value}
@@ -280,19 +324,25 @@ const AlignmentOptionsContent = () => {
           </Select.Portal>
         </Select>
 
-        <Select>
-          <Select.Trigger asChild>
-            <Button variant="secondary" className="w-24">
+        <Select className="flex-1">
+          <Select.Trigger variant="unstyled" asChild>
+            <Button variant="secondary">
               <Select.Value
                 placeholder="Center"
                 numberOfLines={1}
                 className="text-accent"
+                maxFontSizeMultiplier={1}
               />
             </Button>
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
-            <Select.Content presentation="popover" width={200} placement="top" align="center">
+            <Select.Content
+              presentation="popover"
+              width={200}
+              placement="top"
+              align="center"
+            >
               {US_STATES.slice(0, 3).map((state) => (
                 <Select.Item
                   key={state.value}
@@ -304,19 +354,25 @@ const AlignmentOptionsContent = () => {
           </Select.Portal>
         </Select>
 
-        <Select>
-          <Select.Trigger asChild>
-            <Button variant="secondary" className="w-24">
+        <Select className="flex-1">
+          <Select.Trigger variant="unstyled" asChild>
+            <Button variant="secondary">
               <Select.Value
                 placeholder="End"
                 numberOfLines={1}
                 className="text-accent"
+                maxFontSizeMultiplier={1}
               />
             </Button>
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
-            <Select.Content presentation="popover" width={200} placement="top" align="end">
+            <Select.Content
+              presentation="popover"
+              width={200}
+              placement="top"
+              align="end"
+            >
               {US_STATES.slice(0, 3).map((state) => (
                 <Select.Item
                   key={state.value}
@@ -343,7 +399,9 @@ const NativeModalTestContent = () => {
         variant="secondary"
         onPress={() => router.push('components/select-native-modal')}
       >
-        Select from Native Modal
+        <Button.Label maxFontSizeMultiplier={1.4}>
+          Select from Native Modal
+        </Button.Label>
       </Button>
     </View>
   );
@@ -354,8 +412,13 @@ const NativeModalTestContent = () => {
 const SELECT_VARIANTS: UsageVariant[] = [
   {
     value: 'basic-usage-button-trigger',
-    label: 'Select with indicator',
-    content: <BasicUsageWithButtonTriggerContent />,
+    label: 'Single select',
+    content: <BasicUsageSingleSelectContent />,
+  },
+  {
+    value: 'basic-usage-multiple-select',
+    label: 'Multiple select',
+    content: <BasicUsageMultipleSelectContent />,
   },
   {
     value: 'presentation',

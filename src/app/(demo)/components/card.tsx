@@ -1,23 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Button, Card, cn, type CardRootProps } from 'heroui-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import {
-  Button,
-  Card,
-  Description,
-  Label,
-  type CardRootProps,
-} from 'heroui-native';
 
+const StyledImage = withUniwind(Image);
 const StyledIonicons = withUniwind(Ionicons);
 
 const BasicCardContent = () => {
@@ -58,57 +48,69 @@ const CardWithImageContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
       <View className="flex-row gap-4">
-        <Card className="flex-1 aspect-[1/1.3] rounded-2xl">
+        <Card className="flex-1 aspect-[1/1.3]">
           <View className="flex-1 gap-4">
             <Card.Header>
-              <Image
+              <StyledImage
                 source={{
                   uri: 'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/docs/demo1.jpg',
                 }}
-                style={{
-                  height: 60,
-                  aspectRatio: 1,
-                  borderRadius: 12,
-                }}
+                className="h-16 aspect-square rounded-xl"
               />
             </Card.Header>
             <Card.Body className="flex-1">
-              <Card.Title>Indie Hackers</Card.Title>
-              <Card.Description className="text-sm">
+              <Card.Title maxFontSizeMultiplier={1.2} numberOfLines={1}>
+                Indie Hackers
+              </Card.Title>
+              <Card.Description
+                className="text-sm"
+                maxFontSizeMultiplier={1.2}
+                numberOfLines={1}
+              >
                 148 members
               </Card.Description>
             </Card.Body>
             <Card.Footer className="flex-row items-center gap-2">
               <View className="size-3 rounded-full bg-rose-400" />
-              <AppText className="text-sm font-medium text-foreground">
+              <AppText
+                className="text-sm font-medium text-foreground"
+                maxFontSizeMultiplier={1.2}
+                numberOfLines={1}
+              >
                 @indiehackers
               </AppText>
             </Card.Footer>
           </View>
         </Card>
-        <Card className="flex-1 aspect-[1/1.3] rounded-2xl">
+        <Card className="flex-1 aspect-[1/1.3]">
           <View className="flex-1 gap-4">
             <Card.Header>
-              <Image
+              <StyledImage
                 source={{
                   uri: 'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/docs/demo2.jpg',
                 }}
-                style={{
-                  height: 60,
-                  aspectRatio: 1,
-                  borderRadius: 12,
-                }}
+                className="h-16 aspect-square rounded-xl"
               />
             </Card.Header>
             <Card.Body className="flex-1">
-              <Card.Title>AI Builders</Card.Title>
-              <Card.Description className="text-sm">
+              <Card.Title maxFontSizeMultiplier={1.2} numberOfLines={1}>
+                AI Builders
+              </Card.Title>
+              <Card.Description
+                className="text-sm"
+                maxFontSizeMultiplier={1.2}
+                numberOfLines={1}
+              >
                 362 members
               </Card.Description>
             </Card.Body>
             <Card.Footer className="flex-row items-center gap-2">
               <View className="size-3 rounded-full bg-emerald-400" />
-              <AppText className="text-sm font-medium text-foreground">
+              <AppText
+                className="text-sm font-medium text-foreground"
+                maxFontSizeMultiplier={1.2}
+                numberOfLines={1}
+              >
                 @aibuilders
               </AppText>
             </Card.Footer>
@@ -125,28 +127,34 @@ const HorizontalCardWithImageContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
       <View className="w-full gap-4">
-        <Card className="flex-row rounded-2xl gap-4 p-4" variant="tertiary">
-          <Image
+        <Card className="flex-row gap-4 p-4" variant="tertiary">
+          <StyledImage
             source={{
               uri: 'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/docs/avocado.jpeg',
             }}
-            style={{
-              height: 110,
-              aspectRatio: 1,
-              borderRadius: 14,
-            }}
+            className="h-28 aspect-square rounded-2xl"
             resizeMode="cover"
           />
           <View className="flex-1 gap-4">
             <Card.Body className="flex-1">
-              <Card.Title>Avocado Hackathon</Card.Title>
-              <Card.Description numberOfLines={2} className="text-sm">
+              <Card.Title maxFontSizeMultiplier={1.2} numberOfLines={1}>
+                Avocado Hackathon
+              </Card.Title>
+              <Card.Description
+                numberOfLines={2}
+                className="text-sm"
+                maxFontSizeMultiplier={1.2}
+              >
                 Today, 6:30 PM
               </Card.Description>
             </Card.Body>
             <Card.Footer>
               <Pressable className="flex-row items-center gap-1">
-                <AppText className="text-sm font-medium text-accent">
+                <AppText
+                  className="text-sm font-medium text-accent"
+                  maxFontSizeMultiplier={1.2}
+                  numberOfLines={1}
+                >
                   View Details
                 </AppText>
                 <StyledIonicons
@@ -158,28 +166,34 @@ const HorizontalCardWithImageContent = () => {
             </Card.Footer>
           </View>
         </Card>
-        <Card className="flex-row rounded-2xl gap-4 p-4" variant="tertiary">
-          <Image
+        <Card className="flex-row gap-4 p-4" variant="tertiary">
+          <StyledImage
             source={{
               uri: 'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/docs/oranges.jpeg',
             }}
-            style={{
-              height: 110,
-              aspectRatio: 1,
-              borderRadius: 12,
-            }}
+            className="h-28 aspect-square rounded-2xl"
             resizeMode="cover"
           />
           <View className="flex-1 gap-4">
             <Card.Body className="flex-1">
-              <Card.Title>Sound Electro</Card.Title>
-              <Card.Description numberOfLines={2} className="text-sm">
+              <Card.Title maxFontSizeMultiplier={1.2} numberOfLines={1}>
+                Sound Electro
+              </Card.Title>
+              <Card.Description
+                numberOfLines={2}
+                className="text-sm"
+                maxFontSizeMultiplier={1.2}
+              >
                 Wed, 4:30 PM
               </Card.Description>
             </Card.Body>
             <Card.Footer>
               <Pressable className="flex-row items-center gap-1">
-                <AppText className="text-sm font-medium text-accent">
+                <AppText
+                  className="text-sm font-medium text-accent"
+                  maxFontSizeMultiplier={1.2}
+                  numberOfLines={1}
+                >
                   View Details
                 </AppText>
                 <StyledIonicons
@@ -215,29 +229,42 @@ const BackgroundImageCardContent = () => {
         />
         <View className="flex-1 gap-4">
           <Card.Body className="flex-1">
-            <Card.Title className="text-base text-zinc-50 uppercase mb-0.5">
+            <Card.Title
+              className="text-base text-zinc-50 uppercase mb-0.5"
+              maxFontSizeMultiplier={1.2}
+            >
               Neo
             </Card.Title>
-            <Card.Description className="text-zinc-50 font-medium text-base">
+            <Card.Description
+              className="text-zinc-50 font-medium text-base"
+              maxFontSizeMultiplier={1.2}
+            >
               Home robot
             </Card.Description>
           </Card.Body>
           <Card.Footer className="gap-3">
             <View className="flex-row items-center justify-between">
               <View>
-                <AppText className="text-base text-white">
+                <AppText
+                  className="text-base text-white"
+                  maxFontSizeMultiplier={1.2}
+                >
                   Available soon
                 </AppText>
-                <AppText className="text-base text-zinc-300">
+                <AppText
+                  className="text-base text-zinc-300"
+                  maxFontSizeMultiplier={1.2}
+                >
                   Get notified
                 </AppText>
               </View>
-              <Button
-                size="sm"
-                className="bg-white"
-                animation={{ highlight: 'disabled' }}
-              >
-                <Button.Label className="text-black">Notify me</Button.Label>
+              <Button size="sm" className="bg-white" feedbackVariant="scale">
+                <Button.Label
+                  className="text-black"
+                  maxFontSizeMultiplier={1.2}
+                >
+                  Notify me
+                </Button.Label>
               </Button>
             </View>
           </Card.Footer>
@@ -253,13 +280,26 @@ type CardItemProps = {
   variant: CardRootProps['variant'];
   title: string;
   description: string;
+  className?: string;
 };
 
-const CardItem = ({ variant, title, description }: CardItemProps) => {
+const CardItem = ({
+  variant,
+  title,
+  description,
+  className,
+}: CardItemProps) => {
   return (
-    <Card variant={variant} className="gap-2">
-      <AppText className="text-foreground font-medium">{title}</AppText>
-      <AppText className="text-muted">{description}</AppText>
+    <Card variant={variant} className={cn('gap-2', className)}>
+      <AppText
+        className="text-foreground font-medium"
+        maxFontSizeMultiplier={1.3}
+      >
+        {title}
+      </AppText>
+      <AppText className="text-muted" maxFontSizeMultiplier={1.3}>
+        {description}
+      </AppText>
     </Card>
   );
 };
@@ -268,11 +308,6 @@ const VariantsContent = () => {
   return (
     <View className="flex-1 items-center justify-center">
       <View className="gap-2 w-full px-5">
-        <CardItem
-          variant="transparent"
-          title="Transparent"
-          description="Minimal prominence with transparent background. Use for less important content or nested cards."
-        />
         <CardItem
           variant="default"
           title="Default"
@@ -286,12 +321,13 @@ const VariantsContent = () => {
         <CardItem
           variant="tertiary"
           title="Tertiary"
-          description="Higher prominence (surface-quaternary). Use for important content."
+          description="Higher prominence (surface-tertiary). Use for important content."
         />
         <CardItem
           variant="transparent"
           title="Transparent"
-          description="Transparent card appearance for content that should sit directly on the page."
+          description="Minimal prominence with transparent background. Use for less important content or nested cards."
+          className="border border-border shadow-none"
         />
       </View>
     </View>

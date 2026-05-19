@@ -1,5 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ScrollShadow, Surface } from 'heroui-native';
 import {
   ScrollView,
   StyleSheet,
@@ -9,7 +10,6 @@ import {
 } from 'react-native';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import { Card, ScrollShadow, Surface } from 'heroui-native';
 
 const VerticalContent = () => {
   const { height } = useWindowDimensions();
@@ -127,7 +127,7 @@ const VerticalContent = () => {
             </Text>
 
             <Text className="mb-3 text-2xl font-semibold text-foreground">
-              {"Cicero's De Finibus"}
+              Cicero's De Finibus
             </Text>
             <Text className="mb-4 text-base leading-6 text-foreground">
               But I must explain to you how all this mistaken idea of denouncing

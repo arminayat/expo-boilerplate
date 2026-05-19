@@ -1,6 +1,3 @@
-import { type FC } from 'react';
-import { View } from 'react-native';
-import { BlurContainer } from './blur-container';
 import {
   cn,
   Description,
@@ -9,6 +6,9 @@ import {
   RadioGroup,
   useRadioGroup,
 } from 'heroui-native';
+import { type FC } from 'react';
+import { View } from 'react-native';
+import { BlurContainer } from './blur-container';
 
 type Props = {
   value: string;
@@ -45,21 +45,19 @@ export const StyledRadio: FC<Props> = ({
           <Radio>
             <Radio.Indicator
               className={cn('border-white/25', isSelected && 'bg-white')}
-            />
+            >
+              <Radio.IndicatorThumb className="bg-[#262626]" />
+            </Radio.Indicator>
           </Radio>
           <View className="flex-1 flex-row items-center justify-between gap-3">
             <View>
-              <Label className={className.title}>
-                {title1}
-              </Label>
+              <Label className={className.title}>{title1}</Label>
               <Description className={className.description}>
                 {description1}
               </Description>
             </View>
             <View>
-              <Label className={className.title}>
-                {title2}
-              </Label>
+              <Label className={className.title}>{title2}</Label>
               <Description className={className.description}>
                 {description2}
               </Description>

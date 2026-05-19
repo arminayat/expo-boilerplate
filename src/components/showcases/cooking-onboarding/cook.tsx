@@ -1,16 +1,15 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { type FC, type RefObject } from 'react';
-import { withUniwind } from 'uniwind';
-import { simulatePress } from '../../../helpers/utils/simulate-press';
-import { AppText } from '../../app-text';
-import { popoverAnimation } from './constants';
-import { className } from './styles';
 import {
   Button,
   Popover,
   useThemeColor,
   type PopoverTriggerRef,
 } from 'heroui-native';
+import { type FC, type RefObject } from 'react';
+import { withUniwind } from 'uniwind';
+import { simulatePress } from '../../../helpers/utils/simulate-press';
+import { AppText } from '../../app-text';
+import { className } from './styles';
 
 const StyledAntDesign = withUniwind(AntDesign);
 
@@ -23,10 +22,10 @@ export const Cook: FC<Props> = ({ isOnboardingDone, triggerRef }) => {
   const themeColorForeground = useThemeColor('foreground');
 
   return (
-    <Popover animation={popoverAnimation}>
+    <Popover>
       <Popover.Trigger ref={triggerRef}>
         <Button
-          animation={{ highlight: 'disabled' }}
+          feedbackVariant="scale"
           className="h-12 px-4 rounded-[14px] flex-row items-center gap-1 bg-orange-300"
           onPress={isOnboardingDone ? simulatePress : undefined}
         >
@@ -35,7 +34,11 @@ export const Cook: FC<Props> = ({ isOnboardingDone, triggerRef }) => {
         </Button>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content presentation="popover" className={className.popoverContent} placement="top">
+        <Popover.Content
+          presentation="popover"
+          className={className.popoverContent}
+          placement="top"
+        >
           <Popover.Arrow
             stroke={themeColorForeground}
             fill={themeColorForeground}

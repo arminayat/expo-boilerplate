@@ -1,9 +1,9 @@
-import { MMKV, Mode } from "react-native-mmkv";
+import { createMMKV } from "react-native-mmkv";
 
 // Onboarding storage instance
-export const onboardingStorage = new MMKV({
+export const onboardingStorage = createMMKV({
   id: `onboarding-storage`,
-  mode: Mode.MULTI_PROCESS,
+  mode: "multi-process",
   readOnly: false,
 });
 

@@ -1,3 +1,4 @@
+import { Toast, type ToastComponentProps } from 'heroui-native';
 import { useCallback, useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -8,7 +9,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 import { useSharedState } from './use-shared-state';
-import { Toast, type ToastComponentProps } from 'heroui-native';
 
 const StyleAnimatedView = withUniwind(Animated.View);
 

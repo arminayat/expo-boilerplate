@@ -1,21 +1,24 @@
-import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { FadeIn, LinearTransition } from 'react-native-reanimated';
-import { withUniwind } from 'uniwind';
-import type { UsageVariant } from '../../../components/component-presentation/types';
-import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import { useAppTheme } from '../../../contexts/app-theme-context';
 import {
   Button,
   cn,
-  Label,
+  PressableFeedback,
   Spinner,
   useThemeColor,
 } from 'heroui-native';
-
-const StyledIonicons = withUniwind(Ionicons);
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { FadeIn, LinearTransition } from 'react-native-reanimated';
+import type { UsageVariant } from '../../../components/component-presentation/types';
+import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import { ArrowDownToSquareIcon } from '../../../components/icons/arrow-down-to-square';
+import { CircleInfoFillIcon } from '../../../components/icons/circle-info-fill';
+import { HeartFillIcon } from '../../../components/icons/heart-fill';
+import { PaperClipIcon } from '../../../components/icons/paper-clip';
+import { PlusIcon } from '../../../components/icons/plus';
+import { ShoppingCartIcon } from '../../../components/icons/shopping-cart';
+import { TrashIcon } from '../../../components/icons/trash';
+import { useAppTheme } from '../../../contexts/app-theme-context';
 
 const SizesContent = () => {
   return (
@@ -41,6 +44,7 @@ const VariantsContent = () => {
           <Button variant="primary">Primary</Button>
           <Button variant="secondary">Secondary</Button>
           <Button variant="tertiary">Tertiary</Button>
+          <Button variant="outline">Outline</Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="danger">Danger</Button>
           <Button variant="danger-soft">Danger Soft</Button>
@@ -53,26 +57,25 @@ const VariantsContent = () => {
 // ------------------------------------------------------------------------------
 
 const DisabledStateContent = () => {
-  const themeColorMuted = useThemeColor('muted');
+  const [themeColorAccent, themeColorAccentForeground] = useThemeColor([
+    'accent',
+    'accent-foreground',
+  ]);
 
   return (
     <View className="flex-1">
       <View className="flex-1 items-center justify-center">
         <View className="gap-8 w-full px-8">
           <Button isDisabled>
-            <Spinner color={themeColorMuted} size="sm" />
+            <Spinner color={themeColorAccentForeground} size="sm" />
             <Button.Label>Loading</Button.Label>
           </Button>
           <Button variant="secondary" isDisabled>
-            <Spinner size="sm" color={themeColorMuted} />
+            <Spinner size="sm" color={themeColorAccent} />
             <Button.Label>Loading</Button.Label>
           </Button>
           <Button variant="tertiary" isDisabled>
-            <StyledIonicons
-              name="alert-circle"
-              size={16}
-              className="text-muted"
-            />
+            <CircleInfoFillIcon size={16} colorClassName="accent-muted" />
             <Button.Label>Access Denied</Button.Label>
           </Button>
         </View>
@@ -114,43 +117,17 @@ const WithIconsContent = () => {
       <View className="flex-1 items-center justify-center">
         <View className="gap-8 w-full px-8">
           <Button variant="primary">
-            <StyledIonicons
-              name="add"
-              size={20}
-              className="text-accent-foreground"
-            />
-            <Button.Label>Add Item</Button.Label>
+            <PlusIcon size={16} colorClassName="accent-accent-foreground" />
+            <Button.Label>Add Member</Button.Label>
           </Button>
 
           <Button variant="secondary">
             <Button.Label>Download</Button.Label>
-            <StyledIonicons
-              name="download"
-              size={18}
-              className="text-accent-soft-foreground"
-            />
+            <ArrowDownToSquareIcon size={16} colorClassName="accent-accent" />
           </Button>
 
-          <Button variant="tertiary">
-            <StyledIonicons
-              name="heart"
-              size={14}
-              className="text-default-foreground"
-            />
-            <Button.Label>Favorite</Button.Label>
-            <StyledIonicons
-              name="chevron-forward"
-              size={18}
-              className="text-default-foreground"
-            />
-          </Button>
-
-          <Button variant="danger" size="sm">
-            <StyledIonicons
-              name="trash"
-              size={14}
-              className="text-danger-foreground"
-            />
+          <Button variant="danger">
+            <TrashIcon size={15} colorClassName="accent-danger-foreground" />
             <Button.Label>Delete</Button.Label>
           </Button>
         </View>
@@ -167,31 +144,16 @@ const IconOnlyContent = () => {
       <View className="flex-1 items-center justify-center">
         <View className="flex-row gap-8">
           <Button size="sm" isIconOnly>
-            <Button.Label>
-              <StyledIonicons
-                name="add"
-                size={16}
-                className="text-accent-foreground"
-              />
-            </Button.Label>
+            <PaperClipIcon
+              size={16}
+              colorClassName="accent-accent-foreground"
+            />
           </Button>
           <Button size="md" variant="secondary" isIconOnly>
-            <Button.Label>
-              <StyledIonicons
-                name="heart"
-                size={18}
-                className="text-pink-500"
-              />
-            </Button.Label>
+            <HeartFillIcon size={18} colorClassName="accent-danger" />
           </Button>
           <Button size="lg" variant="danger" isIconOnly>
-            <Button.Label>
-              <StyledIonicons
-                name="trash"
-                size={20}
-                className="text-danger-foreground"
-              />
-            </Button.Label>
+            <TrashIcon size={18} colorClassName="accent-danger-foreground" />
           </Button>
         </View>
       </View>
@@ -216,7 +178,7 @@ const CustomStylingContent = () => {
                   value: '#c084fc',
                 },
                 opacity: {
-                  value: [0, 1],
+                  value: [0, 0.5],
                 },
               },
             }}
@@ -226,41 +188,36 @@ const CustomStylingContent = () => {
             </Button.Label>
           </Button>
 
-          <Button
-            animation={{
-              highlight: {
-                backgroundColor: {
-                  value: '#ec4899',
-                },
-                opacity: {
-                  value: [0, 0.25],
-                },
-              },
-            }}
-          >
+          <Button feedbackVariant="scale">
             <LinearGradient
               colors={['#0d9488', '#ec4899']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={StyleSheet.absoluteFill}
             />
-            <Button.Label className="text-white font-bold">
+            <PressableFeedback.Ripple
+              animation={{
+                backgroundColor: { value: 'white' },
+                opacity: { value: [0, 0.5, 0] },
+              }}
+            />
+            <Button.Label className="text-white font-bold" pointerEvents="none">
               Gradient
             </Button.Label>
           </Button>
           <Button
             className={cn(
-              'bg-neutral-950 rounded-none',
+              'bg-neutral-950 rounded-md',
               isDark && 'bg-neutral-50'
             )}
-            animation={{
-              highlight: { backgroundColor: { value: 'transparent' } },
-            }}
+            feedbackVariant="scale"
           >
-            <StyledIonicons
-              name="cart-outline"
+            <ShoppingCartIcon
               size={18}
-              className={cn('text-neutral-50', isDark && 'text-neutral-950')}
+              colorClassName={cn(
+                'accent-neutral-50',
+                isDark && 'accent-neutral-950'
+              )}
             />
             <Button.Label
               className={cn('text-neutral-50', isDark && 'text-neutral-950')}

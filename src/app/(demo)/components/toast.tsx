@@ -1,26 +1,31 @@
-import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
-import Octicons from '@expo/vector-icons/Octicons';
 import { useRouter } from 'expo-router';
-import { useCallback, useRef, useState } from 'react';
-import { Platform, TextInput, View } from 'react-native';
-import { withUniwind } from 'uniwind';
-import type { UsageVariant } from '../../../components/component-presentation/types';
-import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import { Logo } from '../../../components/logo';
-import { AchievementToast } from '../../../components/toast/achievement-toast';
-import { LoadingToast, useLoadingState } from '../../../components/toast/loading-toast';
-import { ProgressToast, useProgressState } from '../../../components/toast/progress-toast';
 import {
   Button,
   useThemeColor,
   useToast,
   type ToastComponentProps,
 } from 'heroui-native';
+import { useCallback, useRef, useState } from 'react';
+import { Platform, TextInput, View } from 'react-native';
+import { withUniwind } from 'uniwind';
+import type { UsageVariant } from '../../../components/component-presentation/types';
+import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import { CircleInfoFillIcon } from '../../../components/icons/circle-info-fill';
+import { ShieldCheckIcon } from '../../../components/icons/shield-check';
+import { ShieldExclamationIcon } from '../../../components/icons/shield-exclamation';
+import { Logo } from '../../../components/logo';
+import { AchievementToast } from '../../../components/toast/achievement-toast';
+import {
+  LoadingToast,
+  useLoadingState,
+} from '../../../components/toast/loading-toast';
+import {
+  ProgressToast,
+  useProgressState,
+} from '../../../components/toast/progress-toast';
 
 const StyledFeather = withUniwind(Feather);
-const StyledOcticons = withUniwind(Octicons);
-const StyledEntypo = withUniwind(Entypo);
 
 // ------------------------------------------------------------------------------
 
@@ -62,11 +67,9 @@ const DefaultVariantsContent = () => {
             label: 'You have 2 credits left',
             description: 'Get a paid plan for more credits',
             icon: (
-              <StyledEntypo
-                name="info-with-circle"
-                size={18}
-                className="text-accent mt-0.5"
-              />
+              <View className="mt-0.5">
+                <CircleInfoFillIcon size={18} colorClassName="accent-accent" />
+              </View>
             ),
             actionLabel: 'Close',
             onActionPress: ({ hide }) => hide(),
@@ -80,14 +83,12 @@ const DefaultVariantsContent = () => {
         onPress={() =>
           toast.show({
             variant: 'success',
-            label: 'You have upgraded your plan',
-            description: 'You can continue using HeroUI Chat',
+            label: 'Plan upgraded',
+            description: 'You can continue using HeroUI Chat and more',
             icon: (
-              <StyledOcticons
-                name="shield-check"
-                size={16}
-                className="text-success mt-[3px]"
-              />
+              <View className="mt-0.5">
+                <ShieldCheckIcon size={20} colorClassName="accent-success" />
+              </View>
             ),
             actionLabel: 'Close',
             onActionPress: ({ hide }) => hide(),
@@ -101,14 +102,15 @@ const DefaultVariantsContent = () => {
         onPress={() =>
           toast.show({
             variant: 'warning',
-            label: 'You have no credits left',
-            description: 'Upgrade to a paid plan to continue',
+            label: 'No credits left',
+            description: 'Upgrade to a paid plan to continue using HeroUI Chat',
             icon: (
-              <StyledOcticons
-                name="shield"
-                size={16}
-                className="text-warning mt-[3px]"
-              />
+              <View className="mt-0.5">
+                <ShieldExclamationIcon
+                  size={20}
+                  colorClassName="accent-warning"
+                />
+              </View>
             ),
             actionLabel: 'Close',
             onActionPress: ({ hide }) => hide(),
@@ -158,14 +160,12 @@ const PlacementVariantsContent = () => {
     toast.show({
       variant: 'success',
       placement: 'top',
-      label: 'You have upgraded your plan',
-      description: 'You can continue using HeroUI Chat',
+      label: 'Plan upgraded',
+      description: 'You can continue using HeroUI Chat and more',
       icon: (
-        <StyledOcticons
-          name="shield-check"
-          size={16}
-          className="text-success mt-[3px]"
-        />
+        <View className="mt-0.5">
+          <ShieldCheckIcon size={20} colorClassName="accent-success" />
+        </View>
       ),
       actionLabel: 'Close',
       onActionPress: ({ hide }) => hide(),
@@ -175,14 +175,12 @@ const PlacementVariantsContent = () => {
     toast.show({
       variant: 'warning',
       placement: 'bottom',
-      label: 'You have no credits left',
-      description: 'Upgrade to a paid plan to continue',
+      label: 'No credits left',
+      description: 'Upgrade to a paid plan to continue using HeroUI Chat',
       icon: (
-        <StyledOcticons
-          name="shield"
-          size={16}
-          className="text-warning mt-[3px]"
-        />
+        <View className="mt-0.5">
+          <ShieldExclamationIcon size={20} colorClassName="accent-warning" />
+        </View>
       ),
       actionLabel: 'Close',
       onActionPress: ({ hide }) => hide(),
@@ -274,7 +272,7 @@ const DifferentContentSizesContent = () => {
         onPress={() =>
           toast.show({
             variant: 'success',
-            label: 'Backup completed successfully',
+            label: 'Backup completed',
             description:
               'All your files have been backed up to the cloud. You can now access them from any device. The backup includes 1,234 files totaling 2.5 GB. Your data is safe and secure. The next backup will run automatically in 24 hours.',
             actionLabel: 'Close',

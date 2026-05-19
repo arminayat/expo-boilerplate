@@ -1,8 +1,9 @@
 import Feather from '@expo/vector-icons/Feather';
-import { type Href, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { Card, Chip, cn } from 'heroui-native';
 import type { FC } from 'react';
-import { Image, Pressable, View } from 'react-native';
+import { Image, Pressable, View, type ImageSourcePropType } from 'react-native';
 import Animated, {
   Easing,
   FadeIn,
@@ -11,16 +12,16 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
+import HomeComponentsDark from '../../../assets/images/home-components-dark.png';
+import HomeComponentsLight from '../../../assets/images/home-components-light.png';
+import HomeShowcasesDark from '../../../assets/images/home-showcases-dark.png';
+import HomeShowcasesLight from '../../../assets/images/home-showcases-light.png';
+import HomeThemesDark from '../../../assets/images/home-themes-dark.png';
+import HomeThemesLight from '../../../assets/images/home-themes-light.png';
 import { AppText } from '../../components/app-text';
 import { ScreenScrollView } from '../../components/screen-scroll-view';
 import { useAppTheme } from '../../contexts/app-theme-context';
-import {
-  Card,
-  Chip,
-  cn,
-  Description,
-  Label,
-} from 'heroui-native';
+import { COMPONENTS } from '../../helpers/data/components';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedImage = Animated.createAnimatedComponent(Image);
@@ -30,43 +31,37 @@ const StyledFeather = withUniwind(Feather);
 
 type HomeCardProps = {
   title: string;
-  imageLight: string;
-  imageDark: string;
+  imageLight: ImageSourcePropType;
+  imageDark: ImageSourcePropType;
   count: number;
   footer: string;
-  path: Href;
+  path: string;
 };
 
 const cards: HomeCardProps[] = [
   {
     title: 'Components',
-    imageLight:
-      'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/home-components-light.png',
-    imageDark:
-      'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/home-components-dark.png',
-    count: 22,
+    imageLight: HomeComponentsLight,
+    imageDark: HomeComponentsDark,
+    count: COMPONENTS.length,
     footer: 'Explore all components',
-    path: '/components',
+    path: 'components',
   },
   {
     title: 'Themes',
-    imageLight:
-      'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/home-themes-light.png',
-    imageDark:
-      'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/home-themes-dark.png',
+    imageLight: HomeThemesLight,
+    imageDark: HomeThemesDark,
     count: 4,
     footer: 'Try different themes',
-    path: '/themes',
+    path: 'themes',
   },
   {
     title: 'Showcases',
-    imageLight:
-      'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/home-showcases-light.png',
-    imageDark:
-      'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/home-showcases-dark-1.png',
-    count: 5,
+    imageLight: HomeShowcasesLight,
+    imageDark: HomeShowcasesDark,
+    count: 6,
     footer: 'View components in action',
-    path: '/showcases',
+    path: 'showcases',
   },
 ];
 
@@ -104,7 +99,7 @@ const HomeCard: FC<HomeCardProps & { index: number }> = ({
     >
       <Card
         className={cn(
-          'p-0 border border-zinc-200',
+          'p-0 border border-zinc-200 shadow-none',
           isDark && 'border-zinc-900'
         )}
       >
@@ -113,13 +108,13 @@ const HomeCard: FC<HomeCardProps & { index: number }> = ({
           className="absolute inset-0 w-full h-full"
         >
           <AnimatedImage
-            source={{ uri: imageLight }}
+            source={imageLight}
             className="absolute inset-0 w-full h-full"
             resizeMode="cover"
             style={rLightImageStyle}
           />
           <AnimatedImage
-            source={{ uri: imageDark }}
+            source={imageDark}
             className="absolute inset-0 w-full h-full"
             resizeMode="cover"
             style={rDarkImageStyle}
@@ -136,14 +131,17 @@ const HomeCard: FC<HomeCardProps & { index: number }> = ({
           <Card.Body className="h-16" />
           <Card.Footer className="px-3 pb-3 flex-row items-end gap-4">
             <View className="flex-1">
-              <Card.Title className="text-2xl text-foreground/85">
+              <Card.Title
+                className="text-2xl text-foreground/85"
+                maxFontSizeMultiplier={1.75}
+              >
                 {title}
               </Card.Title>
               <Card.Description className="text-foreground/65 pl-0.5">
                 {footer}
               </Card.Description>
             </View>
-            <View className="size-9 rounded-full bg-background/25 items-center justify-center">
+            <View className="size-9 rounded-3xl bg-background/25 items-center justify-center">
               <StyledFeather
                 name="arrow-up-right"
                 size={20}
@@ -162,9 +160,9 @@ export default function App() {
 
   return (
     <ScreenScrollView>
-      <View className="items-center justify-center my-4">
-        <AppText className="text-muted text-base">v1.0.0-beta.9</AppText>
-      </View>
+      <AppText className="text-muted text-base text-center my-4">
+        v1.0.3
+      </AppText>
       <View className="gap-6">
         {cards.map((card, index) => (
           <HomeCard

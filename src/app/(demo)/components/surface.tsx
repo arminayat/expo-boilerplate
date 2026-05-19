@@ -1,20 +1,33 @@
+import { cn, Surface, type SurfaceRootProps } from 'heroui-native';
 import { View } from 'react-native';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import { Surface, type SurfaceRootProps } from 'heroui-native';
 
 type SurfaceItemProps = {
   variant: SurfaceRootProps['variant'];
   title: string;
   description: string;
+  className?: string;
 };
 
-const SurfaceItem = ({ variant, title, description }: SurfaceItemProps) => {
+const SurfaceItem = ({
+  variant,
+  title,
+  description,
+  className,
+}: SurfaceItemProps) => {
   return (
-    <Surface variant={variant} className="gap-2">
-      <AppText className="text-foreground font-medium">{title}</AppText>
-      <AppText className="text-muted">{description}</AppText>
+    <Surface variant={variant} className={cn('gap-2', className)}>
+      <AppText
+        className="text-foreground font-medium"
+        maxFontSizeMultiplier={1.2}
+      >
+        {title}
+      </AppText>
+      <AppText className="text-muted" maxFontSizeMultiplier={1.2}>
+        {description}
+      </AppText>
     </Surface>
   );
 };
@@ -41,7 +54,8 @@ const VariantsContent = () => {
         <SurfaceItem
           variant="transparent"
           title="Surface Content"
-          description="This is a transparent surface variant for unframed content."
+          description="This is a transparent surface variant. It uses bg-transparent styling."
+          className="border border-border shadow-none"
         />
       </View>
     </View>

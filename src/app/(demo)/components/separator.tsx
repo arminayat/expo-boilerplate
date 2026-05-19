@@ -1,26 +1,44 @@
+import { Separator, Surface } from 'heroui-native';
 import { View } from 'react-native';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import { Separator, Surface } from 'heroui-native';
 
-const DividerInActionContent = () => {
+const SeparatorInActionContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
       <Surface variant="secondary" className="px-6 py-7">
-        <AppText className="text-base font-medium text-foreground">
+        <AppText
+          className="text-base font-medium text-foreground"
+          maxFontSizeMultiplier={1.4}
+        >
           HeroUI Native
         </AppText>
-        <AppText className="text-sm text-muted">
+        <AppText className="text-sm text-muted" maxFontSizeMultiplier={1.4}>
           A modern React Native component library.
         </AppText>
         <Separator className="my-4" />
         <View className="flex-row items-center h-5">
-          <AppText className="text-sm text-foreground">Components</AppText>
+          <AppText
+            className="text-sm text-foreground"
+            maxFontSizeMultiplier={1.2}
+          >
+            Components
+          </AppText>
           <Separator orientation="vertical" className="mx-3" />
-          <AppText className="text-sm text-foreground">Themes</AppText>
+          <AppText
+            className="text-sm text-foreground"
+            maxFontSizeMultiplier={1.2}
+          >
+            Themes
+          </AppText>
           <Separator orientation="vertical" className="mx-3" />
-          <AppText className="text-sm text-foreground">Examples</AppText>
+          <AppText
+            className="text-sm text-foreground"
+            maxFontSizeMultiplier={1.2}
+          >
+            Examples
+          </AppText>
         </View>
       </Surface>
     </View>
@@ -142,11 +160,11 @@ const CustomColorsContent = () => {
 
 // ------------------------------------------------------------------------------
 
-const DIVIDER_VARIANTS: UsageVariant[] = [
+const SEPARATOR_VARIANTS: UsageVariant[] = [
   {
-    value: 'divider-in-action',
+    value: 'separator-in-action',
     label: 'Separator in action',
-    content: <DividerInActionContent />,
+    content: <SeparatorInActionContent />,
   },
   {
     value: 'variants',
@@ -170,6 +188,6 @@ const DIVIDER_VARIANTS: UsageVariant[] = [
   },
 ];
 
-export default function DividerScreen() {
-  return <UsageVariantFlatList data={DIVIDER_VARIANTS} />;
+export default function SeparatorScreen() {
+  return <UsageVariantFlatList data={SEPARATOR_VARIANTS} />;
 }

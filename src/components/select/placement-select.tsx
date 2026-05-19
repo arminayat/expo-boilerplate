@@ -1,19 +1,13 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import {
-  memo,
-  useEffect,
-  useMemo,
-  useRef,
-  type FC,
-} from 'react';
-import { FlatList } from 'react-native';
-import {
   Button,
   ScrollShadow,
   Select,
   useSelect,
   useThemeColor,
 } from 'heroui-native';
+import { type FC, memo, useEffect, useMemo, useRef } from 'react';
+import { FlatList } from 'react-native';
 
 type SelectOption = {
   value: string;
@@ -87,19 +81,21 @@ const PlacementContentList: FC<PlacementContentListProps> = memo(
               style={{
                 height: ITEM_HEIGHT,
               }}
-            />
+            >
+              <Select.ItemLabel maxFontSizeMultiplier={1} />
+              <Select.ItemIndicator />
+            </Select.Item>
           )}
         />
       </ScrollShadow>
     );
   }
 );
-
 PlacementContentList.displayName = 'PlacementContentList';
 
 const PlacementContent = () => {
   const { value } = useSelect();
-  const selectedValue = value as SelectOption | undefined;
+  const selectedValue = Array.isArray(value) ? value[0] : value;
 
   const valueIndex = useMemo(
     () =>
@@ -119,18 +115,24 @@ type Props = {
 export const PlacementSelect: FC<Props> = ({ placeholder, placement }) => {
   return (
     <Select>
-      <Select.Trigger asChild>
+      <Select.Trigger variant="unstyled" asChild>
         <Button variant="secondary" className="w-32">
           <Select.Value
             placeholder={placeholder}
             numberOfLines={1}
             className="text-accent"
+            maxFontSizeMultiplier={1}
           />
         </Button>
       </Select.Trigger>
       <Select.Portal>
         <Select.Overlay />
-        <Select.Content presentation="popover" width={200} placement={placement} className="h-[150px]">
+        <Select.Content
+          presentation="popover"
+          width={200}
+          placement={placement}
+          className="h-[150px]"
+        >
           <PlacementContent />
         </Select.Content>
       </Select.Portal>

@@ -1,3 +1,10 @@
+import {
+  Select,
+  Separator,
+  useSelectAnimation,
+  useThemeColor,
+  type SelectTriggerRef,
+} from 'heroui-native';
 import React, { useRef, useState, type FC } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { KeyboardController } from 'react-native-keyboard-controller';
@@ -7,13 +14,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../app-text';
-import {
-  Select,
-  Separator,
-  useSelectAnimation,
-  useThemeColor,
-  type SelectTriggerRef,
-} from 'heroui-native';
 
 const StyleAnimatedView = withUniwind(Animated.View);
 
@@ -61,7 +61,7 @@ export function SearchableSelect() {
     <Select
       value={value}
       onValueChange={(newValue) => {
-        setValue(newValue as SelectOption | undefined);
+        setValue(newValue);
         setSearchQuery('');
       }}
       defaultValue={US_STATES[1]}

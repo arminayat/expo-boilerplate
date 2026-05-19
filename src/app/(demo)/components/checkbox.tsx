@@ -1,5 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import {
+  Checkbox,
+  ControlField,
+  Description,
+  Label,
+  Separator,
+  Surface,
+} from 'heroui-native';
 import React from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -15,14 +23,6 @@ import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import {
-  Checkbox,
-  ControlField,
-  Description,
-  Label,
-  Separator,
-  Surface,
-} from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 const StyleAnimatedView = withUniwind(Animated.View);
@@ -52,8 +52,10 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
         <Checkbox className="mt-0.5" />
       </ControlField.Indicator>
       <View className="flex-1">
-        <Label className="text-lg">{title}</Label>
-        <Description className="text-base">
+        <Label className="text-lg">
+          <Label.Text maxFontSizeMultiplier={1.2}>{title}</Label.Text>
+        </Label>
+        <Description className="text-base" maxFontSizeMultiplier={1.2}>
           {description}
         </Description>
       </View>
@@ -175,7 +177,9 @@ const AnimatedCustomIndicator = ({
       {isSelected ? (
         <Animated.View
           key="selected"
-          entering={ZoomIn.withInitialValues({ scale: 0.5 })}
+          entering={ZoomIn.withInitialValues({
+            transform: [{ scale: 0.5 }],
+          })}
         >
           <StyledFontAwesome
             name="check"
@@ -186,7 +190,9 @@ const AnimatedCustomIndicator = ({
       ) : (
         <Animated.View
           key="unselected"
-          entering={ZoomIn.withInitialValues({ scale: 0.5 })}
+          entering={ZoomIn.withInitialValues({
+            transform: [{ scale: 0.5 }],
+          })}
         >
           <StyledFontAwesome
             name="times"

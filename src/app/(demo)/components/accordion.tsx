@@ -1,4 +1,4 @@
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Accordion, PressableFeedback, useAccordionItem } from 'heroui-native';
 import { View } from 'react-native';
 import Animated, {
   Easing,
@@ -7,20 +7,40 @@ import Animated, {
   ZoomIn,
   ZoomOut,
 } from 'react-native-reanimated';
-import { withUniwind } from 'uniwind';
 import { AccordionWithDepthEffect } from '../../../components/accordion/accordion-with-depth-effect';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import {
-  Accordion,
-  PressableFeedback,
-  Surface,
-  useAccordionItem,
-} from 'heroui-native';
+import { BoxIcon } from '../../../components/icons/box';
+import { MinusIcon } from '../../../components/icons/minus';
+import { PlanetEarthIcon } from '../../../components/icons/planet-earth';
+import { PlusIcon } from '../../../components/icons/plus';
+import { ReceiptIcon } from '../../../components/icons/receipt';
+import { ShoppingBagIcon } from '../../../components/icons/shopping-bag';
 
-const StyledIonicons = withUniwind(Ionicons);
-const StyledMaterialIcons = withUniwind(MaterialIcons);
+const TriggerTitle = ({ title }: { title: string }) => {
+  return (
+    <AppText
+      className="text-foreground text-base flex-1"
+      maxFontSizeMultiplier={1}
+    >
+      {title}
+    </AppText>
+  );
+};
+
+const ContentText = ({ text }: { text: string }) => {
+  return (
+    <AppText
+      className="text-muted text-base/relaxed px-[28px]"
+      maxFontSizeMultiplier={1}
+    >
+      {text}
+    </AppText>
+  );
+};
+
+// ------------------------------------------------------------------------------
 
 const ICON_SIZE = 16;
 
@@ -42,7 +62,7 @@ const CustomIndicator = () => {
           entering={CUSTOM_INDICATOR_ENTERING}
           exiting={CUSTOM_INDICATOR_EXITING}
         >
-          <StyledIonicons name="remove" size={18} className="text-muted" />
+          <MinusIcon size={14} colorClassName="accent-muted" />
         </Animated.View>
       ) : (
         <Animated.View
@@ -50,7 +70,7 @@ const CustomIndicator = () => {
           entering={CUSTOM_INDICATOR_ENTERING}
           exiting={CUSTOM_INDICATOR_EXITING}
         >
-          <StyledIonicons name="add" size={18} className="text-muted" />
+          <PlusIcon size={14} colorClassName="accent-muted" />
         </Animated.View>
       )}
     </View>
@@ -63,52 +83,28 @@ const accordionData = [
   {
     id: '1',
     title: 'How do I place an order?',
-    icon: (
-      <StyledIonicons
-        name="bag-outline"
-        size={ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <ShoppingBagIcon size={ICON_SIZE} colorClassName="accent-muted" />,
     content:
       'Lorem ipsum dolor sit amet consectetur. Netus nunc mauris risus consequat. Libero placerat dignissim consectetur nisl.',
   },
   {
     id: '2',
     title: 'Can I modify or cancel my order?',
-    icon: (
-      <StyledIonicons
-        name="receipt-outline"
-        size={ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <ReceiptIcon size={ICON_SIZE} colorClassName="accent-muted" />,
     content:
       'Lorem ipsum dolor sit amet consectetur. Netus nunc mauris risus consequat. Libero placerat dignissim consectetur nisl. Ornare imperdiet amet lorem adipiscing.',
   },
   {
     id: '3',
     title: 'How much does shipping cost?',
-    icon: (
-      <StyledMaterialIcons
-        name="inventory-2"
-        size={ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <BoxIcon size={ICON_SIZE} colorClassName="accent-muted" />,
     content:
       'Lorem ipsum dolor sit amet consectetur. Netus nunc mauris risus consequat.',
   },
   {
     id: '4',
     title: 'Do you ship internationally?',
-    icon: (
-      <StyledIonicons
-        name="globe-outline"
-        size={ICON_SIZE}
-        className="text-muted"
-      />
-    ),
+    icon: <PlanetEarthIcon size={ICON_SIZE} colorClassName="accent-muted" />,
     content:
       'Lorem ipsum dolor sit amet consectetur. Netus nunc mauris risus consequat. Libero placerat dignissim consectetur nisl. Ornare imperdiet amet lorem adipiscing.',
   },
@@ -118,8 +114,6 @@ const accordionData = [
 
 const classNames = {
   triggerContentContainer: 'flex-row items-center flex-1 gap-3',
-  triggerTitle: 'text-foreground text-base flex-1',
-  contentText: 'text-muted text-base/relaxed px-[28px]',
 };
 
 // ------------------------------------------------------------------------------
@@ -130,24 +124,22 @@ const DefaultVariantContent = () => {
       <Accordion defaultValue="2" className="w-full">
         {accordionData.map((item) => (
           <Accordion.Item key={item.id} value={item.id}>
-            <PressableFeedback animation="disabled">
-              <Accordion.Trigger>
-                <View className={classNames.triggerContentContainer}>
+            <Accordion.Trigger asChild>
+              <PressableFeedback animation={{ scale: false }}>
+                <PressableFeedback.Scale
+                  className={classNames.triggerContentContainer}
+                >
                   {item.icon}
-                  <AppText className={classNames.triggerTitle}>
-                    {item.title}
-                  </AppText>
-                </View>
+                  <TriggerTitle title={item.title} />
+                </PressableFeedback.Scale>
                 <Accordion.Indicator />
-              </Accordion.Trigger>
-              <PressableFeedback.Highlight
-                animation={{ opacity: { value: [0, 0.05] } }}
-              />
-            </PressableFeedback>
+                <PressableFeedback.Highlight
+                  animation={{ opacity: { value: [0, 0.05] } }}
+                />
+              </PressableFeedback>
+            </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <ContentText text={item.content} />
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -167,16 +159,12 @@ const SurfaceVariantContent = () => {
             <Accordion.Trigger>
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <TriggerTitle title={item.title} />
               </View>
               <Accordion.Indicator />
             </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <ContentText text={item.content} />
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -201,16 +189,12 @@ const MultipleSelectionContent = () => {
             <Accordion.Trigger>
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <TriggerTitle title={item.title} />
               </View>
               <Accordion.Indicator />
             </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <ContentText text={item.content} />
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -221,7 +205,7 @@ const MultipleSelectionContent = () => {
 
 // ------------------------------------------------------------------------------
 
-const WithoutDividersContent = () => {
+const WithoutSeparatorsContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
       <Accordion hideSeparator className="w-full">
@@ -230,16 +214,12 @@ const WithoutDividersContent = () => {
             <Accordion.Trigger className="rounded-lg">
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <TriggerTitle title={item.title} />
               </View>
               <Accordion.Indicator />
             </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <ContentText text={item.content} />
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -259,18 +239,14 @@ const CustomIndicatorContent = () => {
             <Accordion.Trigger>
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <TriggerTitle title={item.title} />
               </View>
               <Accordion.Indicator>
                 <CustomIndicator />
               </Accordion.Indicator>
             </Accordion.Trigger>
             <Accordion.Content>
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <ContentText text={item.content} />
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -290,9 +266,7 @@ const CustomEnteringAnimationContent = () => {
             <Accordion.Trigger>
               <View className={classNames.triggerContentContainer}>
                 {item.icon}
-                <AppText className={classNames.triggerTitle}>
-                  {item.title}
-                </AppText>
+                <TriggerTitle title={item.title} />
               </View>
               <Accordion.Indicator
                 animation={{
@@ -319,9 +293,7 @@ const CustomEnteringAnimationContent = () => {
                 },
               }}
             >
-              <AppText className={classNames.contentText}>
-                {item.content}
-              </AppText>
+              <ContentText text={item.content} />
             </Accordion.Content>
           </Accordion.Item>
         ))}
@@ -353,9 +325,9 @@ const ACCORDION_VARIANTS: UsageVariant[] = [
     content: <MultipleSelectionContent />,
   },
   {
-    value: 'without-dividers',
-    label: 'Without dividers',
-    content: <WithoutDividersContent />,
+    value: 'without-separators',
+    label: 'Without separators',
+    content: <WithoutSeparatorsContent />,
   },
   {
     value: 'custom-indicator',

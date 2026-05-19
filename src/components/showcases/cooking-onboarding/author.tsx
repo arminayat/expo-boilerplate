@@ -1,10 +1,10 @@
 import Feather from '@expo/vector-icons/Feather';
+import { Avatar } from 'heroui-native';
 import { type FC } from 'react';
 import { Pressable, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
 import { AppText } from '../../app-text';
-import { Avatar } from 'heroui-native';
 
 const StyledFeather = withUniwind(Feather);
 

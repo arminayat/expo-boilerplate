@@ -1,22 +1,25 @@
 import * as Crypto from "expo-crypto";
 import * as SecureStore from "expo-secure-store";
-import { MMKV } from "react-native-mmkv";
+import { createMMKV } from "react-native-mmkv";
+
+const SESSION_ENCRYPTION_KEY_STORAGE_KEY = "session-encryption-key-v4";
 
 const fetchOrGenerateEncryptionKey = (): string => {
-  const encryptionKey = SecureStore.getItem("session-encryption-key");
+  const encryptionKey = SecureStore.getItem(SESSION_ENCRYPTION_KEY_STORAGE_KEY);
 
-  if (encryptionKey) {
+  if (encryptionKey?.length === 32) {
     return encryptionKey;
-  } else {
-    const uuid = Crypto.randomUUID();
-    SecureStore.setItem("session-encryption-key", uuid);
-    return uuid;
   }
+
+  const key = Crypto.randomUUID().replace(/-/g, "");
+  SecureStore.setItem(SESSION_ENCRYPTION_KEY_STORAGE_KEY, key);
+  return key;
 };
 
-export const storage = new MMKV({
-  id: "session",
+export const storage = createMMKV({
+  id: "session-v4",
   encryptionKey: fetchOrGenerateEncryptionKey(),
+  encryptionType: "AES-256",
 });
 
 /**
@@ -59,7 +62,7 @@ export async function setItem(key: string, value: string): Promise<void> {
  */
 export async function removeItem(key: string): Promise<void> {
   try {
-    storage.delete(key);
+    storage.remove(key);
   } catch {
     console.warn(`Failed to remove key "${key}" from secure storage`);
   }

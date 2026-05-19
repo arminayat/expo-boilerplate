@@ -124,6 +124,7 @@
 
 - Behavior: demo stack layout with themed headers, logo title, theme toggle, reduced-motion warning toast, and registered component/showcase screens.
 - Source files: `src/app/(demo)/_layout.tsx`, `src/components/theme-toggle.tsx`.
+- Mirror source: this route tree is copied from `/Users/armin/Projects/heroui-native-example/src/app/(home)`.
 - User actions: navigate back, toggle theme.
 - Writes/mutations: theme toggle calls `Uniwind.setTheme()` through `AppThemeProvider`.
 - External calls: none.
@@ -140,9 +141,9 @@
 
 ### Component demo routes under `src/app/(demo)/components/`
 
-- Behavior: interactive HeroUI Native component examples for accordion, avatar, button, card, checkbox, chip, dialog, divider, error view, form field, popover, pressable feedback, radio group, scroll shadow, select, skeleton, spinner, surface, switch, tabs, text field, and toast.
-- Source files: `src/app/(demo)/components/*.tsx`, shared demo helpers under `src/components/`, `src/components/select/`, `src/components/toast/`, and `src/components/component-presentation/`.
-- User actions: interact with local controls, dialogs, popovers, toasts, text inputs, selects, switches, and tabs.
+- Behavior: interactive HeroUI Native examples for accordion, alert, avatar, bottom sheet, button, card, checkbox, chip, close button, control field, description, dialog, field error, input, input group, input OTP, label, link button, list group, menu, popover, pressable feedback, radio group, scroll shadow, search field, select, separator, skeleton, slider, spinner, surface, switch, tabs, tag group, text, text area, text field, and toast.
+- Source files: `src/app/(demo)/components/*.tsx`, shared demo helpers under `src/components/accordion`, `src/components/bottom-sheet`, `src/components/component-presentation`, `src/components/icons`, `src/components/select`, and `src/components/toast`.
+- User actions: interact with local controls, bottom sheets, dialogs, menus, popovers, toasts, text inputs, selects, sliders, switches, tabs, and tag groups.
 - Writes/mutations: local React state only, plus toast state through HeroUI Native or `react-native-toast-message`.
 - External calls: none expected except remote images in avatar/showcase examples.
 - Persistence: none.
@@ -159,7 +160,7 @@
 
 ### Showcase routes under `src/app/(demo)/showcases/`
 
-- Behavior: full-screen composed UI showcases: Raycast model select, cooking onboarding, Linear issue, paywall, and onboarding carousel.
+- Behavior: full-screen composed UI showcases: Super App Paywall, Raycast model select, cooking onboarding, Linear issue, hero paywall, and onboarding carousel.
 - Source files: `src/app/(demo)/showcases/*.tsx`, `src/components/showcases/**`.
 - User actions: open/close showcases, change local selections, search in local dialogs, interact with simulated buttons.
 - Writes/mutations: local React state only. Some actions call `simulatePress()` to show a dev alert and trigger haptics.

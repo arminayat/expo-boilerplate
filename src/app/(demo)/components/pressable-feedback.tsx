@@ -1,23 +1,21 @@
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Button, Card, PressableFeedback } from 'heroui-native';
 import { StyleSheet, View } from 'react-native';
+import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
-import {
-  Button,
-  Card,
-  Description,
-  Label,
-  PressableFeedback,
-} from 'heroui-native';
+
+const StyledImage = withUniwind(Image);
 
 const BackgroundImageCardContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
       <PressableFeedback
-        className="w-full aspect-square rounded-3xl"
+        className="w-full aspect-square overflow-auto"
+        animation={{ scale: { value: 0.995 } }}
       >
         <Card className="flex-1">
           <Image
@@ -31,44 +29,61 @@ const BackgroundImageCardContent = () => {
             colors={['rgba(0,0,0,0.1)', 'rgba(0,0,0,0.4)']}
             style={StyleSheet.absoluteFill}
           />
-          <View className="flex-1 gap-4">
-            <Card.Body className="flex-1">
-              <Card.Title className="text-base text-zinc-50 uppercase mb-0.5">
+          <PressableFeedback.Ripple
+            animation={{
+              backgroundColor: { value: 'white' },
+              opacity: { value: [0, 0.3, 0] },
+            }}
+          />
+          <View className="flex-1 gap-4" pointerEvents="box-none">
+            <Card.Body className="flex-1" pointerEvents="none">
+              <Card.Title
+                maxFontSizeMultiplier={1.4}
+                className="text-base text-zinc-50 uppercase mb-0.5"
+              >
                 Neo
               </Card.Title>
-              <Card.Description className="text-zinc-50 font-medium text-base">
+              <Card.Description
+                maxFontSizeMultiplier={1.4}
+                className="text-zinc-50 font-medium text-base"
+              >
                 Home robot
               </Card.Description>
             </Card.Body>
             <Card.Footer className="gap-3">
               <View className="flex-row items-center justify-between">
-                <View>
-                  <AppText className="text-base text-white">
+                <View pointerEvents="none">
+                  <AppText
+                    maxFontSizeMultiplier={1.4}
+                    className="text-base text-white"
+                  >
                     Available soon
                   </AppText>
-                  <AppText className="text-base text-zinc-300">
+                  <AppText
+                    maxFontSizeMultiplier={1.4}
+                    className="text-base text-zinc-300"
+                  >
                     Get notified
                   </AppText>
                 </View>
+
                 <Button
                   size="sm"
                   className="bg-white"
-                  animation={{ highlight: 'disabled' }}
+                  feedbackVariant="scale"
                   onPress={simulatePress}
                 >
-                  <Button.Label className="text-black">Notify me</Button.Label>
+                  <Button.Label
+                    maxFontSizeMultiplier={1.4}
+                    className="text-black"
+                  >
+                    Notify me
+                  </Button.Label>
                 </Button>
               </View>
             </Card.Footer>
           </View>
         </Card>
-        <PressableFeedback.Ripple
-          animation={{
-            backgroundColor: { value: 'white' },
-            opacity: { value: [0, 0.3, 0] },
-            progress: { baseDuration: 600 },
-          }}
-        />
       </PressableFeedback>
     </View>
   );
@@ -81,79 +96,93 @@ const CardWithImageContent = () => {
     <View className="flex-1 items-center justify-center px-5">
       <View className="flex-row gap-4">
         <PressableFeedback
-          className="flex-1 aspect-[1/1.3] rounded-3xl"
+          className="flex-1 aspect-[1/1.3] overflow-auto"
+          animation={{ scale: { value: 0.995 } }}
         >
           <Card className="flex-1">
             <View className="flex-1 gap-4">
               <Card.Header>
-                <Image
+                <StyledImage
                   source={{
                     uri: 'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/docs/demo1.jpg',
                   }}
-                  style={{
-                    height: 60,
-                    aspectRatio: 1,
-                    borderRadius: 14,
-                  }}
+                  className="h-16 aspect-square rounded-xl"
                 />
               </Card.Header>
               <Card.Body className="flex-1">
-                <Card.Title>Indie Hackers</Card.Title>
-                <Card.Description className="text-sm">
+                <Card.Title maxFontSizeMultiplier={1.2} numberOfLines={1}>
+                  Indie Hackers
+                </Card.Title>
+                <Card.Description
+                  className="text-sm"
+                  maxFontSizeMultiplier={1.2}
+                  numberOfLines={1}
+                >
                   148 members
                 </Card.Description>
               </Card.Body>
               <Card.Footer className="flex-row items-center gap-2">
                 <View className="size-3 rounded-full bg-rose-400" />
-                <AppText className="text-sm font-medium text-foreground">
+                <AppText
+                  maxFontSizeMultiplier={1.2}
+                  numberOfLines={1}
+                  className="text-sm font-medium text-foreground"
+                >
                   @indiehackers
                 </AppText>
               </Card.Footer>
             </View>
+            <PressableFeedback.Ripple
+              animation={{
+                backgroundColor: { value: '#fecdd3' },
+                opacity: { value: [0, 0.2, 0] },
+              }}
+            />
           </Card>
-          <PressableFeedback.Ripple
-            animation={{
-              backgroundColor: { value: '#fecdd3' },
-              opacity: { value: [0, 0.2, 0] },
-            }}
-          />
         </PressableFeedback>
         <PressableFeedback
-          className="flex-1 aspect-[1/1.3] rounded-3xl"
+          className="flex-1 aspect-[1/1.3] overflow-auto"
+          animation={{ scale: { value: 0.995 } }}
         >
           <Card className="flex-1">
             <View className="flex-1 gap-4">
               <Card.Header>
-                <Image
+                <StyledImage
                   source={{
                     uri: 'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/docs/demo2.jpg',
                   }}
-                  style={{
-                    height: 60,
-                    aspectRatio: 1,
-                    borderRadius: 14,
-                  }}
+                  className="h-16 aspect-square rounded-xl"
                 />
               </Card.Header>
               <Card.Body className="flex-1">
-                <Card.Title>AI Builders</Card.Title>
-                <Card.Description className="text-sm">
+                <Card.Title maxFontSizeMultiplier={1.2} numberOfLines={1}>
+                  AI Builders
+                </Card.Title>
+                <Card.Description
+                  className="text-sm"
+                  maxFontSizeMultiplier={1.2}
+                  numberOfLines={1}
+                >
                   362 members
                 </Card.Description>
               </Card.Body>
               <Card.Footer className="flex-row items-center gap-2">
                 <View className="size-3 rounded-full bg-emerald-400" />
-                <AppText className="text-sm font-medium text-foreground">
+                <AppText
+                  maxFontSizeMultiplier={1.2}
+                  numberOfLines={1}
+                  className="text-sm font-medium text-foreground"
+                >
                   @aibuilders
                 </AppText>
               </Card.Footer>
             </View>
+            <PressableFeedback.Ripple
+              animation={{
+                backgroundColor: { value: '#67e8f9' },
+              }}
+            />
           </Card>
-          <PressableFeedback.Ripple
-            animation={{
-              backgroundColor: { value: '#67e8f9' },
-            }}
-          />
         </PressableFeedback>
       </View>
     </View>

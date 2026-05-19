@@ -1,6 +1,6 @@
+import { ControlField, Description, Label } from 'heroui-native';
 import React from 'react';
 import { View } from 'react-native';
-import { ControlField, Description, Label } from 'heroui-native';
 
 interface CheckboxFieldProps {
   isSelected: boolean;

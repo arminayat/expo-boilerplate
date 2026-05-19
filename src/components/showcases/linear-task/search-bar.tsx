@@ -1,8 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useThemeColor } from 'heroui-native';
 import { type FC } from 'react';
 import { TextInput, View } from 'react-native';
 import { withUniwind } from 'uniwind';
-import { useThemeColor } from 'heroui-native';
 
 const StyledFontAwesome = withUniwind(FontAwesome);
 

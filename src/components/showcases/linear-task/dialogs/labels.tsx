@@ -1,5 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
+import { Checkbox, Chip, cn, ControlField, Dialog, Label } from 'heroui-native';
 import { useMemo, useState, type FC } from 'react';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -7,19 +8,14 @@ import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
+import { useAppTheme } from '../../../../contexts/app-theme-context';
 import { AppText } from '../../../app-text';
 import { DialogBlurBackdrop } from '../../../dialog-blur-backdrop';
 import { DialogHeader } from '../dialog-header';
 import { SearchBar } from '../search-bar';
-import {
-  Checkbox,
-  Chip,
-  ControlField,
-  Dialog,
-  Label,
-} from 'heroui-native';
 
 const StyledFeather = withUniwind(Feather);
+const StyledScrollView = withUniwind(ScrollView);
 
 type LabelItem = {
   value: string;
@@ -35,6 +31,7 @@ export const Labels: FC = () => {
 
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const { isDark } = useAppTheme();
 
   const insetTop = insets.top + 12;
   const dialogContentHeight = (height - insetTop) / 2;
@@ -136,7 +133,10 @@ export const Labels: FC = () => {
     <Dialog>
       <Dialog.Trigger asChild>
         <Chip
-          className="h-7 bg-surface-quaternary px-2"
+          className={cn(
+            'h-7 px-2',
+            isDark ? 'bg-neutral-900/50' : 'bg-neutral-300/50'
+          )}
           onPress={() => {
             if (Platform.OS === 'ios') {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -169,7 +169,7 @@ export const Labels: FC = () => {
               </View>
             )}
             {filteredItems.length > 0 && (
-              <ScrollView
+              <StyledScrollView
                 contentContainerClassName="pt-3"
                 showsVerticalScrollIndicator={false}
                 bounces={false}
@@ -195,7 +195,7 @@ export const Labels: FC = () => {
                         <ControlField.Indicator>
                           <Checkbox
                             isSelected={isSelected}
-                            className="bg-transparent"
+                            className="bg-transparent border-none shadow-none"
                           >
                             <Checkbox.Indicator className="bg-transparent">
                               {isSelected && (
@@ -217,7 +217,7 @@ export const Labels: FC = () => {
                     );
                   })}
                 </View>
-              </ScrollView>
+              </StyledScrollView>
             )}
           </Dialog.Content>
         </KeyboardAvoidingView>

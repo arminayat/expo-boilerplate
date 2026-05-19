@@ -1,8 +1,8 @@
+import { Select, useSelect } from 'heroui-native';
 import { type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { AppText } from '../../app-text';
 import type { UsageVariant } from '../types';
-import { Select, useSelect } from 'heroui-native';
 
 type Props = {
   data: UsageVariant;
@@ -12,7 +12,7 @@ export const SelectItem: FC<Props> = ({ data }) => {
   const { value: selectedValue } = useSelect();
 
   const isSelected =
-    (selectedValue as UsageVariant | undefined)?.value === data.value;
+    !Array.isArray(selectedValue) && selectedValue?.value === data.value;
 
   return (
     <Select.Item
@@ -23,7 +23,11 @@ export const SelectItem: FC<Props> = ({ data }) => {
       style={styles.container}
     >
       {isSelected && <View className="absolute inset-0 bg-surface shadow-md" />}
-      <AppText className="text-lg text-foreground font-medium">
+      <AppText
+        className="text-lg text-foreground font-medium"
+        maxFontSizeMultiplier={1.2}
+        numberOfLines={1}
+      >
         {data.label}
       </AppText>
       <Select.ItemIndicator />

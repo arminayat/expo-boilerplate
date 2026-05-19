@@ -3,6 +3,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
+import { Button, Chip, RadioGroup } from 'heroui-native';
 import { useCallback, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, {
@@ -16,15 +17,9 @@ import { Uniwind, useUniwind, withUniwind } from 'uniwind';
 import BG from '../../../../assets/images/paywall-showcase-bg.jpeg';
 import LogoDark from '../../../../assets/logo-dark.png';
 import { AppText } from '../../../components/app-text';
-import { StyledFormField } from '../../../components/showcases/paywall/styled-form-field';
+import { StyledControlField } from '../../../components/showcases/paywall/styled-control-field';
 import { StyledRadio } from '../../../components/showcases/paywall/styled-radio';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
-import {
-  Button,
-  Chip,
-  Label,
-  RadioGroup,
-} from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 const StyledFeather = withUniwind(Feather);
@@ -89,7 +84,7 @@ export default function Paywall() {
           .easing(Easing.out(Easing.ease))}
         className="flex-1 justify-end"
       >
-        <StyledFormField
+        <StyledControlField
           isSelected={isFreeTrialEnabled}
           onSelectedChange={setIsFreeTrialEnabled}
         />
@@ -137,7 +132,7 @@ export default function Paywall() {
           size="lg"
           className="rounded-full bg-white mb-5"
           onPress={simulatePress}
-          animation={{ highlight: 'disabled' }}
+          feedbackVariant="scale"
         >
           <Button.Label className="text-black">Continue</Button.Label>
         </Button>

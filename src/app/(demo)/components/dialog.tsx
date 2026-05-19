@@ -1,27 +1,8 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import {
-  Platform,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { KeyboardAvoidingView, KeyboardController } from 'react-native-keyboard-controller';
-
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { withUniwind } from 'uniwind';
-import type { UsageVariant } from '../../../components/component-presentation/types';
-import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import { DialogBlurBackdrop } from '../../../components/dialog-blur-backdrop';
-import { useAppTheme } from '../../../contexts/app-theme-context';
-import { simulatePress } from '../../../helpers/utils/simulate-press';
 import {
   Button,
   cn,
-  Description,
   Dialog,
   FieldError,
   Input,
@@ -30,9 +11,23 @@ import {
   TextField,
   useThemeColor,
 } from 'heroui-native';
+import { useState } from 'react';
+import { Platform, Text, useWindowDimensions, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { KeyboardController } from 'react-native-keyboard-controller';
+
+import { Easing, FadeInDown, FadeOutDown } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { withUniwind } from 'uniwind';
+import type { UsageVariant } from '../../../components/component-presentation/types';
+import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import { DialogBlurBackdrop } from '../../../components/dialog-blur-backdrop';
+import { FloppyDiscIcon } from '../../../components/icons/floppy-disc';
+import { TrashIcon } from '../../../components/icons/trash';
+import { useAppTheme } from '../../../contexts/app-theme-context';
+import { simulatePress } from '../../../helpers/utils/simulate-press';
 
 const StyleScrollView = withUniwind(ScrollView);
-const StyledIonicons = withUniwind(Ionicons);
 
 KeyboardController.preload();
 
@@ -49,13 +44,12 @@ const BasicDialogContent = () => {
           <Dialog.Portal>
             <Dialog.Overlay />
             <Dialog.Content>
-              <Dialog.Close className="self-end -mb-2 z-50" />
+              <Dialog.Close
+                variant="ghost"
+                className="absolute top-3 right-2.5 z-50"
+              />
               <View className="size-9 items-center justify-center rounded-full bg-overlay-foreground/5 mb-4">
-                <StyledIonicons
-                  name="albums-outline"
-                  size={16}
-                  className="text-warning"
-                />
+                <FloppyDiscIcon size={16} colorClassName="accent-warning" />
               </View>
               <View className="mb-8 gap-1.5">
                 <Dialog.Title>Low Disk Space</Dialog.Title>
@@ -98,18 +92,17 @@ const BlurBackdropDialogContent = () => {
           onOpenChange={setBlurBackdropDialogOpen}
         >
           <Dialog.Trigger asChild>
-            <Button variant="secondary">Dialog with blur backdrop</Button>
+            <Button variant="secondary">
+              <Button.Label maxFontSizeMultiplier={1.2}>
+                Dialog with blur backdrop
+              </Button.Label>
+            </Button>
           </Dialog.Trigger>
           <Dialog.Portal>
             <DialogBlurBackdrop />
             <Dialog.Content className="max-w-sm mx-auto">
-              <Dialog.Close className="self-end -mb-2 z-50" />
               <View className="size-10 items-center justify-center rounded-full bg-overlay-foreground/5 mb-4">
-                <StyledIonicons
-                  name="trash-outline"
-                  size={16}
-                  className="text-danger"
-                />
+                <TrashIcon size={16} colorClassName="accent-danger" />
               </View>
               <View className="mb-8 gap-1">
                 <Dialog.Title>Delete product</Dialog.Title>
@@ -122,14 +115,13 @@ const BlurBackdropDialogContent = () => {
                 <Button variant="danger" onPress={simulatePress}>
                   Delete
                 </Button>
-                <Dialog.Close asChild>
-                  <Button
-                    variant="tertiary"
-                    className="bg-overlay-foreground/5"
-                  >
-                    Cancel
-                  </Button>
-                </Dialog.Close>
+                <Button
+                  variant="tertiary"
+                  className="bg-overlay-foreground/5"
+                  onPress={() => setBlurBackdropDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
               </View>
             </Dialog.Content>
           </Dialog.Portal>
@@ -141,8 +133,11 @@ const BlurBackdropDialogContent = () => {
 
 // ------------------------------------------------------------------------------
 
-const TextInputDialogContent = () => {
-  const [textInputDialogOpen, setTextInputDialogOpen] = useState(false);
+/**
+ * Component containing the form content and state logic for the text input dialog.
+ * Manages form state, validation, and UI rendering.
+ */
+const UpdateProfileDialogForm = ({ onClose }: { onClose: () => void }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [nameError, setNameError] = useState('');
@@ -154,14 +149,24 @@ const TextInputDialogContent = () => {
   const insetTop = insets.top + 12;
   const maxTextInputDialogHeight = (height - insetTop) / 2;
 
-  const themeColorSurfaceSecondary = useThemeColor('surface-secondary');
   const themeColorMuted = useThemeColor('muted');
 
+  /**
+   * Validates email format using regex pattern.
+   * @param emailValue - The email string to validate
+   * @returns True if email is valid, false otherwise
+   */
   const validateEmail = (emailValue: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(emailValue);
   };
 
+  /**
+   * Handles form submission with validation.
+   * Validates name and email fields, shows errors if invalid.
+   * On success, simulates press action and resets form.
+   * @returns True if validation passes, false otherwise
+   */
   const handleSubmit = () => {
     let hasError = false;
 
@@ -197,6 +202,94 @@ const TextInputDialogContent = () => {
     return false;
   };
 
+  /**
+   * Resets all form fields and errors, then closes the dialog.
+   */
+  const handleCancel = () => {
+    setName('');
+    setEmail('');
+    setNameError('');
+    setEmailError('');
+    onClose();
+  };
+
+  return (
+    <Dialog.Content
+      className="bg-surface"
+      animation={{
+        entering: FadeInDown.duration(200).easing(Easing.out(Easing.ease)),
+        exiting: FadeOutDown.duration(150).easing(Easing.in(Easing.ease)),
+      }}
+      style={{
+        marginTop: insetTop,
+        height: maxTextInputDialogHeight,
+      }}
+    >
+      <View className="items-end">
+        <Dialog.Close />
+      </View>
+      <Dialog.Title className="mb-6">Update Profile</Dialog.Title>
+
+      <View className="flex-1">
+        <StyleScrollView
+          contentContainerClassName="gap-5"
+          keyboardShouldPersistTaps="always"
+        >
+          <TextField isRequired isInvalid={!!nameError}>
+            <Label isInvalid={false}>Full Name</Label>
+            <Input
+              variant="secondary"
+              placeholder="Enter your name"
+              value={name}
+              onChangeText={(text) => {
+                setName(text);
+                if (nameError) setNameError('');
+              }}
+              autoCapitalize="words"
+              autoCorrect
+              autoFocus
+              isInvalid={false}
+              selectionColorClassName="accent-muted"
+            />
+            <FieldError>{nameError}</FieldError>
+          </TextField>
+
+          <TextField isRequired isInvalid={!!emailError}>
+            <Label isInvalid={false}>Email Address</Label>
+            <Input
+              variant="secondary"
+              placeholder="email@example.com"
+              value={email}
+              onChangeText={(text) => {
+                setEmail(text);
+                if (emailError) setEmailError('');
+              }}
+              autoCapitalize="none"
+              isInvalid={false}
+              selectionColor={themeColorMuted}
+            />
+            <FieldError>{emailError}</FieldError>
+          </TextField>
+        </StyleScrollView>
+      </View>
+
+      <View className="flex-row items-center justify-end gap-3 pt-3">
+        <Button variant="ghost" size="sm" onPress={handleCancel}>
+          <Button.Label maxFontSizeMultiplier={1.4}>Cancel</Button.Label>
+        </Button>
+        <Button size="sm" onPress={handleSubmit}>
+          <Button.Label maxFontSizeMultiplier={1.4}>
+            Update Profile
+          </Button.Label>
+        </Button>
+      </View>
+    </Dialog.Content>
+  );
+};
+
+const TextInputDialogContent = () => {
+  const [textInputDialogOpen, setTextInputDialogOpen] = useState(false);
+
   return (
     <View className="flex-1">
       <View className="flex-1 items-center justify-center">
@@ -204,105 +297,20 @@ const TextInputDialogContent = () => {
           isOpen={textInputDialogOpen}
           onOpenChange={(isOpen) => {
             setTextInputDialogOpen(isOpen);
-            // Reset form and errors when dialog closes
-            if (!isOpen) {
-              setName('');
-              setEmail('');
-              setNameError('');
-              setEmailError('');
-            }
           }}
         >
           <Dialog.Trigger asChild>
-            <Button variant="secondary">Dialog with text input</Button>
+            <Button variant="secondary">
+              <Button.Label maxFontSizeMultiplier={1.6}>
+                Dialog with text input
+              </Button.Label>
+            </Button>
           </Dialog.Trigger>
-          <Dialog.Portal>
+          <Dialog.Portal className="justify-start">
             <DialogBlurBackdrop />
-            <KeyboardAvoidingView
-              behavior="padding"
-              keyboardVerticalOffset={24}
-              style={{
-                flex: 1,
-                justifyContent: 'flex-start',
-              }}
-            >
-              <Dialog.Content
-                className="bg-surface rounded-3xl"
-                style={{
-                  marginTop: insetTop,
-                  height: maxTextInputDialogHeight,
-                }}
-              >
-                <Dialog.Close className="self-end" />
-                <Dialog.Title className="mb-6">Update Profile</Dialog.Title>
-
-                <View className="flex-1">
-                  <StyleScrollView contentContainerClassName="gap-5">
-                    <TextField isRequired isInvalid={!!nameError}>
-                      <Label isInvalid={false}>
-                        Full Name
-                      </Label>
-                      <Input
-                        placeholder="Enter your name"
-                        value={name}
-                        onChangeText={(text) => {
-                          setName(text);
-                          if (nameError) setNameError('');
-                        }}
-                        autoCapitalize="words"
-                        autoCorrect
-                        autoFocus
-                        isInvalid={false}
-                        selectionColor={themeColorMuted}
-                      />
-                      <FieldError>
-                        {nameError}
-                      </FieldError>
-                    </TextField>
-
-                    <TextField isRequired isInvalid={!!emailError}>
-                      <Label isInvalid={false}>
-                        Email Address
-                      </Label>
-                      <Input
-                        placeholder="email@example.com"
-                        value={email}
-                        onChangeText={(text) => {
-                          setEmail(text);
-                          if (emailError) setEmailError('');
-                        }}
-                        autoCapitalize="none"
-                        isInvalid={false}
-                        selectionColor={themeColorMuted}
-                      />
-                      <FieldError>
-                        {emailError}
-                      </FieldError>
-                    </TextField>
-                  </StyleScrollView>
-                </View>
-
-                <View className="flex-row justify-end gap-3 pt-3">
-                  <Dialog.Close asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onPress={() => {
-                        setName('');
-                        setEmail('');
-                        setNameError('');
-                        setEmailError('');
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                  </Dialog.Close>
-                  <Button size="sm" onPress={handleSubmit}>
-                    Update Profile
-                  </Button>
-                </View>
-              </Dialog.Content>
-            </KeyboardAvoidingView>
+            <UpdateProfileDialogForm
+              onClose={() => setTextInputDialogOpen(false)}
+            />
           </Dialog.Portal>
         </Dialog>
       </View>
@@ -323,14 +331,18 @@ const LongContentDialogContent = () => {
       <View className="flex-1 items-center justify-center">
         <Dialog isOpen={scrollDialogOpen} onOpenChange={setScrollDialogOpen}>
           <Dialog.Trigger asChild>
-            <Button variant="secondary">Dialog with long content</Button>
+            <Button variant="secondary">
+              <Button.Label maxFontSizeMultiplier={1.6}>
+                Dialog with long content
+              </Button.Label>
+            </Button>
           </Dialog.Trigger>
           <Dialog.Portal>
             <Dialog.Overlay
               className={cn('bg-stone-100', isDark && 'bg-stone-950')}
             />
-            <Dialog.Content className="rounded-2xl px-0 shadow-2xl shadow-black/10">
-              <Dialog.Close className="self-end mr-4" />
+            <Dialog.Content className="rounded-2xl px-0">
+              <Dialog.Close variant="ghost" className="self-end mr-4" />
               <Dialog.Title className="text-center mb-5">
                 Upload Audio
               </Dialog.Title>
@@ -338,6 +350,7 @@ const LongContentDialogContent = () => {
                 LinearGradientComponent={LinearGradient}
                 style={{ height: height * 0.35 }}
                 color={themeColorOverlay}
+                className="mb-4"
               >
                 <StyleScrollView contentContainerClassName="px-6">
                   <Text className="text-foreground/80 text-center">
@@ -382,13 +395,11 @@ const LongContentDialogContent = () => {
                 </StyleScrollView>
               </ScrollShadow>
               <Button
-                variant="ghost"
+                variant="secondary"
                 className="self-center"
-                onPress={simulatePress}
+                onPress={() => setScrollDialogOpen(false)}
               >
-                <Button.Label className="text-foreground font-semibold">
-                  Agree to Terms
-                </Button.Label>
+                Agree to Terms
               </Button>
             </Dialog.Content>
           </Dialog.Portal>
@@ -412,9 +423,11 @@ const NativeModalDialogContent = () => {
       <View className="flex-1 items-center justify-center">
         <Button
           variant="secondary"
-          onPress={() => router.push('/components/dialog-native-modal')}
+          onPress={() => router.push('components/dialog-native-modal')}
         >
-          Dialog from native modal
+          <Button.Label maxFontSizeMultiplier={1.6}>
+            Dialog from native modal
+          </Button.Label>
         </Button>
       </View>
     </View>

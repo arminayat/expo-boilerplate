@@ -1,6 +1,16 @@
 import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import * as Haptics from 'expo-haptics';
+import {
+  Avatar,
+  Chip,
+  cn,
+  Dialog,
+  Label,
+  Radio,
+  RadioGroup,
+  useDialog,
+} from 'heroui-native';
 import { useMemo, useState, type FC } from 'react';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -8,26 +18,61 @@ import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
+import { useAppTheme } from '../../../../contexts/app-theme-context';
 import { AppText } from '../../../app-text';
 import { DialogBlurBackdrop } from '../../../dialog-blur-backdrop';
 import { DialogHeader } from '../dialog-header';
 import { SearchBar } from '../search-bar';
-import {
-  Avatar,
-  Chip,
-  Dialog,
-  Label,
-  Radio,
-  RadioGroup,
-} from 'heroui-native';
 
 const StyledFeather = withUniwind(Feather);
 const StyledMaterialCommunityIcons = withUniwind(MaterialCommunityIcons);
+const StyledScrollView = withUniwind(ScrollView);
 
 type AssigneeItem = {
   value: string;
   label: string;
   indicator: React.ReactNode;
+};
+
+type AssigneeRadioItemProps = {
+  item: AssigneeItem;
+  value: string;
+};
+
+const AssigneeRadioItem: FC<AssigneeRadioItemProps> = ({ item, value }) => {
+  const { onOpenChange } = useDialog();
+
+  return (
+    <RadioGroup.Item
+      value={item.value}
+      onPress={() => {
+        if (Platform.OS === 'ios') {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }
+        onOpenChange(false);
+      }}
+    >
+      <View className="flex-row items-center gap-2">
+        <View className="w-7 pl-0.5 justify-center">
+          <View className="scale-105">{item.indicator}</View>
+        </View>
+        <Label>{item.label}</Label>
+      </View>
+      <Radio>
+        <Radio.Indicator className="border-none shadow-none bg-transparent">
+          {value === item.value && (
+            <Animated.View key={item.value} entering={FadeIn.duration(200)}>
+              <StyledFeather
+                name="check"
+                size={18}
+                className="text-foreground"
+              />
+            </Animated.View>
+          )}
+        </Radio.Indicator>
+      </Radio>
+    </RadioGroup.Item>
+  );
 };
 
 export const Assignee: FC = () => {
@@ -36,6 +81,7 @@ export const Assignee: FC = () => {
 
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const { isDark } = useAppTheme();
 
   const insetTop = insets.top + 12;
   const dialogContentHeight = (height - insetTop) / 2;
@@ -100,7 +146,10 @@ export const Assignee: FC = () => {
     <Dialog>
       <Dialog.Trigger asChild>
         <Chip
-          className="h-7 bg-surface-quaternary pl-1 pr-2"
+          className={cn(
+            'h-7 pl-1 pr-2',
+            isDark ? 'bg-neutral-900/50' : 'bg-neutral-300/50'
+          )}
           onPress={() => {
             if (Platform.OS === 'ios') {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -133,7 +182,7 @@ export const Assignee: FC = () => {
               </View>
             )}
             {filteredItems.length > 0 && (
-              <ScrollView
+              <StyledScrollView
                 contentContainerClassName="pt-3"
                 showsVerticalScrollIndicator={false}
                 bounces={false}
@@ -145,46 +194,14 @@ export const Assignee: FC = () => {
                   className="gap-7"
                 >
                   {filteredItems.map((item) => (
-                    <Dialog.Close
+                    <AssigneeRadioItem
                       key={item.value}
-                      className="self-stretch"
-                      asChild
-                    >
-                      <RadioGroup.Item
-                        value={item.value}
-                        onPress={() => {
-                          if (Platform.OS === 'ios') {
-                            Haptics.impactAsync(
-                              Haptics.ImpactFeedbackStyle.Light
-                            );
-                          }
-                        }}
-                      >
-                        <View className="flex-row items-center gap-2">
-                          <View className="w-7 pl-0.5 justify-center">
-                            <View className="scale-105">{item.indicator}</View>
-                          </View>
-                          <Label>{item.label}</Label>
-                        </View>
-                        <Radio><Radio.Indicator className="border-0 bg-transparent">
-                          {value === item.value && (
-                            <Animated.View
-                              key={item.value}
-                              entering={FadeIn.duration(200)}
-                            >
-                              <StyledFeather
-                                name="check"
-                                size={18}
-                                className="text-foreground"
-                              />
-                            </Animated.View>
-                          )}
-                        </Radio.Indicator></Radio>
-                      </RadioGroup.Item>
-                    </Dialog.Close>
+                      item={item}
+                      value={value}
+                    />
                   ))}
                 </RadioGroup>
-              </ScrollView>
+              </StyledScrollView>
             )}
           </Dialog.Content>
         </KeyboardAvoidingView>

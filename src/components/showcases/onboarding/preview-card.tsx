@@ -1,3 +1,4 @@
+import { Card, Chip, cn } from 'heroui-native';
 import { type FC } from 'react';
 import { Image, useWindowDimensions, View } from 'react-native';
 import Animated, {
@@ -6,13 +7,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useAppTheme } from '../../../contexts/app-theme-context';
 import { AppText } from '../../app-text';
-import {
-  Card,
-  Chip,
-  cn,
-  Description,
-  Label,
-} from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -66,7 +60,7 @@ export const PreviewCard: FC<PreviewCardProps> = ({
       <Card
         className={cn(
           'aspect-3/5 border-0 rounded-3xl',
-          isDark && 'border border-border/70'
+          isDark && 'border border-border/50'
         )}
       >
         <Card.Body className="flex-1 p-2 mb-4">

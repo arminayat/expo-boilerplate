@@ -1,9 +1,3 @@
-import React from 'react';
-import { View } from 'react-native';
-import Animated, { LinearTransition } from 'react-native-reanimated';
-import { withUniwind } from 'uniwind';
-import type { UsageVariant } from '../../../components/component-presentation/types';
-import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
 import {
   Checkbox,
   ControlField,
@@ -12,8 +6,13 @@ import {
   Label,
   Separator,
   Surface,
-  Switch,
 } from 'heroui-native';
+import React from 'react';
+import { View } from 'react-native';
+import Animated, { LinearTransition } from 'react-native-reanimated';
+import { withUniwind } from 'uniwind';
+import type { UsageVariant } from '../../../components/component-presentation/types';
+import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
 
 const StyleAnimatedView = withUniwind(Animated.View);
 interface SwitchFieldProps {
@@ -31,8 +30,10 @@ const SwitchField: React.FC<SwitchFieldProps> = ({
 }) => (
   <ControlField isSelected={isSelected} onSelectedChange={onSelectedChange}>
     <View className="flex-1">
-      <Label>{title}</Label>
-      <Description>{description}</Description>
+      <Label>
+        <Label.Text maxFontSizeMultiplier={1.2}>{title}</Label.Text>
+      </Label>
+      <Description maxFontSizeMultiplier={1.2}>{description}</Description>
     </View>
     <ControlField.Indicator />
   </ControlField>
@@ -114,8 +115,10 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
         </Checkbox>
       </ControlField.Indicator>
       <View className="flex-1">
-        <Label>{title}</Label>
-        <Description>{description}</Description>
+        <Label>
+          <Label.Text maxFontSizeMultiplier={1.2}>{title}</Label.Text>
+        </Label>
+        <Description maxFontSizeMultiplier={1.2}>{description}</Description>
       </View>
     </ControlField>
   );
@@ -225,7 +228,7 @@ const InlineLayoutCompactContent = () => {
 
   return (
     <View className="flex-1 items-center justify-center px-5">
-      <View className="flex-row flex-wrap gap-4 w-full">
+      <View className="flex-row flex-wrap justify-center gap-4 w-full">
         {(Object.keys(filters) as Array<keyof typeof filters>).map((key) => (
           <InlineFilter
             key={key}
@@ -248,7 +251,10 @@ const DisabledStateContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
       <View className="gap-8 w-full">
-        <ControlField isSelected={activeSwitch} onSelectedChange={setActiveSwitch}>
+        <ControlField
+          isSelected={activeSwitch}
+          onSelectedChange={setActiveSwitch}
+        >
           <View className="flex-1">
             <Label>Two-factor authentication</Label>
             <Description>
@@ -294,23 +300,20 @@ const ValidationErrorStatesContent = () => {
             isSelected={terms}
             onSelectedChange={setTerms}
             isInvalid={!terms}
-            className="flex-col items-start gap-1"
+            isRequired
           >
-            <View className="flex-row items-center gap-2">
-              <View className="flex-1">
-                <Label>
+            <View className="flex-1">
+              <Label>
+                <Label.Text maxFontSizeMultiplier={1.2}>
                   I agree to the terms and conditions
-                </Label>
-                <Description>
-                  By checking this box, you agree to our Terms of Service and
-                  Privacy Policy
-                </Description>
-              </View>
-              <ControlField.Indicator variant="checkbox" />
+                </Label.Text>
+              </Label>
+              <Description isInvalid={false} maxFontSizeMultiplier={1.2}>
+                By checking this box, you agree to our Terms of Service and
+                Privacy Policy
+              </Description>
             </View>
-            <FieldError>
-              You must accept the terms to continue
-            </FieldError>
+            <ControlField.Indicator variant="checkbox" />
           </ControlField>
         </Animated.View>
 
@@ -319,22 +322,23 @@ const ValidationErrorStatesContent = () => {
             isSelected={privacyAccepted}
             onSelectedChange={setPrivacyAccepted}
             isInvalid={!privacyAccepted}
-            className="flex-col items-start gap-1"
           >
-            <View className="flex-row items-center gap-2">
-              <View className="flex-1">
-                <Label>Accept Privacy Policy</Label>
-                <Description>
-                  You must accept our privacy policy to create an account
-                </Description>
-              </View>
-              <ControlField.Indicator>
-                <Checkbox isInvalid={false} />
-              </ControlField.Indicator>
+            <View className="flex-1">
+              <Label isInvalid={false}>
+                <Label.Text maxFontSizeMultiplier={1.2}>
+                  Accept Privacy Policy
+                </Label.Text>
+              </Label>
+              <Description hideOnInvalid maxFontSizeMultiplier={1.2}>
+                The privacy policy has been accepted
+              </Description>
+              <FieldError textProps={{ maxFontSizeMultiplier: 1.2 }}>
+                Please accept the privacy policy to continue
+              </FieldError>
             </View>
-            <FieldError>
-              Please accept the privacy policy to continue
-            </FieldError>
+            <ControlField.Indicator>
+              <Checkbox isInvalid={false} />
+            </ControlField.Indicator>
           </ControlField>
         </Animated.View>
 
@@ -347,14 +351,19 @@ const ValidationErrorStatesContent = () => {
           >
             <View className="flex-row items-center gap-2">
               <View className="flex-1">
-                <Label>Share usage data</Label>
-                <Description>
-                  Help improve our product by sharing anonymous usage data
+                <Label isInvalid={false}>
+                  <Label.Text maxFontSizeMultiplier={1.2}>
+                    Share usage data
+                  </Label.Text>
+                </Label>
+                <Description isInvalid={false} maxFontSizeMultiplier={1.2}>
+                  Help improve our product by sharing anonymous usage data and
+                  improving our products.
                 </Description>
               </View>
               <ControlField.Indicator />
             </View>
-            <FieldError>
+            <FieldError textProps={{ maxFontSizeMultiplier: 1.2 }}>
               Warning: This will share your usage patterns
             </FieldError>
           </ControlField>
@@ -366,14 +375,14 @@ const ValidationErrorStatesContent = () => {
 
 // ------------------------------------------------------------------------------
 
-const FORM_FIELD_VARIANTS: UsageVariant[] = [
+const CONTROL_FIELD_VARIANTS: UsageVariant[] = [
   {
-    value: 'switch-form-field-set',
+    value: 'switch-control-field-set',
     label: 'Switch ControlField set',
     content: <SwitchFormFieldSetContent />,
   },
   {
-    value: 'checkbox-form-field-set',
+    value: 'checkbox-control-field-set',
     label: 'Checkbox ControlField set',
     content: <CheckboxFormFieldSetContent />,
   },
@@ -394,6 +403,6 @@ const FORM_FIELD_VARIANTS: UsageVariant[] = [
   },
 ];
 
-export default function FormFieldScreen() {
-  return <UsageVariantFlatList data={FORM_FIELD_VARIANTS} />;
+export default function ControlFieldScreen() {
+  return <UsageVariantFlatList data={CONTROL_FIELD_VARIANTS} />;
 }

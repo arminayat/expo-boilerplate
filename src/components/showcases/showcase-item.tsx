@@ -1,11 +1,7 @@
 import { Image as ExpoImage } from 'expo-image';
 import { type Href, useRouter } from 'expo-router';
-import {
-  Platform,
-  Pressable,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Chip, cn, Surface } from 'heroui-native';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -15,14 +11,13 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useAppTheme } from '../../contexts/app-theme-context';
 import { AppText } from '../app-text';
-import { Chip, cn, Surface } from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type ShowcaseComponent = {
   name: string;
-  href: Href;
+  href: string;
 };
 
 export type ShowcaseItemData = {
@@ -30,7 +25,7 @@ export type ShowcaseItemData = {
   imageDark: string;
   title: string;
   description: string;
-  href: Href;
+  href: string;
   components: ShowcaseComponent[];
 };
 
@@ -131,12 +126,15 @@ export function ShowcaseItem({
         className="flex-1 items-center justify-center p-8"
         style={[rContainerStyle]}
       >
-        <Pressable className="mb-5" onPress={() => router.push(item.href)}>
+        <Pressable
+          className="mb-5"
+          onPress={() => router.push(item.href as Href)}
+        >
           <AppText className="text-2xl/7 text-foreground font-semibold">
             {item.title}
           </AppText>
         </Pressable>
-        <AnimatedPressable onPress={() => router.push(item.href)}>
+        <AnimatedPressable onPress={() => router.push(item.href as Href)}>
           <Surface
             className={cn(
               'w-[62%] aspect-[1/2] items-center justify-center rounded-3xl p-0 border border-neutral-100 shadow-2xl shadow-black/5',
@@ -157,7 +155,7 @@ export function ShowcaseItem({
                 key={componentIndex}
                 variant="secondary"
                 size="sm"
-                onPress={() => router.push(component.href)}
+                onPress={() => router.push(component.href as Href)}
               >
                 {component.name}
               </Chip>

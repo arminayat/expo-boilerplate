@@ -1,46 +1,57 @@
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import { Stack } from 'expo-router';
-import { useCallback, useEffect } from 'react';
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { useThemeColor, useToast } from 'heroui-native';
+import { useCallback, useEffect, useState } from 'react';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 import LogoDark from '../../../assets/logo-dark.png';
 import LogoLight from '../../../assets/logo-light.png';
+import { type UpdateBottomSheetMode } from '../../components/bottom-sheet/update-bottom-sheet';
 import { ThemeToggle } from '../../components/theme-toggle';
 import { useAppTheme } from '../../contexts/app-theme-context';
-import {
-  Accordion,
-  Avatar,
-  Button,
-  Card,
-  Checkbox,
-  Chip,
-  Dialog,
-  Popover,
-  Radio,
-  Select,
-  Separator,
-  Skeleton,
-  Spinner,
-  Surface,
-  Switch,
-  Tabs,
-  TextField,
-  useThemeColor,
-  useToast,
-} from 'heroui-native';
+import { COMPONENTS } from '../../helpers/data/components';
+import { useOtaUpdate } from '../../helpers/hooks/use-ota-update';
+import { useVersionCheck } from '../../helpers/hooks/use-version-check';
 
 export default function Layout() {
   const { isDark } = useAppTheme();
-  const themeColorForeground = useThemeColor('foreground');
-  const themeColorBackground = useThemeColor('background');
+  const [themeColorForeground, themeColorBackground] = useThemeColor([
+    'foreground',
+    'background',
+  ]);
 
   const reducedMotion = useReducedMotion();
   const { toast } = useToast();
+
+  // -- Update management state --
+  const [isVersionChecked, setIsVersionChecked] = useState(false);
+  const [isNewVersionAvailable, setIsNewVersionAvailable] = useState(false);
+  const [_updateSheetOpen, setUpdateSheetOpen] = useState(false);
+  const [_updateSheetMode, setUpdateSheetMode] =
+    useState<UpdateBottomSheetMode>('new-version');
+
+  const handleVersionChecked = useCallback((isNew: boolean) => {
+    setIsVersionChecked(true);
+    setIsNewVersionAvailable(isNew);
+
+    if (isNew) {
+      setUpdateSheetMode('new-version');
+      setUpdateSheetOpen(true);
+    }
+  }, []);
+
+  const handleOtaUpdateReady = useCallback(() => {
+    setUpdateSheetMode('ota-update');
+    setUpdateSheetOpen(true);
+  }, []);
+
+  useVersionCheck({ onVersionChecked: handleVersionChecked });
+
+  useOtaUpdate({
+    isVersionChecked,
+    isNewVersionAvailable,
+    onUpdateReady: handleOtaUpdateReady,
+  });
 
   useEffect(() => {
     if (reducedMotion) {
@@ -105,79 +116,39 @@ export default function Layout() {
           name="components/index"
           options={{ headerTitle: 'Components' }}
         />
+        {COMPONENTS.map((component) => (
+          <Stack.Screen
+            key={component.path}
+            name={`components/${component.path}`}
+            options={{ title: component.title }}
+          />
+        ))}
         <Stack.Screen
-          name="components/accordion"
-          options={{ title: 'Accordion' }}
+          name="components/bottom-sheet-native-modal"
+          options={{
+            title: 'Bottom Sheet Native Modal',
+            presentation: 'formSheet',
+          }}
         />
-        <Stack.Screen name="components/avatar" options={{ title: 'Avatar' }} />
-        <Stack.Screen name="components/button" options={{ title: 'Button' }} />
-        <Stack.Screen name="components/card" options={{ title: 'Card' }} />
-        <Stack.Screen
-          name="components/checkbox"
-          options={{ title: 'Checkbox' }}
-        />
-        <Stack.Screen name="components/chip" options={{ title: 'Chip' }} />
-        <Stack.Screen name="components/dialog" options={{ title: 'Dialog' }} />
         <Stack.Screen
           name="components/dialog-native-modal"
           options={{ title: 'Dialog Native Modal', presentation: 'formSheet' }}
-        />
-        <Stack.Screen
-          name="components/divider"
-          options={{ title: 'Separator' }}
-        />
-        <Stack.Screen
-          name="components/error-view"
-          options={{ title: 'Error View' }}
-        />
-        <Stack.Screen
-          name="components/form-field"
-          options={{ title: 'Form Field' }}
-        />
-        <Stack.Screen
-          name="components/popover"
-          options={{ title: 'Popover' }}
-        />
-        <Stack.Screen
-          name="components/pressable-feedback"
-          options={{ title: 'Pressable Feedback' }}
         />
         <Stack.Screen
           name="components/popover-native-modal"
           options={{ title: 'Popover Native Modal', presentation: 'formSheet' }}
         />
         <Stack.Screen
-          name="components/radio-group"
-          options={{ title: 'Radio Group' }}
-        />
-        <Stack.Screen
-          name="components/scroll-shadow"
-          options={{ title: 'Scroll Shadow' }}
-        />
-        <Stack.Screen
           name="components/select-native-modal"
           options={{ title: 'Select Native Modal', presentation: 'formSheet' }}
         />
-        <Stack.Screen name="components/select" options={{ title: 'Select' }} />
         <Stack.Screen
-          name="components/skeleton"
-          options={{ title: 'Skeleton' }}
+          name="components/toast-native-modal"
+          options={{
+            title: 'Toast From Native Modal',
+            presentation: 'formSheet',
+          }}
         />
-        <Stack.Screen
-          name="components/spinner"
-          options={{ title: 'Spinner' }}
-        />
-        <Stack.Screen
-          name="components/surface"
-          options={{ title: 'Surface' }}
-        />
-        <Stack.Screen name="components/switch" options={{ title: 'Switch' }} />
-        <Stack.Screen name="components/tabs" options={{ title: 'Tabs' }} />
-        <Stack.Screen
-          name="components/text-field"
-          options={{ title: 'TextField' }}
-        />
-        <Stack.Screen name="components/toast" options={{ title: 'Toast' }} />
         <Stack.Screen name="themes/index" options={{ headerTitle: 'Themes' }} />
         <Stack.Screen
           name="showcases"
@@ -187,14 +158,12 @@ export default function Layout() {
             animationDuration: 300,
           }}
         />
-        <Stack.Screen
-          name="components/toast-native-modal"
-          options={{
-            title: 'Toast From Native Modal',
-            presentation: 'formSheet',
-          }}
-        />
       </Stack>
+      {/* <UpdateBottomSheet
+        isOpen={updateSheetOpen}
+        onOpenChange={setUpdateSheetOpen}
+        mode={updateSheetMode}
+      /> */}
     </View>
   );
 }

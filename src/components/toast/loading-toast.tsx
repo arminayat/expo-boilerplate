@@ -1,9 +1,4 @@
 import Feather from '@expo/vector-icons/Feather';
-import { useEffect } from 'react';
-import { View } from 'react-native';
-import { LinearTransition } from 'react-native-reanimated';
-import { withUniwind } from 'uniwind';
-import { useSharedState } from './use-shared-state';
 import {
   cn,
   Spinner,
@@ -11,6 +6,11 @@ import {
   useThemeColor,
   type ToastComponentProps,
 } from 'heroui-native';
+import { useEffect } from 'react';
+import { View } from 'react-native';
+import { LinearTransition } from 'react-native-reanimated';
+import { withUniwind } from 'uniwind';
+import { useSharedState } from './use-shared-state';
 
 const StyledFeather = withUniwind(Feather);
 
@@ -56,8 +56,8 @@ export const LoadingToast = (props: ToastComponentProps) => {
       // @ts-ignore
       layout={LinearTransition.springify().mass(2)}
       className={cn(
-        'mx-auto flex-row items-center gap-3 rounded-full border-[4px]',
-        isLoading ? 'w-[115px]' : 'w-[185px]'
+        'mx-auto flex-row gap-3 rounded-full p-2',
+        isLoading ? 'w-[130px]' : 'w-[200px]'
       )}
       isSwipeable={false}
       {...props}
@@ -80,6 +80,7 @@ export const LoadingToast = (props: ToastComponentProps) => {
             'text-sm',
             isLoading ? 'text-muted/75' : 'text-success'
           )}
+          maxFontSizeMultiplier={1}
         >
           {isLoading ? 'Loading...' : 'Loaded successfully'}
         </Toast.Title>

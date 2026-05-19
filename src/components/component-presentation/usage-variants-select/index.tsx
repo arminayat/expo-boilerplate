@@ -1,5 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colorKit, Select, useThemeColor } from 'heroui-native';
 import {
   FlatList,
   Platform,
@@ -11,17 +12,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Animated, { SlideInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
-import { SelectBlurBackdrop } from '../../select/select-blur-backdrop';
 import type { UsageVariant } from '../types';
+import { BlurBackdrop } from './blur-backdrop';
+import { CloseButton } from './close-button';
 import { SelectContentContainer } from './select-content-container';
 import { SelectItem } from './select-item';
 import { TriggerButton } from './trigger-button';
-import {
-  CloseButton,
-  colorKit,
-  Select,
-  useThemeColor,
-} from 'heroui-native';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const StyledAnimatedScrollView = withUniwind(AnimatedScrollView);
@@ -46,21 +42,22 @@ export const UsageVariantsSelect = ({
 
   return (
     <Select
+      presentation="dialog"
       value={variant}
       onValueChange={(value) => {
-        const selectedValue = value as UsageVariant | undefined;
-        const variantValue = data.find((m) => m.value === selectedValue?.value);
+        const variantValue = data.find((m) => m.value === value?.value);
         setVariant(variantValue!);
         setTimeout(() => {
           listRef.current?.scrollToIndex({
             index: data.indexOf(variantValue!),
             animated: false,
           });
-        }, 200);
+        }, 0);
       }}
       defaultValue={data[0]}
     >
       <Select.Trigger
+        variant="unstyled"
         isDisabled={data.length === 1}
         hitSlop={12}
         onPress={() => {
@@ -75,7 +72,7 @@ export const UsageVariantsSelect = ({
         {Platform.OS === 'android' ? (
           <Select.Overlay className="bg-background" />
         ) : (
-          <SelectBlurBackdrop />
+          <BlurBackdrop />
         )}
 
         <SelectContentContainer>
@@ -90,7 +87,10 @@ export const UsageVariantsSelect = ({
             contentContainerClassName="gap-2 px-4"
             contentContainerStyle={{ paddingBottom: insets.bottom + 80 }}
           >
-            <Select.Close>
+            <Select.Close
+              className="h-auto w-auto bg-transparent"
+              animation={{ highlight: false }}
+            >
               <View style={{ height: insets.top + screenHeight * 0.25 }} />
             </Select.Close>
             {data.map((m) => (

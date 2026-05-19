@@ -1,6 +1,7 @@
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Button, cn, colorKit, Select, useThemeColor } from 'heroui-native';
 import {
   Platform,
   Pressable,
@@ -19,13 +20,6 @@ import { SelectBlurBackdrop } from '../../../select/select-blur-backdrop';
 import { SelectContentContainer } from './select-content-container';
 import { SelectItem } from './select-item';
 import { type ModelOption } from './types';
-import {
-  Button,
-  cn,
-  colorKit,
-  Select,
-  useThemeColor,
-} from 'heroui-native';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const StyledAnimatedScrollView = withUniwind(AnimatedScrollView);
@@ -47,15 +41,15 @@ export const ModelSelect = ({ data, model, setModel }: Props) => {
 
   return (
     <Select
+      presentation="dialog"
       value={model}
       onValueChange={(value) => {
-        const selectedValue = value as ModelOption | undefined;
-        const modelValue = data.find((m) => m.value === selectedValue?.value);
+        const modelValue = data.find((m) => m.value === value?.value);
         setModel(modelValue!);
       }}
       defaultValue={data[0]}
     >
-      <Select.Trigger asChild>
+      <Select.Trigger variant="unstyled" asChild>
         <Button
           variant="tertiary"
           size="sm"
@@ -124,7 +118,10 @@ export const ModelSelect = ({ data, model, setModel }: Props) => {
             contentContainerClassName="gap-2"
             contentContainerStyle={{ paddingBottom: insets.bottom + 80 }}
           >
-            <Select.Close>
+            <Select.Close
+              className="h-auto w-auto bg-transparent"
+              animation={{ highlight: false }}
+            >
               <View style={{ height: insets.top + screenHeight * 0.25 }} />
             </Select.Close>
             {data.map((m) => (

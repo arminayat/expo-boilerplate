@@ -1,4 +1,16 @@
-import { useHeaderHeight } from '@react-navigation/elements';
+import {
+  Button,
+  cn,
+  ControlField,
+  Description,
+  FieldError,
+  Input,
+  Label,
+  Radio,
+  RadioGroup,
+  Tabs,
+  TextField,
+} from 'heroui-native';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
@@ -9,21 +21,7 @@ import Animated, {
 import { withUniwind } from 'uniwind';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
-import {
-  Button,
-  Checkbox,
-  cn,
-  ControlField,
-  Description,
-  FieldError,
-  Input,
-  Label,
-  Radio,
-  RadioGroup,
-  Select,
-  Tabs,
-  TextField,
-} from 'heroui-native';
+import useHeaderHeight from '../../../helpers/hooks/use-header-height';
 
 const StyleAnimatedView = withUniwind(Animated.View);
 
@@ -49,7 +47,7 @@ interface FormErrors {
 }
 
 interface TabsContentProps {
-  variant: 'pill' | 'line';
+  variant: 'primary' | 'secondary';
 }
 
 interface TabTriggerProps {
@@ -60,22 +58,13 @@ interface TabTriggerProps {
 const TabTrigger = ({ value, label }: TabTriggerProps) => {
   return (
     <Tabs.Trigger value={value}>
-      {({ isSelected }) => (
-        <Tabs.Label
-          className={cn(
-            isSelected ? 'text-accent font-medium' : 'text-foreground'
-          )}
-        >
-          {label}
-        </Tabs.Label>
-      )}
+      <Tabs.Label>{label}</Tabs.Label>
     </Tabs.Trigger>
   );
 };
 
 const TabsContent = ({ variant }: TabsContentProps) => {
   const [activeTab, setActiveTab] = useState('general');
-  const tabsVariant = variant === 'line' ? 'secondary' : 'primary';
 
   const [homepage] = useState('heroui.com');
   const [showSidebar, setShowSidebar] = useState(true);
@@ -119,15 +108,15 @@ const TabsContent = ({ variant }: TabsContentProps) => {
 
   return (
     <Tabs
-      variant={tabsVariant}
+      variant={variant}
       value={activeTab}
       onValueChange={setActiveTab}
-      className={cn('gap-1.5', variant === 'line' && 'gap-0')}
+      className={cn('gap-1.5', variant === 'secondary' && 'gap-0')}
     >
-      <Tabs.List className={cn('border-b-0', variant === 'line' && 'mx-4')}>
-        <Tabs.ScrollView
-          contentContainerClassName={cn('gap-4', variant === 'line' && 'px-0')}
-        >
+      <Tabs.List
+        className={cn('border-b-0', variant === 'secondary' && 'mx-4')}
+      >
+        <Tabs.ScrollView contentContainerClassName="gap-1">
           <Tabs.Indicator />
           <TabTrigger value="general" label="General" />
           <TabTrigger value="appearance" label="Appearance" />
@@ -139,15 +128,18 @@ const TabsContent = ({ variant }: TabsContentProps) => {
         layout={LinearTransition.duration(DURATION)}
         className={cn(
           'px-2 py-6',
-          variant === 'line' && 'px-5 border border-foreground/10 rounded-2xl'
+          variant === 'secondary' &&
+            'px-5 border border-foreground/10 rounded-2xl'
         )}
         style={styles.borderCurve}
       >
         <Tabs.Content value="general">
           <AnimatedContentContainer>
             <TextField>
-              <Label>Homepage</Label>
-              <Input value={homepage} />
+              <Label>
+                <Label.Text maxFontSizeMultiplier={1.4}>Homepage</Label.Text>
+              </Label>
+              <Input value={homepage} maxFontSizeMultiplier={1.4} />
             </TextField>
 
             <ControlField
@@ -156,8 +148,12 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             >
               <ControlField.Indicator variant="checkbox" />
               <View className="flex-1">
-                <Label>Show sidebar</Label>
-                <Description>
+                <Label>
+                  <Label.Text maxFontSizeMultiplier={1.4}>
+                    Show sidebar
+                  </Label.Text>
+                </Label>
+                <Description maxFontSizeMultiplier={1.4}>
                   Display the sidebar navigation panel
                 </Description>
               </View>
@@ -170,8 +166,12 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             >
               <ControlField.Indicator variant="checkbox" />
               <View className="flex-1">
-                <Label>Show status bar</Label>
-                <Description>
+                <Label>
+                  <Label.Text maxFontSizeMultiplier={1.4}>
+                    Show status bar
+                  </Label.Text>
+                </Label>
+                <Description maxFontSizeMultiplier={1.4}>
                   Display the status bar at the bottom
                 </Description>
               </View>
@@ -183,46 +183,62 @@ const TabsContent = ({ variant }: TabsContentProps) => {
           <AnimatedContentContainer>
             <RadioGroup value={theme} onValueChange={setTheme} className="mb-6">
               <View className="mb-2">
-                <Label>Theme</Label>
-                <Description>
+                <Label>
+                  <Label.Text maxFontSizeMultiplier={1.4}>Theme</Label.Text>
+                </Label>
+                <Description maxFontSizeMultiplier={1.4}>
                   Select your preferred color theme
                 </Description>
               </View>
               <View className="gap-3">
                 <RadioGroup.Item value="auto" className="self-start">
-                  <Radio><Radio.Indicator  /></Radio>
-                  <Label>Auto</Label>
+                  <Radio />
+                  <Label>
+                    <Label.Text maxFontSizeMultiplier={1.4}>Auto</Label.Text>
+                  </Label>
                 </RadioGroup.Item>
                 <RadioGroup.Item value="light" className="self-start">
-                  <Radio><Radio.Indicator  /></Radio>
-                  <Label>Light</Label>
+                  <Radio />
+                  <Label>
+                    <Label.Text maxFontSizeMultiplier={1.4}>Light</Label.Text>
+                  </Label>
                 </RadioGroup.Item>
                 <RadioGroup.Item value="dark" className="self-start">
-                  <Radio><Radio.Indicator  /></Radio>
-                  <Label>Dark</Label>
+                  <Radio />
+                  <Label>
+                    <Label.Text maxFontSizeMultiplier={1.4}>Dark</Label.Text>
+                  </Label>
                 </RadioGroup.Item>
               </View>
             </RadioGroup>
 
             <RadioGroup value={fontSize} onValueChange={setFontSize}>
               <View className="mb-2">
-                <Label>Font Size</Label>
-                <Description>
+                <Label>
+                  <Label.Text maxFontSizeMultiplier={1.4}>Font Size</Label.Text>
+                </Label>
+                <Description maxFontSizeMultiplier={1.4}>
                   Adjust the text size throughout the app
                 </Description>
               </View>
               <View className="gap-3">
                 <RadioGroup.Item value="small" className="self-start">
-                  <Radio><Radio.Indicator  /></Radio>
-                  <Label>Small</Label>
+                  <Radio />
+                  <Label>
+                    <Label.Text maxFontSizeMultiplier={1.4}>Small</Label.Text>
+                  </Label>
                 </RadioGroup.Item>
                 <RadioGroup.Item value="medium" className="self-start">
-                  <Radio><Radio.Indicator  /></Radio>
-                  <Label>Medium</Label>
+                  <Radio />
+                  <Label>
+                    <Label.Text maxFontSizeMultiplier={1.4}>Medium</Label.Text>
+                  </Label>
                 </RadioGroup.Item>
                 <RadioGroup.Item value="large" className="self-start">
-                  <Radio><Radio.Indicator  /></Radio>
-                  <Label>Large</Label>
+                  <Radio />
+                  <Label>
+                    <Label.Text maxFontSizeMultiplier={1.4}>Large</Label.Text>
+                  </Label>
                 </RadioGroup.Item>
               </View>
             </RadioGroup>
@@ -237,8 +253,12 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             >
               <ControlField.Indicator variant="checkbox" />
               <View className="flex-1">
-                <Label>Account activity</Label>
-                <Description>
+                <Label>
+                  <Label.Text maxFontSizeMultiplier={1.4}>
+                    Account activity
+                  </Label.Text>
+                </Label>
+                <Description maxFontSizeMultiplier={1.4}>
                   Notifications about your account activity
                 </Description>
               </View>
@@ -247,8 +267,10 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             <ControlField isSelected={mentions} onSelectedChange={setMentions}>
               <ControlField.Indicator variant="checkbox" />
               <View className="flex-1">
-                <Label>Mentions</Label>
-                <Description>
+                <Label>
+                  <Label.Text maxFontSizeMultiplier={1.4}>Mentions</Label.Text>
+                </Label>
+                <Description maxFontSizeMultiplier={1.4}>
                   When someone mentions you in a comment
                 </Description>
               </View>
@@ -260,8 +282,12 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             >
               <ControlField.Indicator variant="checkbox" />
               <View className="flex-1">
-                <Label>Direct messages</Label>
-                <Description>
+                <Label>
+                  <Label.Text maxFontSizeMultiplier={1.4}>
+                    Direct messages
+                  </Label.Text>
+                </Label>
+                <Description maxFontSizeMultiplier={1.4}>
                   Notifications for new direct messages
                 </Description>
               </View>
@@ -273,8 +299,12 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             >
               <ControlField.Indicator variant="checkbox" />
               <View className="flex-1">
-                <Label>Marketing email</Label>
-                <Description>
+                <Label>
+                  <Label.Text maxFontSizeMultiplier={1.4}>
+                    Marketing email
+                  </Label.Text>
+                </Label>
+                <Description maxFontSizeMultiplier={1.4}>
                   Receive emails about new features and updates
                 </Description>
               </View>
@@ -285,7 +315,9 @@ const TabsContent = ({ variant }: TabsContentProps) => {
         <Tabs.Content value="profile">
           <AnimatedContentContainer>
             <TextField isRequired isInvalid={!!errors.name}>
-              <Label>Name</Label>
+              <Label>
+                <Label.Text maxFontSizeMultiplier={1.4}>Name</Label.Text>
+              </Label>
               <Input
                 value={name}
                 onChangeText={(text) => {
@@ -300,7 +332,9 @@ const TabsContent = ({ variant }: TabsContentProps) => {
             </TextField>
 
             <TextField isRequired isInvalid={!!errors.username}>
-              <Label>Username</Label>
+              <Label>
+                <Label.Text maxFontSizeMultiplier={1.4}>Username</Label.Text>
+              </Label>
               <Input
                 value={username}
                 onChangeText={(text) => {
@@ -312,8 +346,8 @@ const TabsContent = ({ variant }: TabsContentProps) => {
                 placeholder="Enter username"
                 autoCapitalize="none"
               />
-              <Description>
-                3-20 characters, letters, numbers, and underscore only
+              <Description hideOnInvalid maxFontSizeMultiplier={1.4}>
+                3-20 characters, letters, numbers only
               </Description>
               <FieldError>{errors.username}</FieldError>
             </TextField>
@@ -324,7 +358,9 @@ const TabsContent = ({ variant }: TabsContentProps) => {
               className="self-start px-6"
               onPress={handleUpdateProfile}
             >
-              <Button.Label className="text-base">Update profile</Button.Label>
+              <Button.Label className="text-base" maxFontSizeMultiplier={1.4}>
+                Update profile
+              </Button.Label>
             </Button>
           </AnimatedContentContainer>
         </Tabs.Content>
@@ -338,7 +374,7 @@ const PillVariantContent = () => {
 
   return (
     <View className="flex-1 px-5" style={{ paddingTop: headerHeight + 20 }}>
-      <TabsContent variant="pill" />
+      <TabsContent variant="primary" />
     </View>
   );
 };
@@ -350,7 +386,7 @@ const LineVariantContent = () => {
 
   return (
     <View className="flex-1 px-5" style={{ paddingTop: headerHeight + 20 }}>
-      <TabsContent variant="line" />
+      <TabsContent variant="secondary" />
     </View>
   );
 };
@@ -359,13 +395,13 @@ const LineVariantContent = () => {
 
 const TABS_VARIANTS: UsageVariant[] = [
   {
-    value: 'pill-variant',
-    label: 'Pill variant',
+    value: 'primary-variant',
+    label: 'Primary variant',
     content: <PillVariantContent />,
   },
   {
-    value: 'line-variant',
-    label: 'Line variant',
+    value: 'secondary-variant',
+    label: 'Secondary variant',
     content: <LineVariantContent />,
   },
 ];

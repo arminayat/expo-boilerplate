@@ -1,4 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { colorKit, useThemeColor } from 'heroui-native';
 import type { PropsWithChildren, ReactElement } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, {
@@ -9,7 +10,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
-import { colorKit, useThemeColor } from 'heroui-native';
 
 const StyleAnimatedView = withUniwind(Animated.View);
 

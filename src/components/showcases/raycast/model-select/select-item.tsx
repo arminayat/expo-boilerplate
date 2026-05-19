@@ -1,12 +1,12 @@
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { BlurView } from 'expo-blur';
+import { cn, Select, useSelect } from 'heroui-native';
 import { type FC } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 import { useAppTheme } from '../../../../contexts/app-theme-context';
 import { AppText } from '../../../app-text';
 import { type ModelOption } from './types';
-import { cn, Select, useSelect } from 'heroui-native';
 
 const StyledFontAwesome5 = withUniwind(FontAwesome5);
 
@@ -18,9 +18,11 @@ export const SelectItem: FC<Props> = ({ data }) => {
   const { isDark } = useAppTheme();
 
   const { value: selectedValue } = useSelect();
+  const selectedOption = Array.isArray(selectedValue)
+    ? selectedValue[0]
+    : selectedValue;
 
-  const isSelected =
-    (selectedValue as ModelOption | undefined)?.value === data.value;
+  const isSelected = selectedOption?.value === data.value;
   const isSelectedAndroid = isSelected && Platform.OS === 'android';
 
   return (

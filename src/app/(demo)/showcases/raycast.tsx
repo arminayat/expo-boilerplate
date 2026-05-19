@@ -2,6 +2,7 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
+import { Avatar, cn } from 'heroui-native';
 import { useState, type FC } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,7 +12,6 @@ import { ModelSelect } from '../../../components/showcases/raycast/model-select'
 import type { ModelOption } from '../../../components/showcases/raycast/model-select/types';
 import { useAppTheme } from '../../../contexts/app-theme-context';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
-import { Avatar, cn } from 'heroui-native';
 
 const StyledFeather = withUniwind(Feather);
 const StyledFontAwesome6 = withUniwind(FontAwesome6);
@@ -79,7 +79,10 @@ export default function Raycast() {
           />
         </Pressable>
         <Pressable
-          className="flex-1 flex-row items-center gap-2 px-3 py-2.5 rounded-[14px] bg-surface-quaternary/70"
+          className={cn(
+            'flex-1 flex-row items-center gap-2 px-3 py-2.5 rounded-[14px]',
+            isDark ? 'bg-neutral-900/50' : 'bg-neutral-300/50'
+          )}
           style={styles.borderCurve}
           onPress={simulatePress}
         >
@@ -119,8 +122,9 @@ export default function Raycast() {
       </View>
       <View
         className={cn(
-          'p-2 bg-surface-quaternary/70 rounded-3xl border border-neutral-400/10 gap-7',
-          isDark && 'border-neutral-600/10'
+          'p-2 rounded-3xl border gap-7',
+          isDark ? 'bg-neutral-900/50' : 'bg-neutral-300/50',
+          isDark ? 'border-neutral-600/10' : 'border-neutral-400/10'
         )}
         style={styles.borderCurve}
       >
