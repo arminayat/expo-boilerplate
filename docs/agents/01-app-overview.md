@@ -1,0 +1,76 @@
+# App Overview
+
+## Product Purpose
+
+Current implementation: this is an Expo Router React Native boilerplate and HeroUI Native demo shell. It demonstrates a mobile app foundation with authentication plumbing, a tab shell, theme switching, component showcases, Supabase client setup, PostHog provider setup, RevenueCat setup helpers, encrypted session storage, and React Query.
+
+Documented intent in `README.md`: a production-ready mobile boilerplate for apps that need authentication, subscriptions, analytics, onboarding, secure storage, theming, and reusable UI components.
+
+Generated Supabase types indicate a much broader newsletter, RSS, document, collection, agent, subscription, and email-summary domain. That domain is mostly not surfaced in the current app UI. Treat those generated types as available backend shape, not implemented product behavior.
+
+## Core User Outcomes
+
+Implemented today:
+
+- Open the app and land in the tabbed shell, currently on `tab1`.
+- Sign in, sign up, request a password reset, and sign out through Supabase Auth screens when navigated there.
+- View a basic profile tab that reads the current Supabase auth user.
+- Open a HeroUI Native demo area from the profile tab.
+- Browse component examples, theme examples, and showcase screens.
+- Switch among supported Uniwind/HeroUI themes in the demo area.
+
+Intended or aspirational:
+
+- A complete authenticated app flow where unauthenticated users are sent to sign-in before reaching the main tabs.
+- Device and user onboarding before the main app.
+- Subscription/paywall behavior backed by RevenueCat.
+- Product analytics through PostHog.
+- User profile persistence through a `profile` table.
+- Newsletter, RSS, email summary, article, document, and agent workflows suggested by generated Supabase types.
+
+## Current Implemented End-to-End Flow
+
+1. `src/app/_layout.tsx` loads global styles, configures Reanimated logging, loads Roboto Slab fonts, composes app providers, and renders the Expo Router root stack.
+2. `src/app/index.tsx` reads Supabase auth state through `useAuth()`.
+3. If a session exists, root redirects to `/(tabs)/${entrancePath}` where `entrancePath` defaults to `tab1` or the first stored usage-priority tab.
+4. If no session exists, root currently redirects to `/(tabs)/tab1`. The intended device onboarding and sign-in redirects are present but commented out.
+5. `src/app/(tabs)/_layout.tsx` renders three tabs and calls `useCheckUserOnboarding({ redirect: true })`.
+6. `tab1` and `tab2` are placeholders. `tab3` shows user fields from `useUser()`, opens the demo area, and signs out through `supabase.auth.signOut()`.
+7. The demo area under `src/app/(demo)/` provides real interactive component demos and showcases, mostly with local component state and simulated actions.
+
+## Intended Future Flow
+
+The README describes a standard boilerplate lifecycle:
+
+- User opens app.
+- Device onboarding appears on first launch.
+- Unauthenticated users sign in or sign up.
+- Supabase persists the auth session in encrypted MMKV storage.
+- RevenueCat identifies the user for subscription state.
+- PostHog identifies and tracks the user.
+- User onboarding completion is checked against profile data.
+- User lands in the appropriate main tab.
+
+Current code only partially implements this. Root auth gating is bypassed, onboarding screens are placeholders, profile reads only Supabase Auth user data, and subscription products are not purchased from the UI.
+
+## Current Product Boundaries
+
+- Mobile-first Expo app with web support enabled by Expo config.
+- App identity is still `HeroUI Native Example` / `heroui-native-example`.
+- The main product surface is a boilerplate tab shell plus demo screens, not a finished domain-specific product.
+- Supabase is the only configured backend client.
+- No local backend server, API route folder, or database migrations exist in this repository.
+- No test suite is configured.
+- Native iOS files are tracked in git but currently deleted in the working tree.
+
+## Explicit Non-Goals Or Unimplemented Areas
+
+- No implemented `/(settings)` route even though the root stack declares it.
+- No implemented `+not-found` file even though the root stack declares it.
+- No implemented `/(onboarding)/secondary` route even though `useCheckUserOnboarding()` redirects there.
+- No implemented Android-native auth option; `NativeAuth` returns an empty fragment for Android.
+- No implemented password reset completion screen; the app only sends Supabase reset emails to `EXPO_PUBLIC_WEB_PASSWORD_RESET_URL`.
+- No implemented RevenueCat purchase or restore flow in the paywall showcase; paywall buttons call `simulatePress`.
+- No implemented PostHog screen tracking; autocapture screen tracking is disabled.
+- No implemented app-specific use of generated Supabase newsletter/RSS/document/agent domain types except the unused `useGetRecentUpdates()` hook.
+- No server-side jobs, webhooks, API endpoints, or queue workers in this repo.
