@@ -1,9 +1,9 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { cn, useThemeColor } from 'heroui-native';
 import { type FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useAppTheme } from '../contexts/app-theme-context';
 import { AppText } from './app-text';
+import { cn, useThemeColor } from 'heroui-native';
 
 type Props = {
   title: string;

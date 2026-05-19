@@ -1,4 +1,7 @@
 import Providers from "@/contexts/Providers";
+import { Stack } from "expo-router";
+import { configureReanimatedLogger, ReanimatedLogLevel } from "react-native-reanimated";
+import "../../global.css";
 import {
   RobotoSlab_100Thin,
   RobotoSlab_200ExtraLight,
@@ -11,14 +14,7 @@ import {
   RobotoSlab_900Black,
   useFonts,
 } from "@expo-google-fonts/roboto-slab";
-import { Stack } from "expo-router";
 import { HeroUINativeProvider } from "heroui-native";
-import {
-  configureReanimatedLogger,
-  ReanimatedLogLevel,
-} from "react-native-reanimated";
-import "../../global.css";
-import { useAppTheme } from "../contexts/app-theme-context";
 
 configureReanimatedLogger({
   level: ReanimatedLogLevel.warn,
@@ -47,13 +43,9 @@ const RootRoutes = () => (
 );
 
 function ThemedLayout() {
-  const { currentTheme } = useAppTheme();
-
   return (
     <HeroUINativeProvider
       config={{
-        colorScheme: "system",
-        theme: currentTheme,
         textProps: {
           allowFontScaling: false,
         },

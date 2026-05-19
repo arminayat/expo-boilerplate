@@ -1,6 +1,5 @@
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "expo-router";
-import { Button, TextField } from "heroui-native";
 import { usePostHog } from "posthog-react-native";
 import * as React from "react";
 import {
@@ -12,6 +11,12 @@ import {
   View,
 } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
+import {
+  Button,
+  Input,
+  Label,
+  TextField,
+} from "heroui-native";
 
 export default function SignUpScreen() {
   const router = useRouter();
@@ -96,8 +101,8 @@ export default function SignUpScreen() {
         >
           <View className="bg-lightYellow w-full gap-4">
             <TextField>
-              <TextField.Label>Email</TextField.Label>
-              <TextField.Input
+              <Label>Email</Label>
+              <Input
                 autoCapitalize="none"
                 value={emailAddress}
                 placeholder="Email..."
@@ -107,8 +112,8 @@ export default function SignUpScreen() {
             </TextField>
 
             <TextField>
-              <TextField.Label>Password</TextField.Label>
-              <TextField.Input
+              <Label>Password</Label>
+              <Input
                 value={password}
                 placeholder="Password..."
                 secureTextEntry={true}
@@ -117,13 +122,13 @@ export default function SignUpScreen() {
               />
             </TextField>
 
-            <Button onPress={handleSignUp} disabled={loading} size="lg">
+            <Button onPress={handleSignUp} isDisabled={loading} size="lg">
               {loading ? "Creating account..." : "Create account"}
             </Button>
           </View>
         </KeyboardAvoidingView>
         <Button
-          disabled={loading}
+          isDisabled={loading}
           onPress={() => router.back()}
           variant="ghost"
         >

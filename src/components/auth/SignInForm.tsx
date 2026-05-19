@@ -1,5 +1,4 @@
 import { Link } from "expo-router";
-import { Button, TextField } from "heroui-native";
 import { usePostHog } from "posthog-react-native";
 import {
   Keyboard,
@@ -9,8 +8,14 @@ import {
   View,
 } from "react-native";
 import { TapGestureHandler } from "react-native-gesture-handler";
-import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { NativeAuth } from "./Auth.native";
+import {
+  Button,
+  Input,
+  Label,
+  TextField,
+} from "heroui-native";
+import Toast from "react-native-toast-message";
 
 interface SignInFormProps {
   emailAddress: string;
@@ -38,8 +43,8 @@ export function SignInForm({
       <View className="flex w-full flex-1 flex-col justify-between">
         <View className="flex flex-col gap-4">
           <TextField>
-            <TextField.Label>Email</TextField.Label>
-            <TextField.Input
+            <Label>Email</Label>
+            <Input
               autoCapitalize="none"
               value={emailAddress}
               placeholder="Email..."
@@ -48,8 +53,8 @@ export function SignInForm({
             />
           </TextField>
           <TextField>
-            <TextField.Label>Password</TextField.Label>
-            <TextField.Input
+            <Label>Password</Label>
+            <Input
               value={password}
               placeholder="Password..."
               secureTextEntry={true}
@@ -66,7 +71,7 @@ export function SignInForm({
         <View className="mt-2 flex flex-col items-center">
           <Button
             onPress={onSubmit}
-            disabled={loading}
+            isDisabled={loading}
             className="w-full"
             size="lg"
             variant="ghost"

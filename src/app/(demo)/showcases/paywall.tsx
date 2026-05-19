@@ -3,7 +3,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { Button, Chip, RadioGroup } from 'heroui-native';
 import { useCallback, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, {
@@ -20,6 +19,12 @@ import { AppText } from '../../../components/app-text';
 import { StyledFormField } from '../../../components/showcases/paywall/styled-form-field';
 import { StyledRadio } from '../../../components/showcases/paywall/styled-radio';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
+import {
+  Button,
+  Chip,
+  Label,
+  RadioGroup,
+} from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 const StyledFeather = withUniwind(Feather);

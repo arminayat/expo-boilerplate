@@ -1,7 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import * as Haptics from 'expo-haptics';
-import { Avatar, Chip, Dialog, RadioGroup } from 'heroui-native';
 import { useMemo, useState, type FC } from 'react';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -13,6 +12,14 @@ import { AppText } from '../../../app-text';
 import { DialogBlurBackdrop } from '../../../dialog-blur-backdrop';
 import { DialogHeader } from '../dialog-header';
 import { SearchBar } from '../search-bar';
+import {
+  Avatar,
+  Chip,
+  Dialog,
+  Label,
+  Radio,
+  RadioGroup,
+} from 'heroui-native';
 
 const StyledFeather = withUniwind(Feather);
 const StyledMaterialCommunityIcons = withUniwind(MaterialCommunityIcons);
@@ -157,9 +164,9 @@ export const Assignee: FC = () => {
                           <View className="w-7 pl-0.5 justify-center">
                             <View className="scale-105">{item.indicator}</View>
                           </View>
-                          <RadioGroup.Label>{item.label}</RadioGroup.Label>
+                          <Label>{item.label}</Label>
                         </View>
-                        <RadioGroup.Indicator className="border-0 bg-transparent">
+                        <Radio><Radio.Indicator className="border-0 bg-transparent">
                           {value === item.value && (
                             <Animated.View
                               key={item.value}
@@ -172,7 +179,7 @@ export const Assignee: FC = () => {
                               />
                             </Animated.View>
                           )}
-                        </RadioGroup.Indicator>
+                        </Radio.Indicator></Radio>
                       </RadioGroup.Item>
                     </Dialog.Close>
                   ))}

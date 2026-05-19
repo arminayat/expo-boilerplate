@@ -1,8 +1,4 @@
-import {
-  focusManager,
-  onlineManager,
-  QueryClient,
-} from "@tanstack/react-query";
+import { focusManager, onlineManager, QueryClient } from "@tanstack/react-query";
 import * as Network from "expo-network";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useRef } from "react";

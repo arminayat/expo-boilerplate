@@ -1,22 +1,15 @@
-/* eslint-disable react-native/no-inline-styles */
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import {
-  Button,
-  cn,
-  Dialog,
-  ScrollShadow,
-  TextField,
-  useThemeColor,
-} from 'heroui-native';
 import { useState } from 'react';
-import { Platform, Text, useWindowDimensions, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import {
-  KeyboardAvoidingView,
-  KeyboardController,
-} from 'react-native-keyboard-controller';
+  Platform,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { KeyboardAvoidingView, KeyboardController } from 'react-native-keyboard-controller';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
@@ -25,6 +18,18 @@ import { UsageVariantFlatList } from '../../../components/component-presentation
 import { DialogBlurBackdrop } from '../../../components/dialog-blur-backdrop';
 import { useAppTheme } from '../../../contexts/app-theme-context';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
+import {
+  Button,
+  cn,
+  Description,
+  Dialog,
+  FieldError,
+  Input,
+  Label,
+  ScrollShadow,
+  TextField,
+  useThemeColor,
+} from 'heroui-native';
 
 const StyleScrollView = withUniwind(ScrollView);
 const StyledIonicons = withUniwind(Ionicons);
@@ -223,11 +228,6 @@ const TextInputDialogContent = () => {
             >
               <Dialog.Content
                 className="bg-surface rounded-3xl"
-                animation={{
-                  scale: {
-                    value: [0.85, 1, 0.95],
-                  },
-                }}
                 style={{
                   marginTop: insetTop,
                   height: maxTextInputDialogHeight,
@@ -239,10 +239,10 @@ const TextInputDialogContent = () => {
                 <View className="flex-1">
                   <StyleScrollView contentContainerClassName="gap-5">
                     <TextField isRequired isInvalid={!!nameError}>
-                      <TextField.Label isInvalid={false}>
+                      <Label isInvalid={false}>
                         Full Name
-                      </TextField.Label>
-                      <TextField.Input
+                      </Label>
+                      <Input
                         placeholder="Enter your name"
                         value={name}
                         onChangeText={(text) => {
@@ -253,26 +253,18 @@ const TextInputDialogContent = () => {
                         autoCorrect
                         autoFocus
                         isInvalid={false}
-                        animation={{
-                          backgroundColor: {
-                            value: {
-                              blur: themeColorSurfaceSecondary,
-                              focus: themeColorSurfaceSecondary,
-                            },
-                          },
-                        }}
                         selectionColor={themeColorMuted}
                       />
-                      <TextField.ErrorMessage>
+                      <FieldError>
                         {nameError}
-                      </TextField.ErrorMessage>
+                      </FieldError>
                     </TextField>
 
                     <TextField isRequired isInvalid={!!emailError}>
-                      <TextField.Label isInvalid={false}>
+                      <Label isInvalid={false}>
                         Email Address
-                      </TextField.Label>
-                      <TextField.Input
+                      </Label>
+                      <Input
                         placeholder="email@example.com"
                         value={email}
                         onChangeText={(text) => {
@@ -281,19 +273,11 @@ const TextInputDialogContent = () => {
                         }}
                         autoCapitalize="none"
                         isInvalid={false}
-                        animation={{
-                          backgroundColor: {
-                            value: {
-                              blur: themeColorSurfaceSecondary,
-                              focus: themeColorSurfaceSecondary,
-                            },
-                          },
-                        }}
                         selectionColor={themeColorMuted}
                       />
-                      <TextField.ErrorMessage>
+                      <FieldError>
                         {emailError}
-                      </TextField.ErrorMessage>
+                      </FieldError>
                     </TextField>
                   </StyleScrollView>
                 </View>
@@ -428,7 +412,7 @@ const NativeModalDialogContent = () => {
       <View className="flex-1 items-center justify-center">
         <Button
           variant="secondary"
-          onPress={() => router.push('components/dialog-native-modal')}
+          onPress={() => router.push('/components/dialog-native-modal')}
         >
           Dialog from native modal
         </Button>

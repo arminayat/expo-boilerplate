@@ -1,13 +1,19 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import {
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  type FC,
+} from 'react';
+import { FlatList } from 'react-native';
+import {
   Button,
   ScrollShadow,
   Select,
   useSelect,
   useThemeColor,
 } from 'heroui-native';
-import { type FC, memo, useEffect, useMemo, useRef } from 'react';
-import { FlatList } from 'react-native';
 
 type SelectOption = {
   value: string;
@@ -89,11 +95,15 @@ const PlacementContentList: FC<PlacementContentListProps> = memo(
   }
 );
 
+PlacementContentList.displayName = 'PlacementContentList';
+
 const PlacementContent = () => {
   const { value } = useSelect();
+  const selectedValue = value as SelectOption | undefined;
 
   const valueIndex = useMemo(
-    () => US_STATES.findIndex((item) => item.value === (value?.value ?? 'CA')),
+    () =>
+      US_STATES.findIndex((item) => item.value === (selectedValue?.value ?? 'CA')),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
@@ -120,7 +130,7 @@ export const PlacementSelect: FC<Props> = ({ placeholder, placement }) => {
       </Select.Trigger>
       <Select.Portal>
         <Select.Overlay />
-        <Select.Content width={200} placement={placement} className="h-[150px]">
+        <Select.Content presentation="popover" width={200} placement={placement} className="h-[150px]">
           <PlacementContent />
         </Select.Content>
       </Select.Portal>

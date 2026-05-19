@@ -67,7 +67,7 @@ Current code only partially implements this. Root auth gating is bypassed, onboa
 
 - No implemented `/(settings)` route even though the root stack declares it.
 - No implemented `+not-found` file even though the root stack declares it.
-- No implemented `/(onboarding)/secondary` route even though `useCheckUserOnboarding()` redirects there.
+- No implemented onboarding flow beyond the placeholder `/(onboarding)` index route.
 - No implemented Android-native auth option; `NativeAuth` returns an empty fragment for Android.
 - No implemented password reset completion screen; the app only sends Supabase reset emails to `EXPO_PUBLIC_WEB_PASSWORD_RESET_URL`.
 - No implemented RevenueCat purchase or restore flow in the paywall showcase; paywall buttons call `simulatePress`.

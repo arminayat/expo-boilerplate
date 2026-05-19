@@ -1,6 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { cn, Divider, RadioGroup, Surface } from 'heroui-native';
 import React from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -12,6 +11,17 @@ import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import {
+  cn,
+  Description,
+  FieldError,
+  Label,
+  Radio,
+  RadioGroup,
+  Select,
+  Separator,
+  Surface,
+} from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 const StyleAnimatedView = withUniwind(Animated.View);
@@ -31,32 +41,32 @@ const BasicRadioGroupContent = () => {
         >
           <RadioGroup.Item value="desc1">
             <View>
-              <RadioGroup.Label>Standard Shipping</RadioGroup.Label>
-              <RadioGroup.Description>
+              <Label>Standard Shipping</Label>
+              <Description>
                 Delivered in 5-7 business days
-              </RadioGroup.Description>
+              </Description>
             </View>
-            <RadioGroup.Indicator />
+            <Radio><Radio.Indicator  /></Radio>
           </RadioGroup.Item>
-          <Divider className="my-1" />
+          <Separator className="my-1" />
           <RadioGroup.Item value="desc2">
             <View>
-              <RadioGroup.Label>Express Shipping</RadioGroup.Label>
-              <RadioGroup.Description>
+              <Label>Express Shipping</Label>
+              <Description>
                 Delivered in 2-3 business days
-              </RadioGroup.Description>
+              </Description>
             </View>
-            <RadioGroup.Indicator />
+            <Radio><Radio.Indicator  /></Radio>
           </RadioGroup.Item>
-          <Divider className="my-1" />
+          <Separator className="my-1" />
           <RadioGroup.Item value="desc3">
             <View>
-              <RadioGroup.Label>Overnight Shipping</RadioGroup.Label>
-              <RadioGroup.Description>
+              <Label>Overnight Shipping</Label>
+              <Description>
                 Delivered next business day
-              </RadioGroup.Description>
+              </Description>
             </View>
-            <RadioGroup.Indicator />
+            <Radio><Radio.Indicator  /></Radio>
           </RadioGroup.Item>
         </RadioGroup>
       </Surface>
@@ -106,15 +116,17 @@ const ShippingOptionItem = ({
             containerClassName
           )}
         >
-          <RadioGroup.Indicator
-            className={cn(
-              !isSelected && 'border border-muted/10',
-              indicatorClassName
-            )}
-          />
+          <Radio>
+            <Radio.Indicator
+              className={cn(
+                !isSelected && 'border border-muted/10',
+                indicatorClassName
+              )}
+            />
+          </Radio>
           <View className="flex-1">
-            <RadioGroup.Label>{label}</RadioGroup.Label>
-            <RadioGroup.Description>{description}</RadioGroup.Description>
+            <Label>{label}</Label>
+            <Description>{description}</Description>
           </View>
           <AppText
             className={cn(
@@ -140,7 +152,6 @@ const StartIndicatorAlignmentContent = () => {
         value={shippingSpeed}
         onValueChange={setShippingSpeed}
         className="gap-4"
-        isOnSurface
       >
         <ShippingOptionItem
           value="standard"
@@ -193,10 +204,10 @@ const InlineRadioOptionsContent = () => {
               value={sizeOption}
               className="flex-1 gap-1.5"
             >
-              <RadioGroup.Indicator />
-              <RadioGroup.Label className="flex-1">
+              <Radio><Radio.Indicator  /></Radio>
+              <Label className="flex-1">
                 {sizeOption}
-              </RadioGroup.Label>
+              </Label>
             </RadioGroup.Item>
           ))}
         </RadioGroup>
@@ -232,39 +243,39 @@ const RadioGroupStatesContent = () => {
           >
             <RadioGroup.Item value="basic" isInvalid={false}>
               <View className="flex-1">
-                <RadioGroup.Label>Basic Plan</RadioGroup.Label>
-                <RadioGroup.Description>
+                <Label>Basic Plan</Label>
+                <Description>
                   Perfect for individuals - $9/month
-                </RadioGroup.Description>
+                </Description>
               </View>
-              <RadioGroup.Indicator />
+              <Radio><Radio.Indicator  /></Radio>
             </RadioGroup.Item>
 
-            <Divider />
+            <Separator />
 
             <RadioGroup.Item value="pro" isDisabled isInvalid={false}>
               <View className="flex-1">
-                <RadioGroup.Label>Pro Plan</RadioGroup.Label>
-                <RadioGroup.Description>
+                <Label>Pro Plan</Label>
+                <Description>
                   Coming soon - Advanced features
-                </RadioGroup.Description>
+                </Description>
               </View>
-              <RadioGroup.Indicator />
+              <Radio><Radio.Indicator  /></Radio>
             </RadioGroup.Item>
 
-            <Divider />
+            <Separator />
             <RadioGroup.Item value="enterprise" isInvalid>
               <View className="flex-1">
-                <RadioGroup.Label>Enterprise Plan</RadioGroup.Label>
-                <RadioGroup.Description>
+                <Label>Enterprise Plan</Label>
+                <Description>
                   Not available in your region
-                </RadioGroup.Description>
+                </Description>
               </View>
-              <RadioGroup.Indicator />
+              <Radio><Radio.Indicator  /></Radio>
             </RadioGroup.Item>
-            <RadioGroup.ErrorMessage>
+            <FieldError>
               Enterprise plan is not available in your region
-            </RadioGroup.ErrorMessage>
+            </FieldError>
           </RadioGroup>
         </Surface>
       </StyleAnimatedView>
@@ -293,65 +304,65 @@ const CustomIndicatorBackgroundContent = () => {
             {({ isSelected }) => (
               <>
                 <View className="flex-1">
-                  <RadioGroup.Label>High Priority</RadioGroup.Label>
-                  <RadioGroup.Description>
+                  <Label>High Priority</Label>
+                  <Description>
                     Urgent - requires immediate attention
-                  </RadioGroup.Description>
+                  </Description>
                 </View>
-                <RadioGroup.Indicator
+                <Radio><Radio.Indicator
                   className={cn(
                     'size-8',
                     isSelected && 'bg-red-500 border-red-400'
                   )}
                 >
-                  <RadioGroup.IndicatorThumb className="size-3.5 bg-red-100" />
-                </RadioGroup.Indicator>
+                  <Radio.IndicatorThumb className="size-3.5 bg-red-100" />
+                </Radio.Indicator></Radio>
               </>
             )}
           </RadioGroup.Item>
 
-          <Divider />
+          <Separator />
 
           <RadioGroup.Item value="medium">
             {({ isSelected }) => (
               <>
                 <View className="flex-1">
-                  <RadioGroup.Label>Medium Priority</RadioGroup.Label>
-                  <RadioGroup.Description>
+                  <Label>Medium Priority</Label>
+                  <Description>
                     Important - complete within this week
-                  </RadioGroup.Description>
+                  </Description>
                 </View>
-                <RadioGroup.Indicator
+                <Radio><Radio.Indicator
                   className={cn(
                     'size-8',
                     isSelected && 'bg-amber-500 border-amber-400'
                   )}
                 >
-                  <RadioGroup.IndicatorThumb className="size-3.5 bg-amber-100" />
-                </RadioGroup.Indicator>
+                  <Radio.IndicatorThumb className="size-3.5 bg-amber-100" />
+                </Radio.Indicator></Radio>
               </>
             )}
           </RadioGroup.Item>
 
-          <Divider />
+          <Separator />
 
           <RadioGroup.Item value="low">
             {({ isSelected }) => (
               <>
                 <View className="flex-1">
-                  <RadioGroup.Label>Low Priority</RadioGroup.Label>
-                  <RadioGroup.Description>
+                  <Label>Low Priority</Label>
+                  <Description>
                     Standard - complete when possible
-                  </RadioGroup.Description>
+                  </Description>
                 </View>
-                <RadioGroup.Indicator
+                <Radio><Radio.Indicator
                   className={cn(
                     'size-8',
                     isSelected && 'bg-emerald-500 border-emerald-400'
                   )}
                 >
-                  <RadioGroup.IndicatorThumb className="size-3.5 bg-emerald-100" />
-                </RadioGroup.Indicator>
+                  <Radio.IndicatorThumb className="size-3.5 bg-emerald-100" />
+                </Radio.Indicator></Radio>
               </>
             )}
           </RadioGroup.Item>
@@ -374,14 +385,14 @@ const CustomIndicatorThumbContent = () => {
             Notification Preferences
           </AppText>
           <AppText className="text-muted text-sm">
-            Choose how you'd like to receive updates
+            {"Choose how you'd like to receive updates"}
           </AppText>
         </View>
         <RadioGroup value={notification} onValueChange={setNotification}>
           <RadioGroup.Item value="email">
             {({ isSelected }) => (
               <>
-                <RadioGroup.Indicator>
+                <Radio><Radio.Indicator>
                   {isSelected && (
                     <AnimatedView entering={FadeIn.duration(200)}>
                       <StyledFontAwesome
@@ -391,23 +402,23 @@ const CustomIndicatorThumbContent = () => {
                       />
                     </AnimatedView>
                   )}
-                </RadioGroup.Indicator>
+                </Radio.Indicator></Radio>
                 <View className="flex-1">
-                  <RadioGroup.Label>Email Notifications</RadioGroup.Label>
-                  <RadioGroup.Description>
+                  <Label>Email Notifications</Label>
+                  <Description>
                     Get updates via email
-                  </RadioGroup.Description>
+                  </Description>
                 </View>
               </>
             )}
           </RadioGroup.Item>
 
-          <Divider />
+          <Separator />
 
           <RadioGroup.Item value="push">
             {({ isSelected }) => (
               <>
-                <RadioGroup.Indicator>
+                <Radio><Radio.Indicator>
                   {isSelected && (
                     <AnimatedView entering={FadeIn.duration(200)}>
                       <StyledIonicons
@@ -417,23 +428,23 @@ const CustomIndicatorThumbContent = () => {
                       />
                     </AnimatedView>
                   )}
-                </RadioGroup.Indicator>
+                </Radio.Indicator></Radio>
                 <View className="flex-1">
-                  <RadioGroup.Label>Push Notifications</RadioGroup.Label>
-                  <RadioGroup.Description>
+                  <Label>Push Notifications</Label>
+                  <Description>
                     Get instant push alerts
-                  </RadioGroup.Description>
+                  </Description>
                 </View>
               </>
             )}
           </RadioGroup.Item>
 
-          <Divider />
+          <Separator />
 
           <RadioGroup.Item value="none">
             {({ isSelected }) => (
               <>
-                <RadioGroup.Indicator>
+                <Radio><Radio.Indicator>
                   {isSelected && (
                     <AnimatedView
                       key="none"
@@ -441,12 +452,12 @@ const CustomIndicatorThumbContent = () => {
                       className="h-2.5 w-2.5 bg-accent-foreground"
                     />
                   )}
-                </RadioGroup.Indicator>
+                </Radio.Indicator></Radio>
                 <View className="flex-1">
-                  <RadioGroup.Label>No Notifications</RadioGroup.Label>
-                  <RadioGroup.Description>
+                  <Label>No Notifications</Label>
+                  <Description>
                     Only check updates manually
-                  </RadioGroup.Description>
+                  </Description>
                 </View>
               </>
             )}

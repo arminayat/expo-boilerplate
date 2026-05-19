@@ -1,6 +1,4 @@
-/* eslint-disable react-native/no-inline-styles */
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { Button, cn, Divider, Select, useThemeColor } from 'heroui-native';
 import React, { useState } from 'react';
 import { Platform, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -11,6 +9,14 @@ import { UsageVariantFlatList } from '../../../components/component-presentation
 import { PlacementSelect } from '../../../components/select/placement-select';
 import { SearchableDialogSelect } from '../../../components/select/searchable-dialog-select';
 import { SelectButtonTrigger } from '../../../components/select/select-button-trigger';
+import {
+  Button,
+  cn,
+  Popover,
+  Select,
+  Separator,
+  useThemeColor,
+} from 'heroui-native';
 
 type SelectOption = {
   value: string;
@@ -76,7 +82,10 @@ const PresentationContent = () => {
         <Select
           value={popoverValue}
           onValueChange={(value) => {
-            const country = COUNTRIES.find((c) => c.value === value?.value);
+            const selectedValue = value as CountryOption | undefined;
+            const country = COUNTRIES.find(
+              (c) => c.value === selectedValue?.value
+            );
             setPopoverValue(country);
           }}
         >
@@ -133,7 +142,10 @@ const PresentationContent = () => {
         <Select
           value={bottomSheetValue}
           onValueChange={(value) => {
-            const country = COUNTRIES.find((c) => c.value === value?.value);
+            const selectedValue = value as CountryOption | undefined;
+            const country = COUNTRIES.find(
+              (c) => c.value === selectedValue?.value
+            );
             setBottomSheetValue(country);
           }}
         >
@@ -171,13 +183,13 @@ const PresentationContent = () => {
                 width: 42,
                 backgroundColor: themeColorMuted,
               }}
-              bottomSheetViewClassName={cn(
+              contentContainerClassName={cn(
                 'h-full mx-2 border border-divider/20 bg-overlay overflow-hidden',
                 Platform.OS === 'ios'
                   ? 'rounded-t-4xl rounded-b-[54px]'
                   : 'rounded-4xl'
               )}
-              bottomSheetViewProps={{
+              contentContainerProps={{
                 style: {
                   padding: 0,
                 },
@@ -206,7 +218,7 @@ const PresentationContent = () => {
                       </View>
                       <Select.ItemIndicator />
                     </Select.Item>
-                    {index < COUNTRIES.length - 1 && <Divider />}
+                    {index < COUNTRIES.length - 1 && <Separator />}
                   </React.Fragment>
                 ))}
               </BottomSheetScrollView>
@@ -256,7 +268,7 @@ const AlignmentOptionsContent = () => {
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
-            <Select.Content width={200} placement="top" align="start">
+            <Select.Content presentation="popover" width={200} placement="top" align="start">
               {US_STATES.slice(0, 3).map((state) => (
                 <Select.Item
                   key={state.value}
@@ -280,7 +292,7 @@ const AlignmentOptionsContent = () => {
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
-            <Select.Content width={200} placement="top" align="center">
+            <Select.Content presentation="popover" width={200} placement="top" align="center">
               {US_STATES.slice(0, 3).map((state) => (
                 <Select.Item
                   key={state.value}
@@ -304,7 +316,7 @@ const AlignmentOptionsContent = () => {
           </Select.Trigger>
           <Select.Portal>
             <Select.Overlay />
-            <Select.Content width={200} placement="top" align="end">
+            <Select.Content presentation="popover" width={200} placement="top" align="end">
               {US_STATES.slice(0, 3).map((state) => (
                 <Select.Item
                   key={state.value}

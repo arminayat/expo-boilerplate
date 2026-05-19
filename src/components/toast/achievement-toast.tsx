@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Toast, useThemeColor, type ToastComponentProps } from 'heroui-native';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -10,6 +9,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
+import { Toast, useThemeColor, type ToastComponentProps } from 'heroui-native';
 
 const StyleAnimatedView = withUniwind(Animated.View);
 const StyledIonicons = withUniwind(Ionicons);
@@ -174,7 +174,7 @@ export const AchievementToast = (props: ToastComponentProps) => {
             New achievement!
           </Toast.Title>
           <Toast.Title className="text-base font-bold text-[#2D3748]">
-            You're on a 1-day
+            {"You're on a 1-day"}
           </Toast.Title>
           <Toast.Title className="text-base font-bold text-[#2D3748]">
             study streak

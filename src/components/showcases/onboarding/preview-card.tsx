@@ -1,4 +1,3 @@
-import { Card, Chip, cn } from 'heroui-native';
 import { type FC } from 'react';
 import { Image, useWindowDimensions, View } from 'react-native';
 import Animated, {
@@ -7,6 +6,13 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useAppTheme } from '../../../contexts/app-theme-context';
 import { AppText } from '../../app-text';
+import {
+  Card,
+  Chip,
+  cn,
+  Description,
+  Label,
+} from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 

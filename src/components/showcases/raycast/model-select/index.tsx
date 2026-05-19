@@ -1,7 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button, cn, colorKit, Select, useThemeColor } from 'heroui-native';
 import {
   Platform,
   Pressable,
@@ -10,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import Animated, { Easing, SlideInDown } from 'react-native-reanimated';
+import Animated, { SlideInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
 import { useAppTheme } from '../../../../contexts/app-theme-context';
@@ -20,6 +19,13 @@ import { SelectBlurBackdrop } from '../../../select/select-blur-backdrop';
 import { SelectContentContainer } from './select-content-container';
 import { SelectItem } from './select-item';
 import { type ModelOption } from './types';
+import {
+  Button,
+  cn,
+  colorKit,
+  Select,
+  useThemeColor,
+} from 'heroui-native';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const StyledAnimatedScrollView = withUniwind(AnimatedScrollView);
@@ -43,26 +49,11 @@ export const ModelSelect = ({ data, model, setModel }: Props) => {
     <Select
       value={model}
       onValueChange={(value) => {
-        const modelValue = data.find((m) => m.value === value?.value);
+        const selectedValue = value as ModelOption | undefined;
+        const modelValue = data.find((m) => m.value === selectedValue?.value);
         setModel(modelValue!);
       }}
       defaultValue={data[0]}
-      animation={{
-        entering: {
-          type: 'timing',
-          config: {
-            duration: 400,
-            easing: Easing.out(Easing.quad),
-          },
-        },
-        exiting: {
-          type: 'timing',
-          config: {
-            duration: 200,
-            easing: Easing.out(Easing.quad),
-          },
-        },
-      }}
     >
       <Select.Trigger asChild>
         <Button

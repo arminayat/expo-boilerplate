@@ -1,6 +1,5 @@
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colorKit, Select, useThemeColor } from 'heroui-native';
 import {
   FlatList,
   Platform,
@@ -9,15 +8,20 @@ import {
   View,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import Animated, { Easing, SlideInDown } from 'react-native-reanimated';
+import Animated, { SlideInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
 import { SelectBlurBackdrop } from '../../select/select-blur-backdrop';
 import type { UsageVariant } from '../types';
-import { CloseButton } from './close-button';
 import { SelectContentContainer } from './select-content-container';
 import { SelectItem } from './select-item';
 import { TriggerButton } from './trigger-button';
+import {
+  CloseButton,
+  colorKit,
+  Select,
+  useThemeColor,
+} from 'heroui-native';
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
 const StyledAnimatedScrollView = withUniwind(AnimatedScrollView);
@@ -44,7 +48,8 @@ export const UsageVariantsSelect = ({
     <Select
       value={variant}
       onValueChange={(value) => {
-        const variantValue = data.find((m) => m.value === value?.value);
+        const selectedValue = value as UsageVariant | undefined;
+        const variantValue = data.find((m) => m.value === selectedValue?.value);
         setVariant(variantValue!);
         setTimeout(() => {
           listRef.current?.scrollToIndex({
@@ -54,22 +59,6 @@ export const UsageVariantsSelect = ({
         }, 200);
       }}
       defaultValue={data[0]}
-      animation={{
-        entering: {
-          type: 'timing',
-          config: {
-            duration: 400,
-            easing: Easing.out(Easing.quad),
-          },
-        },
-        exiting: {
-          type: 'timing',
-          config: {
-            duration: 200,
-            easing: Easing.out(Easing.quad),
-          },
-        },
-      }}
     >
       <Select.Trigger
         isDisabled={data.length === 1}

@@ -1,9 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Button, TextField } from 'heroui-native';
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 import { DialogContent } from './dialog-content';
+import {
+  Button,
+  Description,
+  FieldError,
+  Input,
+  Label,
+  TextField,
+} from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -36,8 +43,8 @@ export const TextInputContent = () => {
     <View className="gap-4">
       {/* Basic TextField */}
       <TextField isRequired isInvalid={emailError}>
-        <TextField.Label>Email</TextField.Label>
-        <TextField.Input
+        <Label>Email</Label>
+        <Input
           placeholder="Enter your email"
           keyboardType="email-address"
           autoCapitalize="none"
@@ -47,18 +54,16 @@ export const TextInputContent = () => {
             if (emailError) setEmailError(false);
           }}
         />
-        <TextField.Description>
-          We'll never share your email with anyone else.
-        </TextField.Description>
-        <TextField.ErrorMessage>
+        <Description>{"We'll never share your email with anyone else."}</Description>
+        <FieldError>
           Please enter a valid email address
-        </TextField.ErrorMessage>
+        </FieldError>
       </TextField>
 
       {/* TextField with Icons */}
       <TextField isRequired isInvalid={passwordError} className="mb-8">
-        <TextField.Label>New password</TextField.Label>
-        <TextField.Input
+        <Label>New password</Label>
+        <Input
           placeholder="Enter your password"
           secureTextEntry={!isPasswordVisible}
           value={password}
@@ -67,14 +72,14 @@ export const TextInputContent = () => {
             if (passwordError) setPasswordError(false);
           }}
         >
-          <TextField.InputStartContent className="pointer-events-none">
+          <View className="pointer-events-none">
             <StyledIonicons
               name="lock-closed-outline"
               size={16}
               className="text-muted"
             />
-          </TextField.InputStartContent>
-          <TextField.InputEndContent>
+          </View>
+          <View>
             <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
               <StyledIonicons
                 name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'}
@@ -82,14 +87,14 @@ export const TextInputContent = () => {
                 className="text-muted"
               />
             </Pressable>
-          </TextField.InputEndContent>
-        </TextField.Input>
-        <TextField.Description>
+          </View>
+        </Input>
+        <Description>
           Password must be at least 6 characters
-        </TextField.Description>
-        <TextField.ErrorMessage>
+        </Description>
+        <FieldError>
           Password must be at least 6 characters long
-        </TextField.ErrorMessage>
+        </FieldError>
       </TextField>
 
       {/* Submit Button */}

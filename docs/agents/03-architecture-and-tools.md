@@ -12,17 +12,19 @@ Source of truth: `package.json` and `package-lock.json`.
 
 - Package manager: npm. `package-lock.json` lockfile version 3 is present; no yarn, pnpm, or bun lockfile is present.
 - Entry point: `expo-router/entry`.
-- Expo: `^54.0.0`.
-- Expo Router: `~6.0.1`.
+- Expo: `~54.0.34`.
+- Expo Router: `~6.0.23`.
 - React: `19.1.0`.
-- React Native: `0.81.4`.
+- React Native: `0.81.5`.
 - TypeScript: `~5.9.2`.
+- HeroUI Native: `1.0.3` pinned exactly.
 - React Native New Architecture: enabled in `app.json`.
 - Expo experiments: typed routes and React Compiler are enabled in `app.json`.
+- Expo SDK boundary: dependencies are currently held on SDK 54-compatible versions. Do not jump to Expo SDK 55 or React/React Native major changes as a "safe dependency update" without treating it as a framework upgrade.
 
 ## Important Config Files
 
-- `app.json`: app identity, Expo plugins, splash config, web static output, New Architecture, typed routes, React Compiler.
+- `app.json`: app identity, Expo plugins, splash config, web static output, New Architecture, typed routes, React Compiler. Current plugins include `expo-router`, `expo-splash-screen`, `expo-secure-store`, and `expo-web-browser`.
 - `package.json`: scripts, dependencies, npm package metadata.
 - `package-lock.json`: npm lockfile.
 - `tsconfig.json`: extends Expo base config, strict mode, `@/*` path alias to `src/*`.
@@ -64,7 +66,7 @@ Implemented provider order:
 - Auth state: `AuthProvider` reads `supabase.auth.getSession()` and listens to `supabase.auth.onAuthStateChange()`.
 - Server state: TanStack Query via a shared `queryClient` in `src/lib/queryClient.ts`.
 - Profile data: `useUser()` currently reads Supabase Auth user data through `supabase.auth.getUser()`. It does not fetch the `profile` table on read.
-- Profile mutation: `useUser().updateProfile()` attempts to update `profile` rows by `user_id`; verify schema before relying on this because generated `profile` types do not show `user_id`.
+- Profile mutation: `useUser().updateProfile()` updates Supabase `profile` rows by `id`, matching the generated `profile` table type.
 - Recent updates: `useGetRecentUpdates()` reads `received_emails`, but it is unused by routes.
 - Local config: `configStorage` MMKV instance stores app config such as intended `usage_priorities`.
 - Local onboarding: `onboardingStorage` MMKV instance stores device and push-notification onboarding flags.
@@ -96,7 +98,7 @@ Generated Supabase types include many tables/views/functions for agents, article
 Implemented or directly referenced:
 
 - Supabase `Session` and auth `User`.
-- `UserProfile` in `src/hooks/useUser.ts`, currently typed as `any`.
+- `UserProfile` in `src/hooks/useUser.ts`: Supabase Auth `User` plus locally expected `full_name` and `onboarding_completed_at` fields.
 - `TTab` in `src/types/appConfig.ts`: `"tab1" | "tab2" | "tab3"`.
 - `TBucket` in `src/types/index.ts`: placeholder `"bucket_name"`.
 - Theme names in `src/contexts/app-theme-context.tsx`: default light/dark plus lavender, mint, and sky variants.
@@ -108,7 +110,7 @@ Backend types available but mostly not implemented in UI:
 ## External Integrations
 
 - Supabase: auth, database, storage signed URLs.
-- PostHog: provider configured with EU host. Autocapture touch/lifecycle options are present, but `disabled: true`; screen capture is disabled.
+- PostHog: provider configured with EU host. Autocapture is currently disabled with `autocapture={false}`, while lifecycle capture is enabled through `options.captureAppLifecycleEvents`.
 - RevenueCat: helper functions configure/login/logout and fetch offerings. iOS API key is supported; Android configuration is commented out.
 - Apple Authentication: iOS sign-in with Supabase ID token.
 - Expo SecureStore: stores MMKV encryption key for session storage.
@@ -147,6 +149,10 @@ Listed in `.env.example` but not referenced by current code:
 - Lint command: `npm run lint` -> `expo lint`.
 - No test command, test config, or test files are present.
 - Native commands: `npm run ios`, `npm run android`, `npm run pod-install`.
+- No `ios/` directory exists in the current working tree; `npm run pod-install` is not usable until a native iOS project exists.
 - Web command: `npm run web`; `app.json` sets web output to `static`.
 - EAS deployment is described in the README but no `eas.json` exists.
-- iOS native files are tracked in git but currently deleted in the working tree. Do not assume the native project is usable without checking the current git state.
+- `npx expo install --check` and `npx expo-doctor` currently pass for the SDK 54 dependency set.
+- `npx tsc --noEmit` currently passes.
+- `npm run lint` currently passes with warnings, mostly unused demo imports, `Array<T>` style warnings, and hook dependency warnings.
+- `npm audit` currently reports remaining moderate advisories in the Expo/PostCSS chain whose available fix requires Expo SDK 55; this is intentionally not applied as a non-breaking update.

@@ -14,7 +14,7 @@ The most established design direction in code is the HeroUI Native demo system: 
 Implemented:
 
 - Root layout loads Roboto Slab weights 100 through 900 using `@expo-google-fonts/roboto-slab`.
-- `HeroUINativeProvider` sets `textProps.allowFontScaling` to `false`.
+- `HeroUINativeProvider` sets `textProps.allowFontScaling` to `false`; theme selection is handled by `AppThemeProvider` and Uniwind rather than provider `theme` or `colorScheme` config.
 - `AppText` wraps React Native `Text` with `font-normal`.
 
 Referenced but not fully wired:
@@ -112,7 +112,7 @@ Current concerns:
 
 Implemented:
 
-- Theme-aware HeroUI Native provider.
+- Theme-aware Uniwind/AppThemeProvider integration with HeroUI Native token classes.
 - Light/dark plus lavender/mint/sky theme variants.
 - Demo theme selector and theme toggle.
 - Token-based CSS themes.

@@ -1,8 +1,15 @@
 import { supabase } from "@/lib/supabase/client";
+import type { TablesUpdate } from "@/lib/supabase/types";
+import type { User } from "@supabase/supabase-js";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-export type UserProfile = {} & any;
+export type UserProfile = User & {
+  full_name?: string | null;
+  onboarding_completed_at?: string | null;
+};
+
+type ProfileUpdate = TablesUpdate<"profile">;
 
 /**
  * Get the user profile from the database
@@ -20,25 +27,30 @@ export function useUser() {
     queryFn: async () => {
       const { data, error } = await supabase.auth.getUser();
 
+      if (error) throw error;
+      if (!data.user) throw new Error("No user logged in");
+
       // user profile data
       // const { data: userProfileData, error: userProfileError } = await supabase
       //   .from("profile")
       //   .select("*")
-      //   .eq("user_id", data.user?.id ?? "")
+      //   .eq("id", data.user.id)
       //   .single();
       // if (userProfileError) throw userProfileError;
 
       const profileData: UserProfile = {
         ...data.user,
+        full_name:
+          typeof data.user.user_metadata.full_name === "string"
+            ? data.user.user_metadata.full_name
+            : null,
       };
-
-      if (error) throw error;
 
       return profileData;
     },
   });
 
-  async function updateProfile(updates: Partial<UserProfile>) {
+  async function updateProfile(updates: ProfileUpdate) {
     setLoading(true);
     try {
       if (!profile?.id) throw new Error("No user logged in");
@@ -46,7 +58,7 @@ export function useUser() {
       const { error } = await supabase
         .from("profile")
         .update(updates)
-        .eq("user_id", profile.id);
+        .eq("id", profile.id);
 
       if (error) throw error;
 

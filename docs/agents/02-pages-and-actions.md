@@ -75,7 +75,7 @@
 - Writes/mutations: none directly.
 - External calls: `useCheckUserOnboarding()` reads user data through `useUser()`.
 - Persistence: none directly.
-- Placeholder/gotcha: `useCheckUserOnboarding()` redirects to `/(onboarding)/secondary` when `profile.onboarding_completed_at === null`, but that route does not exist. The generated `profile` type also does not include `onboarding_completed_at`.
+- Placeholder/gotcha: `useCheckUserOnboarding()` redirects to the implemented `/(onboarding)` index when `profile.onboarding_completed_at === null`, but the onboarding route is still only a placeholder. The generated `profile` type does not include `onboarding_completed_at`.
 
 ### `src/app/(tabs)/tab1/index.tsx`
 
@@ -172,9 +172,9 @@
 ### `useUser()`
 
 - Source files: `src/hooks/useUser.ts`.
-- Behavior: React Query hook that calls `supabase.auth.getUser()` and returns the auth user as `profile`.
-- Mutations: `updateProfile()` updates Supabase `profile` rows by `user_id`, then refetches.
-- Current gap: generated `profile` type has `id`, `email`, `full_name`, billing/payment fields, but not `user_id`; the read path does not fetch `profile` table data.
+- Behavior: React Query hook that calls `supabase.auth.getUser()` and returns the auth user as `profile`, with `full_name` derived from auth `user_metadata.full_name` when present.
+- Mutations: `updateProfile()` updates Supabase `profile` rows by `id`, then refetches.
+- Current gap: generated `profile` type has `id`, `email`, `full_name`, billing/payment fields, but not `onboarding_completed_at`; the read path does not fetch `profile` table data.
 
 ### `useGetRecentUpdates()`
 

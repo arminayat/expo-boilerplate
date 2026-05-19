@@ -2,11 +2,7 @@ import { useRouter } from "expo-router";
 import { useCallback, useEffect } from "react";
 import { useMMKVBoolean } from "react-native-mmkv";
 
-import {
-  DEVICE_ONBOARDING_KEY,
-  onboardingStorage,
-  PUSH_NOTIFICATION_ONBOARDING_KEY,
-} from "@/storage/onboarding";
+import { DEVICE_ONBOARDING_KEY, onboardingStorage, PUSH_NOTIFICATION_ONBOARDING_KEY } from "@/storage/onboarding";
 import { useUser } from "./useUser";
 
 export const useCheckUserOnboarding = ({
@@ -20,7 +16,7 @@ export const useCheckUserOnboarding = ({
   useEffect(() => {
     if (!profile) return;
     if (profile.onboarding_completed_at === null && redirect) {
-      router.push("/(onboarding)/secondary");
+      router.push("/(onboarding)");
     }
   }, [profile, router, redirect]);
 

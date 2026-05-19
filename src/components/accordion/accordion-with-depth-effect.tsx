@@ -1,18 +1,14 @@
-/* eslint-disable react-native/no-inline-styles */
 import { Ionicons } from '@expo/vector-icons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useHeaderHeight } from '@react-navigation/elements';
 import {
-  Accordion,
-  cn,
-  Divider,
-  FormField,
-  useAccordion,
-  useAccordionItem,
-} from 'heroui-native';
-import { createContext, use, useState, type FC } from 'react';
+  createContext,
+  use,
+  useState,
+  type FC,
+} from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
   Easing,
@@ -25,6 +21,16 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../app-text';
+import {
+  Accordion,
+  cn,
+  ControlField,
+  Description,
+  Label,
+  Separator,
+  useAccordion,
+  useAccordionItem,
+} from 'heroui-native';
 
 const LAYOUT_TRANSITION = LinearTransition.springify()
   .damping(70)
@@ -260,7 +266,7 @@ const AccordionItemContent: FC<AccordionItemProps> = ({ item, index }) => {
           entering={FadeIn.duration(200)}
           className={cn('px-3 bg-surface', depth && 'pb-3 -mb-3')}
         >
-          <Divider />
+          <Separator />
         </StyledAnimatedView>
       )}
     </Animated.View>
@@ -291,7 +297,7 @@ export const AccordionWithDepthEffect: FC = () => {
             },
           }}
           defaultValue="2"
-          isDividerVisible={false}
+          hideSeparator
           className="w-full overflow-visible"
         >
           {accordionData.map((item, index) => (
@@ -305,20 +311,20 @@ export const AccordionWithDepthEffect: FC = () => {
           ))}
         </Accordion>
         <View>
-          <FormField
+          <ControlField
             isSelected={depth}
             onSelectedChange={setDepth}
             className="pr-2"
           >
             <View className="flex-1">
-              <FormField.Label>Depth</FormField.Label>
-              <FormField.Description>
+              <Label>Depth</Label>
+              <Description>
                 Enable depth effect for the accordion
-              </FormField.Description>
+              </Description>
             </View>
-            <FormField.Indicator />
-          </FormField>
-          <Divider className="mt-6" />
+            <ControlField.Indicator />
+          </ControlField>
+          <Separator className="mt-6" />
         </View>
       </View>
     </SettingsContext>

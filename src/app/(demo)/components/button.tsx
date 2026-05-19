@@ -1,6 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button, cn, Spinner, useThemeColor } from 'heroui-native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FadeIn, LinearTransition } from 'react-native-reanimated';
@@ -8,6 +7,13 @@ import { withUniwind } from 'uniwind';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
 import { useAppTheme } from '../../../contexts/app-theme-context';
+import {
+  Button,
+  cn,
+  Label,
+  Spinner,
+  useThemeColor,
+} from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -221,7 +227,6 @@ const CustomStylingContent = () => {
           </Button>
 
           <Button
-            feedbackPosition="top"
             animation={{
               highlight: {
                 backgroundColor: {

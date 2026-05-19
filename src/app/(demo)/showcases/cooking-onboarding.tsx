@@ -3,12 +3,6 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import {
-  colorKit,
-  Divider,
-  useThemeColor,
-  type PopoverTriggerRef,
-} from 'heroui-native';
-import {
   useCallback,
   useEffect,
   useMemo,
@@ -16,7 +10,12 @@ import {
   useRef,
   type RefObject,
 } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
@@ -31,6 +30,12 @@ import ParallaxScrollView from '../../../components/showcases/cooking-onboarding
 import { Plan } from '../../../components/showcases/cooking-onboarding/plan';
 import { Save } from '../../../components/showcases/cooking-onboarding/save';
 import { Share } from '../../../components/showcases/cooking-onboarding/share';
+import {
+  colorKit,
+  Separator,
+  useThemeColor,
+  type PopoverTriggerRef,
+} from 'heroui-native';
 
 const StyledAnimatedView = withUniwind(Animated.View);
 const StyledFeather = withUniwind(Feather);
@@ -200,7 +205,7 @@ export default function CookingOnboardingScreen() {
           great source of antioxidants and fiber, making them a healthy choice
           for breakfast.
         </AppText>
-        <Divider className="my-5" />
+        <Separator className="my-5" />
         <Highlights />
         <Ingridients />
       </ParallaxScrollView>

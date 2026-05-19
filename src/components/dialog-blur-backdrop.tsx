@@ -1,8 +1,8 @@
-import { Dialog, useDialogAnimation } from 'heroui-native';
 import { StyleSheet } from 'react-native';
 import { interpolate, useDerivedValue } from 'react-native-reanimated';
 import { useAppTheme } from '../contexts/app-theme-context';
 import { AnimatedBlurView } from './animated-blur-view';
+import { Dialog, useDialogAnimation } from 'heroui-native';
 
 export const DialogBlurBackdrop = () => {
   const { isDark } = useAppTheme();

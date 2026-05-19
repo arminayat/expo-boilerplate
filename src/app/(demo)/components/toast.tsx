@@ -2,12 +2,6 @@ import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
 import Octicons from '@expo/vector-icons/Octicons';
 import { useRouter } from 'expo-router';
-import {
-  Button,
-  useThemeColor,
-  useToast,
-  type ToastComponentProps,
-} from 'heroui-native';
 import { useCallback, useRef, useState } from 'react';
 import { Platform, TextInput, View } from 'react-native';
 import { withUniwind } from 'uniwind';
@@ -15,14 +9,14 @@ import type { UsageVariant } from '../../../components/component-presentation/ty
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
 import { Logo } from '../../../components/logo';
 import { AchievementToast } from '../../../components/toast/achievement-toast';
+import { LoadingToast, useLoadingState } from '../../../components/toast/loading-toast';
+import { ProgressToast, useProgressState } from '../../../components/toast/progress-toast';
 import {
-  LoadingToast,
-  useLoadingState,
-} from '../../../components/toast/loading-toast';
-import {
-  ProgressToast,
-  useProgressState,
-} from '../../../components/toast/progress-toast';
+  Button,
+  useThemeColor,
+  useToast,
+  type ToastComponentProps,
+} from 'heroui-native';
 
 const StyledFeather = withUniwind(Feather);
 const StyledOcticons = withUniwind(Octicons);
@@ -374,7 +368,7 @@ const FromNativeModalContent = () => {
     <View className="flex-1 items-center justify-center px-5 gap-5">
       <Button
         variant="secondary"
-        onPress={() => router.push('components/toast-native-modal')}
+        onPress={() => router.push('/components/toast-native-modal')}
       >
         Open modal
       </Button>

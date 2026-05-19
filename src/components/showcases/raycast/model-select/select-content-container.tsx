@@ -1,6 +1,6 @@
-import { Select, useSelectAnimation } from 'heroui-native';
 import { type FC, type PropsWithChildren } from 'react';
 import { interpolate, useAnimatedStyle } from 'react-native-reanimated';
+import { Select, useSelectAnimation } from 'heroui-native';
 
 export const SelectContentContainer: FC<PropsWithChildren> = ({ children }) => {
   const { progress } = useSelectAnimation();

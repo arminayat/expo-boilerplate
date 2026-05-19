@@ -1,5 +1,4 @@
 import { Stack, useRouter } from "expo-router";
-import { Button, TextField } from "heroui-native";
 import { usePostHog } from "posthog-react-native";
 import { useEffect, useState } from "react";
 import {
@@ -15,7 +14,8 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { supabase } from "../../lib/supabase/client"; // Ensure supabase client is configured correctly
+import { Button, Input, TextField } from "heroui-native";
+import { supabase } from "../../lib/supabase/client";
 
 export default function ForgetPasswordScreen() {
   const [email, setEmail] = useState("");
@@ -112,7 +112,7 @@ export default function ForgetPasswordScreen() {
         </Text>
         <Animated.View style={emailAnimatedStyle} className="w-full">
           <TextField>
-            <TextField.Input
+            <Input
               autoCapitalize="none"
               keyboardType="email-address"
               value={email}
@@ -125,12 +125,12 @@ export default function ForgetPasswordScreen() {
           </TextField>
         </Animated.View>
         <Animated.View style={buttonAnimatedStyle} className="mt-4 w-full">
-          <Button onPress={handlePasswordReset} disabled={loading} size="lg">
+          <Button onPress={handlePasswordReset} isDisabled={loading} size="lg">
             {loading ? "Sending..." : "Send Reset Instructions"}
           </Button>
         </Animated.View>
         <Animated.View style={buttonAnimatedStyle} className="mt-4 w-full">
-          <Button onPress={() => router.back()} disabled={loading} size="lg">
+          <Button onPress={() => router.back()} isDisabled={loading} size="lg">
             Back to Sign In
           </Button>
         </Animated.View>

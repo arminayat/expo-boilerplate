@@ -1,4 +1,10 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { type FC, type RefObject } from 'react';
+import { withUniwind } from 'uniwind';
+import { simulatePress } from '../../../helpers/utils/simulate-press';
+import { AppText } from '../../app-text';
+import { popoverAnimation } from './constants';
+import { className } from './styles';
 import {
   Button,
   cn,
@@ -6,12 +12,6 @@ import {
   useThemeColor,
   type PopoverTriggerRef,
 } from 'heroui-native';
-import { type FC, type RefObject } from 'react';
-import { withUniwind } from 'uniwind';
-import { simulatePress } from '../../../helpers/utils/simulate-press';
-import { AppText } from '../../app-text';
-import { popoverAnimation } from './constants';
-import { className } from './styles';
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -45,7 +45,7 @@ export const Ask: FC<Props> = ({ isOnboardingDone, triggerRef }) => {
         </Button>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content
+        <Popover.Content presentation="popover"
           className={cn(className.popoverContent, 'w-[240px]')}
           placement="top"
         >

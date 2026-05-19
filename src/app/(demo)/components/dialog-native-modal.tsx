@@ -1,6 +1,6 @@
-import { Button, Dialog } from 'heroui-native';
 import { useState } from 'react';
 import { View } from 'react-native';
+import { Button, Description, Dialog } from 'heroui-native';
 
 export default function DialogNativeModalScreen() {
   const [isOpen, setIsOpen] = useState(false);

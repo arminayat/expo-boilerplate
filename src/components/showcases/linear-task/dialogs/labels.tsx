@@ -1,6 +1,5 @@
 import Feather from '@expo/vector-icons/Feather';
 import * as Haptics from 'expo-haptics';
-import { Checkbox, Chip, Dialog, FormField } from 'heroui-native';
 import { useMemo, useState, type FC } from 'react';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -12,6 +11,13 @@ import { AppText } from '../../../app-text';
 import { DialogBlurBackdrop } from '../../../dialog-blur-backdrop';
 import { DialogHeader } from '../dialog-header';
 import { SearchBar } from '../search-bar';
+import {
+  Checkbox,
+  Chip,
+  ControlField,
+  Dialog,
+  Label,
+} from 'heroui-native';
 
 const StyledFeather = withUniwind(Feather);
 
@@ -173,7 +179,7 @@ export const Labels: FC = () => {
                   {filteredItems.map((item) => {
                     const isSelected = selectedValues.has(item.value);
                     return (
-                      <FormField
+                      <ControlField
                         key={item.value}
                         isSelected={isSelected}
                         onSelectedChange={(selected) =>
@@ -184,9 +190,9 @@ export const Labels: FC = () => {
                           <View className="w-5 pl-0.5 justify-center">
                             <View className="scale-105">{item.indicator}</View>
                           </View>
-                          <FormField.Label>{item.label}</FormField.Label>
+                          <Label>{item.label}</Label>
                         </View>
-                        <FormField.Indicator>
+                        <ControlField.Indicator>
                           <Checkbox
                             isSelected={isSelected}
                             className="bg-transparent"
@@ -206,8 +212,8 @@ export const Labels: FC = () => {
                               )}
                             </Checkbox.Indicator>
                           </Checkbox>
-                        </FormField.Indicator>
-                      </FormField>
+                        </ControlField.Indicator>
+                      </ControlField>
                     );
                   })}
                 </View>

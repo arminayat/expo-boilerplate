@@ -3,7 +3,13 @@ import { loginWithRevenueCat } from "@/lib/revenuecat";
 import { Session } from "@supabase/supabase-js";
 import { router } from "expo-router";
 import { usePostHog } from "posthog-react-native";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { supabase } from "../lib/supabase/client";
 
 type AuthContextType = {

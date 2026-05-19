@@ -1,5 +1,4 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { Accordion, PressableFeedback, useAccordionItem } from 'heroui-native';
 import { View } from 'react-native';
 import Animated, {
   Easing,
@@ -13,6 +12,12 @@ import { AccordionWithDepthEffect } from '../../../components/accordion/accordio
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import {
+  Accordion,
+  PressableFeedback,
+  Surface,
+  useAccordionItem,
+} from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 const StyledMaterialIcons = withUniwind(MaterialIcons);
@@ -125,9 +130,7 @@ const DefaultVariantContent = () => {
       <Accordion defaultValue="2" className="w-full">
         {accordionData.map((item) => (
           <Accordion.Item key={item.id} value={item.id}>
-            <PressableFeedback
-              animation={{ highlight: { opacity: { value: [0, 0.05] } } }}
-            >
+            <PressableFeedback animation="disabled">
               <Accordion.Trigger>
                 <View className={classNames.triggerContentContainer}>
                   {item.icon}
@@ -137,6 +140,9 @@ const DefaultVariantContent = () => {
                 </View>
                 <Accordion.Indicator />
               </Accordion.Trigger>
+              <PressableFeedback.Highlight
+                animation={{ opacity: { value: [0, 0.05] } }}
+              />
             </PressableFeedback>
             <Accordion.Content>
               <AppText className={classNames.contentText}>
@@ -218,7 +224,7 @@ const MultipleSelectionContent = () => {
 const WithoutDividersContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
-      <Accordion isDividerVisible={false} className="w-full">
+      <Accordion hideSeparator className="w-full">
         {accordionData.slice(0, 3).map((item) => (
           <Accordion.Item key={item.id} value={item.id}>
             <Accordion.Trigger className="rounded-lg">

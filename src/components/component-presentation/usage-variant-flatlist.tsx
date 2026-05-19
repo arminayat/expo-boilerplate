@@ -1,7 +1,11 @@
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
-import { useToast } from 'heroui-native';
-import { memo, useCallback, useRef, useState } from 'react';
+import {
+  memo,
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
 import {
   FlatList,
   Platform,
@@ -25,6 +29,7 @@ import { useAccessibilityInfo } from '../../helpers/hooks/use-accessability-info
 import { PaginationIndicator } from './pagination-indicator';
 import type { UsageVariant } from './types';
 import { UsageVariantsSelect } from './usage-variants-select';
+import { useToast } from 'heroui-native';
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 

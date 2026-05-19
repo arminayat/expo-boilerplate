@@ -1,12 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import * as Haptics from 'expo-haptics';
-import { cn } from 'heroui-native';
 import { type FC } from 'react';
 import { Platform, Pressable } from 'react-native';
 import Animated, { FadeOut, ZoomIn } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 import { useAppTheme } from '../contexts/app-theme-context';
+import { cn } from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 

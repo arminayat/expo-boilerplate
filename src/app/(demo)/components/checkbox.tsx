@@ -1,6 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Checkbox, Divider, FormField, Surface } from 'heroui-native';
 import React from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -16,6 +15,14 @@ import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import {
+  Checkbox,
+  ControlField,
+  Description,
+  Label,
+  Separator,
+  Surface,
+} from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 const StyleAnimatedView = withUniwind(Animated.View);
@@ -36,21 +43,21 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
   description,
 }) => {
   return (
-    <FormField
+    <ControlField
       isSelected={isSelected}
       onSelectedChange={onSelectedChange}
       className="items-start"
     >
-      <FormField.Indicator>
+      <ControlField.Indicator>
         <Checkbox className="mt-0.5" />
-      </FormField.Indicator>
+      </ControlField.Indicator>
       <View className="flex-1">
-        <FormField.Label className="text-lg">{title}</FormField.Label>
-        <FormField.Description className="text-base">
+        <Label className="text-lg">{title}</Label>
+        <Description className="text-base">
           {description}
-        </FormField.Description>
+        </Description>
       </View>
-    </FormField>
+    </ControlField>
   );
 };
 
@@ -90,7 +97,7 @@ const BasicUsage = () => {
       <Surface className="py-5 w-full">
         {fieldKeys.map((key, index) => (
           <React.Fragment key={key}>
-            {index > 0 && <Divider className="my-4" />}
+            {index > 0 && <Separator className="my-4" />}
             <CheckboxField
               isSelected={fields[key]}
               onSelectedChange={handleFieldChange(key)}

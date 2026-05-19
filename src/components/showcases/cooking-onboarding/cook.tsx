@@ -1,16 +1,16 @@
 import AntDesign from '@expo/vector-icons/AntDesign';
-import {
-  Button,
-  Popover,
-  useThemeColor,
-  type PopoverTriggerRef,
-} from 'heroui-native';
 import { type FC, type RefObject } from 'react';
 import { withUniwind } from 'uniwind';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
 import { AppText } from '../../app-text';
 import { popoverAnimation } from './constants';
 import { className } from './styles';
+import {
+  Button,
+  Popover,
+  useThemeColor,
+  type PopoverTriggerRef,
+} from 'heroui-native';
 
 const StyledAntDesign = withUniwind(AntDesign);
 
@@ -35,7 +35,7 @@ export const Cook: FC<Props> = ({ isOnboardingDone, triggerRef }) => {
         </Button>
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Content className={className.popoverContent} placement="top">
+        <Popover.Content presentation="popover" className={className.popoverContent} placement="top">
           <Popover.Arrow
             stroke={themeColorForeground}
             fill={themeColorForeground}

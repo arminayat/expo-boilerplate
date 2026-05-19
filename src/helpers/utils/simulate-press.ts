@@ -1,5 +1,5 @@
 import * as Haptics from 'expo-haptics';
-import { Alert } from 'react-native';
+import { Alert } from "react-native";
 
 export const simulatePress = () => {
   if (__DEV__) {

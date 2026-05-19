@@ -1,12 +1,22 @@
-/* eslint-disable react-native/no-inline-styles */
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button, Card, type CardRootProps } from 'heroui-native';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import {
+  Button,
+  Card,
+  Description,
+  Label,
+  type CardRootProps,
+} from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -279,9 +289,9 @@ const VariantsContent = () => {
           description="Higher prominence (surface-quaternary). Use for important content."
         />
         <CardItem
-          variant="quaternary"
-          title="Quaternary"
-          description="Highest prominence (surface-quaternary). Use for critical content."
+          variant="transparent"
+          title="Transparent"
+          description="Transparent card appearance for content that should sit directly on the page."
         />
       </View>
     </View>

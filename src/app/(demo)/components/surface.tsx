@@ -1,8 +1,8 @@
-import { Surface, type SurfaceRootProps } from 'heroui-native';
 import { View } from 'react-native';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import { Surface, type SurfaceRootProps } from 'heroui-native';
 
 type SurfaceItemProps = {
   variant: SurfaceRootProps['variant'];
@@ -39,9 +39,9 @@ const VariantsContent = () => {
           description="This is a tertiary surface variant. It uses bg-surface-tertiary styling."
         />
         <SurfaceItem
-          variant="quaternary"
+          variant="transparent"
           title="Surface Content"
-          description="This is a quaternary surface variant. It uses bg-surface-quaternary styling."
+          description="This is a transparent surface variant for unframed content."
         />
       </View>
     </View>

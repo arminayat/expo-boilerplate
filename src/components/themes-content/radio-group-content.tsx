@@ -1,6 +1,13 @@
-import { Divider, RadioGroup, Surface } from 'heroui-native';
 import React from 'react';
 import { View } from 'react-native';
+import {
+  Description,
+  Label,
+  Radio,
+  RadioGroup,
+  Separator,
+  Surface,
+} from 'heroui-native';
 
 export const RadioGroupContent = () => {
   const [frequency, setFrequency] = React.useState('daily');
@@ -13,32 +20,32 @@ export const RadioGroupContent = () => {
         className="gap-0"
       >
         <RadioGroup.Item value="instant">
-          <RadioGroup.Indicator />
+          <Radio><Radio.Indicator  /></Radio>
           <View className="flex-1">
-            <RadioGroup.Label>Instant</RadioGroup.Label>
-            <RadioGroup.Description>
+            <Label>Instant</Label>
+            <Description>
               Get notifications immediately
-            </RadioGroup.Description>
+            </Description>
           </View>
         </RadioGroup.Item>
-        <Divider className="my-4" />
+        <Separator className="my-4" />
         <RadioGroup.Item value="daily">
-          <RadioGroup.Indicator />
+          <Radio><Radio.Indicator  /></Radio>
           <View className="flex-1">
-            <RadioGroup.Label>Daily</RadioGroup.Label>
-            <RadioGroup.Description>
+            <Label>Daily</Label>
+            <Description>
               Once per day summary of all updates
-            </RadioGroup.Description>
+            </Description>
           </View>
         </RadioGroup.Item>
-        <Divider className="my-4" />
+        <Separator className="my-4" />
         <RadioGroup.Item value="weekly">
-          <RadioGroup.Indicator />
+          <Radio><Radio.Indicator  /></Radio>
           <View className="flex-1">
-            <RadioGroup.Label>Weekly</RadioGroup.Label>
-            <RadioGroup.Description>
+            <Label>Weekly</Label>
+            <Description>
               Weekly digest every Monday morning
-            </RadioGroup.Description>
+            </Description>
           </View>
         </RadioGroup.Item>
       </RadioGroup>

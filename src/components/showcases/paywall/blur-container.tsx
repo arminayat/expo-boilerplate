@@ -1,7 +1,7 @@
 import { BlurView } from 'expo-blur';
-import { cn } from 'heroui-native';
 import { type FC, type PropsWithChildren } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { cn } from 'heroui-native';
 
 type Props = {
   className?: string;

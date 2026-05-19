@@ -1,12 +1,6 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Haptics from 'expo-haptics';
-import {
-  Button,
-  useSelect,
-  useSelectAnimation,
-  useThemeColor,
-} from 'heroui-native';
 import { Platform } from 'react-native';
 import Animated, {
   Extrapolation,
@@ -15,6 +9,12 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
+import {
+  Button,
+  useSelect,
+  useSelectAnimation,
+  useThemeColor,
+} from 'heroui-native';
 
 const StyleAnimatedView = withUniwind(Animated.View);
 

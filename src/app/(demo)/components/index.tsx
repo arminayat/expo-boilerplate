@@ -1,108 +1,126 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { usePathname, useRouter } from 'expo-router';
-import { Accordion, useToast } from 'heroui-native';
+import { type Href, usePathname, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { Platform, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import { ScreenScrollView } from '../../../components/screen-scroll-view';
+import {
+  Accordion,
+  Avatar,
+  Button,
+  Card,
+  Checkbox,
+  Chip,
+  Dialog,
+  Popover,
+  Radio,
+  Select,
+  Separator,
+  Skeleton,
+  Spinner,
+  Surface,
+  Switch,
+  Tabs,
+  useToast,
+} from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 
 type Component = {
   title: string;
-  path: string;
+  path: Href;
 };
 
 const components: Component[] = [
   {
     title: 'Accordion',
-    path: 'accordion',
+    path: '/components/accordion',
   },
   {
     title: 'Avatar',
-    path: 'avatar',
+    path: '/components/avatar',
   },
   {
     title: 'Button',
-    path: 'button',
+    path: '/components/button',
   },
   {
     title: 'Card',
-    path: 'card',
+    path: '/components/card',
   },
   {
     title: 'Checkbox',
-    path: 'checkbox',
+    path: '/components/checkbox',
   },
   {
     title: 'Chip',
-    path: 'chip',
+    path: '/components/chip',
   },
   {
     title: 'Dialog',
-    path: 'dialog',
+    path: '/components/dialog',
   },
   {
-    title: 'Divider',
-    path: 'divider',
+    title: 'Separator',
+    path: '/components/divider',
   },
   {
     title: 'Error View',
-    path: 'error-view',
+    path: '/components/error-view',
   },
   {
     title: 'Form Field',
-    path: 'form-field',
+    path: '/components/form-field',
   },
   {
     title: 'Popover',
-    path: 'popover',
+    path: '/components/popover',
   },
   {
     title: 'Pressable Feedback',
-    path: 'pressable-feedback',
+    path: '/components/pressable-feedback',
   },
   {
     title: 'Radio Group',
-    path: 'radio-group',
+    path: '/components/radio-group',
   },
   {
     title: 'Scroll Shadow',
-    path: 'scroll-shadow',
+    path: '/components/scroll-shadow',
   },
   {
     title: 'Select',
-    path: 'select',
+    path: '/components/select',
   },
   {
     title: 'Skeleton',
-    path: 'skeleton',
+    path: '/components/skeleton',
   },
   {
     title: 'Spinner',
-    path: 'spinner',
+    path: '/components/spinner',
   },
   {
     title: 'Surface',
-    path: 'surface',
+    path: '/components/surface',
   },
   {
     title: 'Switch',
-    path: 'switch',
+    path: '/components/switch',
   },
   {
     title: 'Tabs',
-    path: 'tabs',
+    path: '/components/tabs',
   },
   {
     title: 'Text Field',
-    path: 'text-field',
+    path: '/components/text-field',
   },
   {
     title: 'Toast',
-    path: 'toast',
+    path: '/components/toast',
   },
 ];
 
@@ -130,7 +148,7 @@ export default function App() {
                 if (Platform.OS === 'ios') {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 }
-                router.push(`/components/${item.path}`);
+                router.push(item.path);
               }}
             >
               <AppText className="text-foreground text-base ml-1">

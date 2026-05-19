@@ -1,20 +1,21 @@
-/* eslint-disable react-native/no-inline-styles */
-import {
-  Avatar,
-  Button,
-  Card,
-  RadioGroup,
-  Skeleton,
-  SkeletonGroup,
-  Surface,
-  type SkeletonAnimation,
-} from 'heroui-native';
 import { useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import Animated, { FadeInLeft, FadeOutRight } from 'react-native-reanimated';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import {
+  Avatar,
+  Button,
+  Card,
+  Label,
+  Radio,
+  RadioGroup,
+  Skeleton,
+  SkeletonGroup,
+  Surface,
+  type SkeletonAnimation,
+} from 'heroui-native';
 
 const SkeletonControls = ({
   isLoading,
@@ -35,16 +36,16 @@ const SkeletonControls = ({
         className="flex-row justify-center gap-5"
       >
         <RadioGroup.Item value="shimmer">
-          <RadioGroup.Indicator />
-          <RadioGroup.Label>Shimmer</RadioGroup.Label>
+          <Radio><Radio.Indicator  /></Radio>
+          <Label>Shimmer</Label>
         </RadioGroup.Item>
         <RadioGroup.Item value="pulse">
-          <RadioGroup.Indicator />
-          <RadioGroup.Label>Pulse</RadioGroup.Label>
+          <Radio><Radio.Indicator  /></Radio>
+          <Label>Pulse</Label>
         </RadioGroup.Item>
         <RadioGroup.Item value="none">
-          <RadioGroup.Indicator />
-          <RadioGroup.Label>None</RadioGroup.Label>
+          <Radio><Radio.Indicator  /></Radio>
+          <Label>None</Label>
         </RadioGroup.Item>
       </RadioGroup>
       <Button variant="secondary" onPress={() => setIsLoading(!isLoading)}>

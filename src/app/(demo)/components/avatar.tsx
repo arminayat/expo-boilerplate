@@ -1,12 +1,11 @@
-/* eslint-disable react-native/no-inline-styles */
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Avatar, cn } from 'heroui-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import { Avatar, cn } from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 

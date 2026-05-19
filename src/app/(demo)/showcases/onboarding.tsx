@@ -1,6 +1,5 @@
 import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from 'expo-router';
-import { Button, cn, Divider } from 'heroui-native';
 import { View } from 'react-native';
 import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,6 +9,12 @@ import MarqueeCarousel, {
   type CardProps,
 } from '../../../components/showcases/onboarding/marquee-carousel';
 import { useAppTheme } from '../../../contexts/app-theme-context';
+import {
+  Button,
+  cn,
+  Label,
+  Separator,
+} from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 const StyledFeather = withUniwind(Feather);
@@ -109,13 +114,12 @@ const OnboardingScreen = () => {
           Setting Up a Show
         </AppText>
         <AppText className="text-base text-center text-foreground/75">
-          It's fast and simple, and we've got a few pointers to help you get
-          started successfully.
+          {"It's fast and simple, and we've got a few pointers to help you get started successfully."}
         </AppText>
       </AnimatedView>
 
       <AnimatedView entering={FadeIn.delay(350)}>
-        <Divider variant="thick" className="my-8 opacity-20" />
+        <Separator variant="thick" className="my-8 opacity-20" />
       </AnimatedView>
 
       <AnimatedView entering={FadeInDown.delay(400).springify()}>

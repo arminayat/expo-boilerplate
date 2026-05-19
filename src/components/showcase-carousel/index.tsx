@@ -3,10 +3,7 @@ import Animated, {
   useAnimatedRef,
   useScrollOffset,
 } from 'react-native-reanimated';
-import {
-  ShowcaseItem,
-  type ShowcaseItemData,
-} from '../showcases/showcase-item';
+import { ShowcaseItem, type ShowcaseItemData } from '../showcases/showcase-item';
 import { PaginationIndicator } from './pagination-indicator';
 
 export type Props = {

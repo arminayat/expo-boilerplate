@@ -1,24 +1,24 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Button, Popover } from 'heroui-native';
 import { Platform, View } from 'react-native';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
+import { Button, Description, Popover } from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 
 const WithTitleDescriptionContent = () => {
   return (
     <View className="flex-1 px-5 items-center justify-center">
-      <Popover>
+      <Popover presentation="bottom-sheet">
         <Popover.Trigger asChild>
           <Button variant="secondary">Did you know?</Button>
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Overlay />
-          <Popover.Content
+          <Popover.Content presentation="popover"
             width={320}
             placement="top"
             className="gap-3 px-6 py-5"
@@ -39,7 +39,8 @@ const WithTitleDescriptionContent = () => {
             <Popover.Description className="text-sm">
               The first computer bug was an actual moth found trapped in a
               Harvard Mark II computer in 1947. Grace Hopper taped it to the log
-              book with the note "First actual case of bug being found."
+              book with the note{' '}
+              {'"First actual case of bug being found."'}
             </Popover.Description>
             <View className="flex-row items-center gap-2 mt-2 pt-2 border-t border-border">
               <StyledIonicons
@@ -113,7 +114,7 @@ const PresentationVariantsContent = () => {
                   Share Options
                 </Popover.Title>
                 <Popover.Description className="text-center text-muted">
-                  Choose how you'd like to share this content
+                  {"Choose how you'd like to share this content"}
                 </Popover.Description>
               </View>
               <View className="gap-2">
@@ -204,7 +205,7 @@ const PlacementPopover = ({
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Overlay />
-        <Popover.Content placement={placement} width={220} className="gap-2">
+        <Popover.Content presentation="popover" placement={placement} width={220} className="gap-2">
           <View className="flex-row items-center gap-2">
             <View className="size-8 items-center justify-center rounded-full bg-accent/15">
               <StyledIonicons
@@ -257,7 +258,7 @@ const AlignmentPopover = ({ align }: { align: 'start' | 'center' | 'end' }) => {
       </Popover.Trigger>
       <Popover.Portal>
         <Popover.Overlay />
-        <Popover.Content
+        <Popover.Content presentation="popover"
           placement="top"
           align={align}
           width={200}
@@ -305,7 +306,7 @@ const NativeModalTestContent = () => {
     <View className="flex-1 px-5 items-center justify-center">
       <Button
         variant="secondary"
-        onPress={() => router.push('components/popover-native-modal')}
+        onPress={() => router.push('/components/popover-native-modal')}
       >
         Popover from native modal
       </Button>

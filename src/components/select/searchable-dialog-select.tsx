@@ -1,17 +1,20 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button, cn, ScrollShadow, Select, useThemeColor } from 'heroui-native';
 import { useState } from 'react';
 import { TextInput, useWindowDimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import {
-  KeyboardAvoidingView,
-  KeyboardController,
-} from 'react-native-keyboard-controller';
-import { Easing } from 'react-native-reanimated';
+import { KeyboardAvoidingView, KeyboardController } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '../../contexts/app-theme-context';
 import { AppText } from '../app-text';
 import { SelectBlurBackdrop } from './select-blur-backdrop';
+import {
+  Button,
+  cn,
+  Dialog,
+  ScrollShadow,
+  Select,
+  useThemeColor,
+} from 'heroui-native';
 
 KeyboardController.preload();
 
@@ -59,19 +62,10 @@ export function SearchableDialogSelect() {
     <Select
       value={value}
       onValueChange={(newValue) => {
-        const country = COUNTRIES.find((c) => c.value === newValue?.value);
+        const selectedValue = newValue as CountryOption | undefined;
+        const country = COUNTRIES.find((c) => c.value === selectedValue?.value);
         setValue(country);
         setSearchQuery('');
-      }}
-      closeDelay={300}
-      animation={{
-        exiting: {
-          type: 'timing',
-          config: {
-            duration: 250,
-            easing: Easing.out(Easing.quad),
-          },
-        },
       }}
     >
       <Select.Trigger asChild>

@@ -17,13 +17,9 @@ export default function Providers({ children }: { children: ReactNode }) {
       <KeyboardProvider>
         <PostHogProvider
           apiKey={process.env.EXPO_PUBLIC_POSTHOG_API_KEY ?? "-"}
-          autocapture={{
-            captureLifecycleEvents: true,
-            captureScreens: false, // will be tracked manually
-            captureTouches: true,
-            disabled: true,
-          }}
+          autocapture={false}
           options={{
+            captureAppLifecycleEvents: true,
             host: "https://eu.i.posthog.com",
           }}
         >

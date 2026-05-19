@@ -1,11 +1,11 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { useSelectAnimation, useThemeColor } from 'heroui-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
+import { useSelectAnimation, useThemeColor } from 'heroui-native';
 
 const StyleAnimatedView = withUniwind(Animated.View);
 

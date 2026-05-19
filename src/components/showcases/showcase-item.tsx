@@ -1,7 +1,11 @@
 import { Image as ExpoImage } from 'expo-image';
-import { useRouter } from 'expo-router';
-import { Chip, cn, Surface } from 'heroui-native';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { type Href, useRouter } from 'expo-router';
+import {
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -11,13 +15,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useAppTheme } from '../../contexts/app-theme-context';
 import { AppText } from '../app-text';
+import { Chip, cn, Surface } from 'heroui-native';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type ShowcaseComponent = {
   name: string;
-  href: string;
+  href: Href;
 };
 
 export type ShowcaseItemData = {
@@ -25,7 +30,7 @@ export type ShowcaseItemData = {
   imageDark: string;
   title: string;
   description: string;
-  href: string;
+  href: Href;
   components: ShowcaseComponent[];
 };
 

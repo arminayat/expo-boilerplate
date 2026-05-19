@@ -2,7 +2,6 @@ import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
-import { Avatar, cn } from 'heroui-native';
 import { useState, type FC } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -12,6 +11,7 @@ import { ModelSelect } from '../../../components/showcases/raycast/model-select'
 import type { ModelOption } from '../../../components/showcases/raycast/model-select/types';
 import { useAppTheme } from '../../../contexts/app-theme-context';
 import { simulatePress } from '../../../helpers/utils/simulate-press';
+import { Avatar, cn } from 'heroui-native';
 
 const StyledFeather = withUniwind(Feather);
 const StyledFontAwesome6 = withUniwind(FontAwesome6);

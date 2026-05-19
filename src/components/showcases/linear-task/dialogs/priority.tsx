@@ -1,13 +1,19 @@
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import * as Haptics from 'expo-haptics';
-import { Chip, Dialog, RadioGroup } from 'heroui-native';
 import { useState, type FC } from 'react';
 import { Platform, View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { withUniwind } from 'uniwind';
 import { DialogBlurBackdrop } from '../../../dialog-blur-backdrop';
 import { DialogHeader } from '../dialog-header';
+import {
+  Chip,
+  Dialog,
+  Label,
+  Radio,
+  RadioGroup,
+} from 'heroui-native';
 
 const StyledFeather = withUniwind(Feather);
 const StyledFontAwesome6 = withUniwind(FontAwesome6);
@@ -115,9 +121,9 @@ export const Priority: FC = () => {
                     <View className="w-7 pl-0.5 justify-center">
                       <View className="scale-105">{item.indicator}</View>
                     </View>
-                    <RadioGroup.Label>{item.label}</RadioGroup.Label>
+                    <Label>{item.label}</Label>
                   </View>
-                  <RadioGroup.Indicator className="border-0 bg-transparent">
+                  <Radio><Radio.Indicator className="border-0 bg-transparent">
                     {value === item.value && (
                       <Animated.View
                         key={item.value}
@@ -130,7 +136,7 @@ export const Priority: FC = () => {
                         />
                       </Animated.View>
                     )}
-                  </RadioGroup.Indicator>
+                  </Radio.Indicator></Radio>
                 </RadioGroup.Item>
               </Dialog.Close>
             ))}

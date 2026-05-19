@@ -1,10 +1,9 @@
-/* eslint-disable react-native/no-inline-styles */
 import MaskedView from '@react-native-masked-view/masked-view';
 import { BlurView, type BlurViewProps } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
-import { cn, colorKit, useThemeColor } from 'heroui-native';
 import { type FC } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
+import { cn, colorKit, useThemeColor } from 'heroui-native';
 
 type Props = {
   position?: 'top' | 'bottom';

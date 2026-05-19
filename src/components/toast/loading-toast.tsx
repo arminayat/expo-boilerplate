@@ -1,4 +1,9 @@
 import Feather from '@expo/vector-icons/Feather';
+import { useEffect } from 'react';
+import { View } from 'react-native';
+import { LinearTransition } from 'react-native-reanimated';
+import { withUniwind } from 'uniwind';
+import { useSharedState } from './use-shared-state';
 import {
   cn,
   Spinner,
@@ -6,11 +11,6 @@ import {
   useThemeColor,
   type ToastComponentProps,
 } from 'heroui-native';
-import { useEffect } from 'react';
-import { View } from 'react-native';
-import { LinearTransition } from 'react-native-reanimated';
-import { withUniwind } from 'uniwind';
-import { useSharedState } from './use-shared-state';
 
 const StyledFeather = withUniwind(Feather);
 

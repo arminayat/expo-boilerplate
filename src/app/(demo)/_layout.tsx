@@ -1,13 +1,38 @@
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import { Stack } from 'expo-router';
-import { useThemeColor, useToast } from 'heroui-native';
 import { useCallback, useEffect } from 'react';
-import { Image, Platform, StyleSheet, View } from 'react-native';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 import LogoDark from '../../../assets/logo-dark.png';
 import LogoLight from '../../../assets/logo-light.png';
 import { ThemeToggle } from '../../components/theme-toggle';
 import { useAppTheme } from '../../contexts/app-theme-context';
+import {
+  Accordion,
+  Avatar,
+  Button,
+  Card,
+  Checkbox,
+  Chip,
+  Dialog,
+  Popover,
+  Radio,
+  Select,
+  Separator,
+  Skeleton,
+  Spinner,
+  Surface,
+  Switch,
+  Tabs,
+  TextField,
+  useThemeColor,
+  useToast,
+} from 'heroui-native';
 
 export default function Layout() {
   const { isDark } = useAppTheme();
@@ -99,7 +124,7 @@ export default function Layout() {
         />
         <Stack.Screen
           name="components/divider"
-          options={{ title: 'Divider' }}
+          options={{ title: 'Separator' }}
         />
         <Stack.Screen
           name="components/error-view"

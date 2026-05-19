@@ -2,8 +2,8 @@ import { SafeAreaView } from "@/components/safe-area-view";
 import { useUser } from "@/hooks/useUser";
 import { supabase } from "@/lib/supabase/client";
 import { router } from "expo-router";
-import { Button } from "heroui-native";
 import { Text, View } from "react-native";
+import { Button } from "heroui-native";
 
 export default function Tab3() {
   const { profile } = useUser();

@@ -1,7 +1,6 @@
 import Feather from '@expo/vector-icons/Feather';
-import { useRouter } from 'expo-router';
+import { type Href, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Card, Chip, cn } from 'heroui-native';
 import type { FC } from 'react';
 import { Image, Pressable, View } from 'react-native';
 import Animated, {
@@ -15,6 +14,13 @@ import { withUniwind } from 'uniwind';
 import { AppText } from '../../components/app-text';
 import { ScreenScrollView } from '../../components/screen-scroll-view';
 import { useAppTheme } from '../../contexts/app-theme-context';
+import {
+  Card,
+  Chip,
+  cn,
+  Description,
+  Label,
+} from 'heroui-native';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedImage = Animated.createAnimatedComponent(Image);
@@ -28,7 +34,7 @@ type HomeCardProps = {
   imageDark: string;
   count: number;
   footer: string;
-  path: string;
+  path: Href;
 };
 
 const cards: HomeCardProps[] = [
@@ -40,7 +46,7 @@ const cards: HomeCardProps[] = [
       'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/home-components-dark.png',
     count: 22,
     footer: 'Explore all components',
-    path: 'components',
+    path: '/components',
   },
   {
     title: 'Themes',
@@ -50,7 +56,7 @@ const cards: HomeCardProps[] = [
       'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/home-themes-dark.png',
     count: 4,
     footer: 'Try different themes',
-    path: 'themes',
+    path: '/themes',
   },
   {
     title: 'Showcases',
@@ -60,7 +66,7 @@ const cards: HomeCardProps[] = [
       'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/images/heroui-native-example/home-showcases-dark-1.png',
     count: 5,
     footer: 'View components in action',
-    path: 'showcases',
+    path: '/showcases',
   },
 ];
 

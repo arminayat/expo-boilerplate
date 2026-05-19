@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Button, Popover } from 'heroui-native';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { withUniwind } from 'uniwind';
 import { AppText } from '../../../components/app-text';
+import { Button, Description, Popover } from 'heroui-native';
 
 const StyledIonicons = withUniwind(Ionicons);
 
@@ -20,7 +20,7 @@ export default function PopoverNativeModalScreen() {
         </Popover.Trigger>
         <Popover.Portal>
           <Popover.Overlay />
-          <Popover.Content
+          <Popover.Content presentation="popover"
             width={320}
             offset={insets.top + 20}
             className="gap-3 px-6 py-5"
@@ -41,7 +41,8 @@ export default function PopoverNativeModalScreen() {
             <Popover.Description className="text-sm">
               The first computer bug was an actual moth found trapped in a
               Harvard Mark II computer in 1947. Grace Hopper taped it to the log
-              book with the note "First actual case of bug being found."
+              book with the note{' '}
+              {'"First actual case of bug being found."'}
             </Popover.Description>
             <View className="flex-row items-center gap-2 mt-2 pt-2 border-t border-border">
               <StyledIonicons

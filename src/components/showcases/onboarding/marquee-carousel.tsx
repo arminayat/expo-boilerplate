@@ -1,4 +1,4 @@
-import { type FC, memo } from 'react';
+import { memo, type FC } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {

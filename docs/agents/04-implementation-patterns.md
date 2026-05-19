@@ -27,6 +27,9 @@
 - Theme tokens are CSS variables in `themes/*.css` and consumed through HeroUI/Uniwind token classes such as `bg-background`, `text-foreground`, `text-muted`, and `bg-surface`.
 - `global.css` imports Tailwind, Uniwind, HeroUI Native styles, and theme CSS.
 - Use `cn()` from `heroui-native` to combine class strings in existing patterns.
+- HeroUI Native 1.0.3 uses standalone field subcomponents: `TextField` wraps standalone `Label`, `Input`, `Description`, and `FieldError`; `ControlField` replaces the older `FormField` root; `Separator` replaces the older `Divider` component.
+- For HeroUI 1.0.3 selection controls, `RadioGroup.Item` wraps standalone `Radio`, `Radio.Indicator`, and `Radio.IndicatorThumb`; do not use the removed `RadioGroup.Label`, `RadioGroup.Description`, `RadioGroup.ErrorMessage`, or `RadioGroup.Indicator` API.
+- `Popover.Content` and `Select.Content` should declare `presentation` (`popover`, `dialog`, or `bottom-sheet`) explicitly. `Select` value handlers often need local option-type casts because the library exposes a generic `SelectOption`.
 
 ## Data Fetching Patterns
 
@@ -59,11 +62,12 @@
 - On sign-in, `AuthProvider` redirects to the configured entrance tab, logs in to RevenueCat, and identifies the user in PostHog.
 - On sign-out, `AuthProvider` redirects to `/(auth)/sign-in`.
 - Root `src/app/index.tsx` currently bypasses auth gating for unauthenticated users; do not assume auth protection is enforced by root routing.
+- PostHog provider config uses `autocapture={false}` and `options.captureAppLifecycleEvents: true`. Do not use the older `autocapture.captureLifecycleEvents` option shape with the current `posthog-react-native` version.
 
 ## Theme Patterns
 
 - `AppThemeProvider` wraps Uniwind theme state and exposes `currentTheme`, `isLight`, `isDark`, `setTheme()`, and `toggleTheme()`.
-- `HeroUINativeProvider` receives `theme: currentTheme`, `colorScheme: "system"`, and `textProps.allowFontScaling: false`.
+- `HeroUINativeProvider` receives `textProps.allowFontScaling: false`; it no longer receives `theme` or `colorScheme` in its config. Theme state is handled through `AppThemeProvider` and Uniwind.
 - Extra themes are registered in `metro.config.js`; generated Uniwind type declarations are in `src/uniwind-types.d.ts`.
 - The paywall showcase temporarily forces dark theme while focused and restores the prior theme on blur.
 
@@ -76,13 +80,14 @@
 ## Framework-Specific Gotchas
 
 - Expo Router route groups are pathless; links such as `/sign-up` can resolve to files under `(auth)`.
+- With typed routes enabled, use `Href` types or concrete absolute route strings for route data and `router.push()` values.
 - The auth layout declares `forgot-password`, but the file is `forget-password.tsx`. Keep route names and links aligned when touching this area.
-- `useCheckUserOnboarding()` redirects to `/(onboarding)/secondary`, which is not implemented.
-- The generated Supabase `profile` type does not include `onboarding_completed_at`, but onboarding code checks that property through an `any` profile type.
-- The generated Supabase `profile` type does not show `user_id`, but `updateProfile()` updates by `user_id`.
+- `useCheckUserOnboarding()` redirects to the implemented `/(onboarding)` index when `profile.onboarding_completed_at === null`, but the actual onboarding screen is still a placeholder.
+- The generated Supabase `profile` type does not include `onboarding_completed_at`; `UserProfile` carries that as an optional locally expected field because the read path still returns Supabase Auth user data.
 - Root stack declares `(settings)` and `+not-found`, but those files do not exist.
 - `npm run reset-project` references a missing `scripts/reset-project.js`.
 - `src/uniwind-types.d.ts` is generated; do not edit it manually.
+- `heroui-native` is pinned exactly to `1.0.3`; do not reintroduce removed pre-1.0.3 APIs such as `TextField.Input`, `FormField`, `Divider`, `ErrorView`, or `RadioGroup.Label`.
 
 ## What To Avoid
 
@@ -92,7 +97,7 @@
 - Do not put backend secrets in app code; `EXPO_PUBLIC_*` variables are client-visible.
 - Do not assume generated Supabase types mean UI or workflows exist.
 - Do not edit generated Uniwind declarations by hand.
-- Do not rely on native iOS project files without checking the dirty working tree, because `ios/` is currently deleted locally.
+- Do not rely on native iOS project files being present; no `ios/` directory exists in the current working tree even though `npm run pod-install` assumes one.
 
 ## Current Gaps Worth Remembering
 
@@ -101,5 +106,7 @@
 - Onboarding storage helpers exist, but onboarding UI is a placeholder.
 - RevenueCat helpers exist, but no real purchase UI calls them.
 - PostHog provider exists, but autocapture is disabled.
-- Supabase profile read/write paths need schema alignment before being treated as production-ready.
+- Supabase profile read path still needs schema alignment before being treated as production-ready; `useUser()` reads Supabase Auth user data rather than selecting the `profile` table.
 - Fonts referenced in some demo/toast styles include Inter and Lora, but root font loading currently loads Roboto Slab only.
+- `npm run lint` currently passes with warnings, mostly unused demo imports, `Array<T>` style warnings, one `require()` style import, and hook dependency warnings.
+- `npx tsc --noEmit` currently passes.

@@ -58,7 +58,13 @@ export function NativeAuth({ platform }: { platform: "ios" | "android" }) {
               throw new Error("No identityToken.");
             }
           } catch (e) {
-            if (e.code === "ERR_REQUEST_CANCELED") {
+            const errorCode =
+              e && typeof e === "object" && "code" in e
+                ? e.code
+                : undefined;
+            const errorMessage = e instanceof Error ? e.message : String(e);
+
+            if (errorCode === "ERR_REQUEST_CANCELED") {
               posthog.capture("user sign in failed", {
                 method: "apple",
                 error: "User canceled the sign-in flow.",
@@ -67,7 +73,7 @@ export function NativeAuth({ platform }: { platform: "ios" | "android" }) {
             } else {
               posthog.capture("user sign in failed", {
                 method: "apple",
-                error: e.message,
+                error: errorMessage,
               });
               // handle other errors
             }

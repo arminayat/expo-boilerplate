@@ -1,7 +1,12 @@
-import { FormField, Switch, useThemeColor } from 'heroui-native';
 import type { FC } from 'react';
 import { View } from 'react-native';
 import { BlurContainer } from './blur-container';
+import {
+  ControlField,
+  Label,
+  Switch,
+  useThemeColor,
+} from 'heroui-native';
 
 type Props = {
   isSelected: boolean;
@@ -16,17 +21,17 @@ export const StyledFormField: FC<Props> = ({
 
   return (
     <BlurContainer className="mb-8">
-      <FormField
+      <ControlField
         isSelected={isSelected}
         onSelectedChange={onSelectedChange}
         className="h-full px-6"
       >
         <View className="flex-1">
-          <FormField.Label className="text-gray-50 text-lg font-semibold">
+          <Label className="text-gray-50 text-lg font-semibold">
             Enable Free Trial
-          </FormField.Label>
+          </Label>
         </View>
-        <FormField.Indicator>
+        <ControlField.Indicator>
           <Switch
             className="w-10"
             animation={{ backgroundColor: { value: ['white', 'white'] } }}
@@ -38,8 +43,8 @@ export const StyledFormField: FC<Props> = ({
               }}
             />
           </Switch>
-        </FormField.Indicator>
-      </FormField>
+        </ControlField.Indicator>
+      </ControlField>
     </BlurContainer>
   );
 };
