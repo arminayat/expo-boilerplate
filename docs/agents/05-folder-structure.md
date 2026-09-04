@@ -122,6 +122,7 @@ Add new storage modules here when they represent durable local storage. Do not u
 Shared TypeScript types live here.
 
 - `appConfig.ts`: app config route/tab types.
+- `expo-runtime.d.ts`: checked-in reference to Expo's ambient asset types for clean-checkout typechecking.
 - `auth.ts`: token cache interface.
 - `index.ts`: currently contains placeholder Supabase storage bucket type.
 

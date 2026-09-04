@@ -97,6 +97,7 @@
 - `(settings)` and `+not-found` currently exist as placeholder routes only.
 - Use `npm run check`, `npm run doctor`, and `npm run export:native` when changing dependencies. No reset-project helper exists.
 - `src/uniwind-types.d.ts` is generated; do not edit it manually.
+- `src/types/expo-runtime.d.ts` references Expo's ambient asset types so clean-checkout typechecking does not depend on ignored CLI-generated `expo-env.d.ts` or `.expo/` files.
 - `heroui-native` is pinned exactly to `1.0.9`; it keeps the 1.0 standalone field/control APIs. Do not reintroduce removed APIs such as `TextField.Input`, `FormField`, `Divider`, `ErrorView`, or `RadioGroup.Label`. HeroUI styles now register their own Tailwind source.
 - SDK 56 rejects the old `android.edgeToEdgeEnabled` app config field and no longer needs an explicit `newArchEnabled` flag.
 - SDK 56 Expo Router is not compatible with direct app dependencies on `@react-navigation/*`; keep navigation imports routed through Expo Router entry points.
