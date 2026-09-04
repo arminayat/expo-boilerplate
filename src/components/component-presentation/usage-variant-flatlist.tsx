@@ -1,7 +1,7 @@
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import { useToast } from 'heroui-native';
-import { memo, useCallback, useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   Platform,
@@ -102,7 +102,7 @@ export const UsageVariantFlatList = ({
   const listRef = useRef<FlatList<UsageVariant>>(null);
 
   const handleViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: Array<{ item: UsageVariant }> }) => {
+    ({ viewableItems }: { viewableItems: { item: UsageVariant }[] }) => {
       if (viewableItems.length > 0 && viewableItems[0]) {
         if (Platform.OS === 'ios') {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -113,9 +113,9 @@ export const UsageVariantFlatList = ({
     []
   );
 
-  const viewabilityConfig = useRef({
+  const viewabilityConfig = useMemo(() => ({
     itemVisiblePercentThreshold: 50,
-  }).current;
+  }), []);
 
   const scrollY = useSharedValue(0);
 

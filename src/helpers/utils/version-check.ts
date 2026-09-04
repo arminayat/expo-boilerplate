@@ -35,7 +35,7 @@ export async function getInfoFromAppStore(
     );
 
     const data = (await response.json()) as {
-      results: Array<{ trackViewUrl: string; version: string }>;
+      results: { trackViewUrl: string; version: string }[];
     };
 
     const firstResult = data.results[0];

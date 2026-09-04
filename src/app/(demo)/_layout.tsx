@@ -26,8 +26,8 @@ export default function Layout() {
   // -- Update management state --
   const [isVersionChecked, setIsVersionChecked] = useState(false);
   const [isNewVersionAvailable, setIsNewVersionAvailable] = useState(false);
-  const [_updateSheetOpen, setUpdateSheetOpen] = useState(false);
-  const [_updateSheetMode, setUpdateSheetMode] =
+  const [, setUpdateSheetOpen] = useState(false);
+  const [, setUpdateSheetMode] =
     useState<UpdateBottomSheetMode>('new-version');
 
   const handleVersionChecked = useCallback((isNew: boolean) => {

@@ -46,7 +46,7 @@ export const SelectItem: FC<Props> = ({ data }) => {
                 : 'systemUltraThinMaterialDark'
             }
             intensity={isDark ? 10 : 20}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
           />
         </View>
       )}

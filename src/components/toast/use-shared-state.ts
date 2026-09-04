@@ -1,11 +1,21 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 
 /**
  * Shared state store for toast components
  * Uses a Map to store state by key and listeners for each key
  */
 const sharedStateStore = new Map<string, unknown>();
-const stateListeners = new Map<string, Set<(value: unknown) => void>>();
+const stateListeners = new Map<string, Set<() => void>>();
+
+function ensureSharedState<T>(key: string, initialValue: T) {
+  if (!sharedStateStore.has(key)) {
+    sharedStateStore.set(key, initialValue);
+  }
+
+  if (!stateListeners.has(key)) {
+    stateListeners.set(key, new Set());
+  }
+}
 
 /**
  * Generic hook to access and update shared state
@@ -24,66 +34,31 @@ const stateListeners = new Map<string, Set<(value: unknown) => void>>();
  * @returns Object with state value and setState function
  */
 export function useSharedState<T>(key: string, initialValue: T) {
-  /**
-   * Initialize state from shared value (important if component mounts after state was set)
-   */
-  const [state, setStateValue] = useState<T>(() => {
+  const getSnapshot = useCallback(() => {
     const existingValue = sharedStateStore.get(key);
     return (existingValue as T) ?? initialValue;
-  });
+  }, [key, initialValue]);
 
-  useEffect(() => {
-    /**
-     * Initialize shared state if it doesn't exist
-     */
-    if (!sharedStateStore.has(key)) {
-      sharedStateStore.set(key, initialValue);
-    }
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
+      ensureSharedState(key, initialValue);
 
-    /**
-     * Initialize listeners set if it doesn't exist
-     */
-    if (!stateListeners.has(key)) {
-      stateListeners.set(key, new Set());
-    }
+      const listeners = stateListeners.get(key);
+      if (!listeners) return () => {};
 
-    /**
-     * Subscribe to state changes
-     * When setState is called elsewhere, this component will update
-     */
-    const updateState = (value: unknown) => {
-      setStateValue(value as T);
-    };
+      listeners.add(onStoreChange);
 
-    const listeners = stateListeners.get(key);
-    if (!listeners) return;
+      return () => {
+        listeners.delete(onStoreChange);
+        if (listeners.size === 0) {
+          stateListeners.delete(key);
+        }
+      };
+    },
+    [key, initialValue]
+  );
 
-    /**
-     * Sync with current shared state immediately (important if component mounts after state was set)
-     */
-    const currentValue = sharedStateStore.get(key);
-    if (currentValue !== undefined && currentValue !== state) {
-      setStateValue(currentValue as T);
-    }
-
-    /**
-     * Add listener to receive future updates
-     */
-    listeners.add(updateState);
-
-    /**
-     * Cleanup listener on unmount
-     */
-    return () => {
-      listeners.delete(updateState);
-      /**
-       * Clean up empty listener sets
-       */
-      if (listeners.size === 0) {
-        stateListeners.delete(key);
-      }
-    };
-  }, [key, initialValue, state]);
+  const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
   /**
    * Set state and notify all listeners (all components using this hook with the same key)
@@ -101,7 +76,7 @@ export function useSharedState<T>(key: string, initialValue: T) {
 
       const listeners = stateListeners.get(key);
       if (listeners) {
-        listeners.forEach((listener) => listener(newValue));
+        listeners.forEach((listener) => listener());
       }
     },
     [key]
@@ -115,7 +90,7 @@ export function useSharedState<T>(key: string, initialValue: T) {
 
     const listeners = stateListeners.get(key);
     if (listeners) {
-      listeners.forEach((listener) => listener(initialValue));
+      listeners.forEach((listener) => listener());
     }
   }, [key, initialValue]);
 

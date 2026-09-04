@@ -11,16 +11,24 @@ import { AuthProvider } from "./AuthContext";
 import { SignedUrlCacheProvider } from "./SignedUrlCacheContext";
 import { AppThemeProvider } from "./app-theme-context";
 
+const postHogApiKey = process.env.EXPO_PUBLIC_POSTHOG_API_KEY?.trim();
+const isPostHogConfigured = Boolean(postHogApiKey);
+
 export default function Providers({ children }: { children: ReactNode }) {
   return (
     <GestureHandlerRootView style={styles.root}>
       <KeyboardProvider>
         <PostHogProvider
-          apiKey={process.env.EXPO_PUBLIC_POSTHOG_API_KEY ?? "-"}
+          apiKey={postHogApiKey || "phc_disabled"}
           autocapture={false}
           options={{
             captureAppLifecycleEvents: true,
+            disabled: !isPostHogConfigured,
+            disableRemoteConfig: !isPostHogConfigured,
+            disableSurveys: !isPostHogConfigured,
             host: "https://eu.i.posthog.com",
+            persistence: isPostHogConfigured ? "file" : "memory",
+            preloadFeatureFlags: isPostHogConfigured,
           }}
         >
           <AuthProvider>

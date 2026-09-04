@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useThemeColor } from 'heroui-native';

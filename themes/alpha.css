@@ -8,10 +8,15 @@
       /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
       --surface: var(--white);
       --surface-foreground: var(--foreground);
+      --surface-secondary: var(--color-neutral-50);
+      --surface-secondary-foreground: var(--foreground);
+      --surface-tertiary: var(--color-neutral-100);
+      --surface-tertiary-foreground: var(--foreground);
 
       /* Overlay: Used for floating/overlay components (dialogs, popovers, modals, menus) */
       --overlay: var(--white);
       --overlay-foreground: var(--foreground);
+      --backdrop: oklch(0% 0 0 / 20%);
 
       --muted: var(--color-neutral-500);
 
@@ -43,8 +48,20 @@
 
       /* Misc Colors */
       --border: var(--color-neutral-200);
-      --divider: var(--color-neutral-400);
+      --separator: var(--color-neutral-400);
+      --focus: var(--accent);
       --link: var(--foreground);
+
+      /* Shadows */
+      --surface-shadow:
+        0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+        0 0 1px 0 rgba(0, 0, 0, 0.06);
+      --overlay-shadow:
+        0 2px 8px 0 rgba(0, 0, 0, 0.02), 0 -6px 12px 0 rgba(0, 0, 0, 0.01),
+        0 14px 28px 0 rgba(0, 0, 0, 0.03);
+      --field-shadow:
+        0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+        0 0 1px 0 rgba(0, 0, 0, 0.06);
     }
 
     @variant alpha-dark {
@@ -55,10 +72,15 @@
       /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
       --surface: var(--eclipse);
       --surface-foreground: var(--foreground);
+      --surface-secondary: var(--color-neutral-800);
+      --surface-secondary-foreground: var(--foreground);
+      --surface-tertiary: var(--color-neutral-700);
+      --surface-tertiary-foreground: var(--foreground);
 
       /* Overlay: Used for floating/overlay components (dialogs, popovers, modals, menus) */
       --overlay: var(--color-neutral-800);
       --overlay-foreground: var(--foreground);
+      --backdrop: oklch(0% 0 0 / 20%);
 
       --muted: var(--color-neutral-400);
 
@@ -90,8 +112,14 @@
 
       /* Misc Colors */
       --border: var(--color-neutral-800);
-      --divider: var(--color-neutral-600);
+      --separator: var(--color-neutral-600);
+      --focus: var(--accent);
       --link: var(--foreground);
+
+      /* Shadows */
+      --surface-shadow: 0 0 0 0 transparent inset;
+      --overlay-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+      --field-shadow: 0 0 0 0 transparent inset;
     }
   }
 }

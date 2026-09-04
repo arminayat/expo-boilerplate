@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase/client";
 import type { TablesUpdate } from "@/lib/supabase/types";
 import type { User } from "@supabase/supabase-js";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export type UserProfile = User & {
   full_name?: string | null;
@@ -18,11 +18,7 @@ type ProfileUpdate = TablesUpdate<"profile">;
 export function useUser() {
   const [loading, setLoading] = useState(false);
 
-  const {
-    data: profile,
-    error: profileError,
-    refetch,
-  } = useQuery({
+  const { data: profile, refetch } = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
       const { data, error } = await supabase.auth.getUser();
@@ -72,12 +68,6 @@ export function useUser() {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    if (!profile) {
-      refetch();
-    }
-  }, []);
 
   return {
     profile,

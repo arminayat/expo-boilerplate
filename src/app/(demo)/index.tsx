@@ -2,6 +2,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Card, Chip, cn } from 'heroui-native';
+import { version as heroUIVersion } from 'heroui-native/package.json';
 import type { FC } from 'react';
 import { Image, Pressable, View, type ImageSourcePropType } from 'react-native';
 import Animated, {
@@ -161,7 +162,7 @@ export default function App() {
   return (
     <ScreenScrollView>
       <AppText className="text-muted text-base text-center my-4">
-        v1.0.3
+        v{heroUIVersion}
       </AppText>
       <View className="gap-6">
         {cards.map((card, index) => (

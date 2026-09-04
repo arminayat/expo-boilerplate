@@ -68,7 +68,7 @@ const SwitchFormFieldSetContent = () => {
     setFields((prev) => ({ ...prev, [key]: value }));
   };
 
-  const fieldKeys = Object.keys(fields) as Array<keyof typeof fields>;
+  const fieldKeys = Object.keys(fields) as (keyof typeof fields)[];
 
   return (
     <View className="flex-1 items-center justify-center px-5">
@@ -153,7 +153,7 @@ const CheckboxFormFieldSetContent = () => {
     setFields((prev) => ({ ...prev, [key]: value }));
   };
 
-  const fieldKeys = Object.keys(fields) as Array<keyof typeof fields>;
+  const fieldKeys = Object.keys(fields) as (keyof typeof fields)[];
 
   return (
     <View className="flex-1 items-center justify-center px-5">
@@ -229,7 +229,7 @@ const InlineLayoutCompactContent = () => {
   return (
     <View className="flex-1 items-center justify-center px-5">
       <View className="flex-row flex-wrap justify-center gap-4 w-full">
-        {(Object.keys(filters) as Array<keyof typeof filters>).map((key) => (
+        {(Object.keys(filters) as (keyof typeof filters)[]).map((key) => (
           <InlineFilter
             key={key}
             isSelected={filters[key]}

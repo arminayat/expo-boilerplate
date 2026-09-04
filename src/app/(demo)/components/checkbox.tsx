@@ -92,7 +92,7 @@ const BasicUsage = () => {
     setFields((prev) => ({ ...prev, [key]: value }));
   };
 
-  const fieldKeys = Object.keys(fields) as Array<keyof typeof fields>;
+  const fieldKeys = Object.keys(fields) as (keyof typeof fields)[];
 
   return (
     <View className="flex-1 items-center justify-center px-5">

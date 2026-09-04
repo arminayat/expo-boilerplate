@@ -34,22 +34,22 @@ const MarqueeCarousel: FC<Props> = ({ cards }) => {
 
   useFrameCallback((frameInfo) => {
     const deltaSeconds = (frameInfo?.timeSincePreviousFrame ?? 0) / 1000;
-    scrollOffsetX.value += scrollSpeed.value * deltaSeconds;
+    scrollOffsetX.set(scrollOffsetX.get() + scrollSpeed.get() * deltaSeconds);
   });
 
   const gesture = Gesture.Pan()
     .onBegin(() => {
-      scrollSpeed.value = 0;
+      scrollSpeed.set(0);
     })
     .onChange((event) => {
-      scrollOffsetX.value -= event.changeX;
+      scrollOffsetX.set(scrollOffsetX.get() - event.changeX);
     })
     .onFinalize((event) => {
-      scrollSpeed.value = -event.velocityX;
-      scrollSpeed.value = withTiming(_defaultScrollSpeed, {
+      scrollSpeed.set(-event.velocityX);
+      scrollSpeed.set(withTiming(_defaultScrollSpeed, {
         duration: 1000,
         easing: Easing.out(Easing.quad),
-      });
+      }));
     });
 
   return (

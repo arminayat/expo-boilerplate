@@ -1,4 +1,4 @@
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from 'expo-router/react-navigation';
 import { type FC, type PropsWithChildren } from 'react';
 import { View, type ViewProps } from 'react-native';
 import Animated, { type AnimatedProps } from 'react-native-reanimated';
@@ -23,7 +23,7 @@ export const SafeAreaView: FC<PropsWithChildren<Props>> = ({
 
   return (
     <AnimatedView
-      className={cn('bg-background', className)}
+      className={cn('flex-1 bg-background', className)}
       style={[
         {
           paddingTop: topInset,

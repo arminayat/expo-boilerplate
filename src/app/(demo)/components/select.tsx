@@ -1,5 +1,6 @@
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import {
   Button,
   Label,
@@ -391,7 +392,7 @@ const AlignmentOptionsContent = () => {
 // ------------------------------------------------------------------------------
 
 const NativeModalTestContent = () => {
-  const router = require('expo-router').useRouter();
+  const router = useRouter();
 
   return (
     <View className="flex-1 px-5 items-center justify-center">

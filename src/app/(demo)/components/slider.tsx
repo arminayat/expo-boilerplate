@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import { BottomSheet, Button, Label, Slider } from 'heroui-native';
 import { useState } from 'react';
 import { View } from 'react-native';

@@ -94,10 +94,10 @@ export const MultiStepDetachedContent = () => {
 
   /** Triggers a blur pulse: 0 → 10 → 0 to mask the content transition */
   const triggerBlurPulse = useCallback(() => {
-    blurIntensity.value = withSequence(
+    blurIntensity.set(withSequence(
       withTiming(10, { duration: 150 }),
       withTiming(0, { duration: 200 })
-    );
+    ));
   }, [blurIntensity]);
 
   /** Handles open/close state; resets step to 1 on every open */
@@ -105,7 +105,7 @@ export const MultiStepDetachedContent = () => {
     (open: boolean) => {
       if (open) {
         setStep(1);
-        blurIntensity.value = 0;
+        blurIntensity.set(0);
       }
       setIsOpen(open);
     },

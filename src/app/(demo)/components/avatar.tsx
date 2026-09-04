@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Avatar, cn } from 'heroui-native';

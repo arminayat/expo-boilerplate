@@ -8,10 +8,15 @@
       /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
       --surface: oklch(0.98 0.01 295);
       --surface-foreground: oklch(0.3 0.045 295);
+      --surface-secondary: oklch(0.965 0.012 295);
+      --surface-secondary-foreground: var(--surface-foreground);
+      --surface-tertiary: oklch(0.95 0.014 295);
+      --surface-tertiary-foreground: var(--surface-foreground);
 
       /* Overlay: Used for floating/overlay components (dialogs, popovers, modals, menus) */
       --overlay: oklch(0.998 0.003 295);
       --overlay-foreground: oklch(0.3 0.045 295);
+      --backdrop: oklch(0% 0 0 / 20%);
 
       --muted: oklch(0.55 0.035 295);
 
@@ -44,8 +49,20 @@
 
       /* Misc Colors */
       --border: oklch(0 0 0 / 0%);
-      --divider: oklch(0.91 0.015 295);
+      --separator: oklch(0.91 0.015 295);
+      --focus: var(--accent);
       --link: oklch(0.62 0.17 310);
+
+      /* Shadows */
+      --surface-shadow:
+        0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+        0 0 1px 0 rgba(0, 0, 0, 0.06);
+      --overlay-shadow:
+        0 2px 8px 0 rgba(0, 0, 0, 0.02), 0 -6px 12px 0 rgba(0, 0, 0, 0.01),
+        0 14px 28px 0 rgba(0, 0, 0, 0.03);
+      --field-shadow:
+        0 2px 4px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.06),
+        0 0 1px 0 rgba(0, 0, 0, 0.06);
     }
 
     @variant lavender-dark {
@@ -56,10 +73,15 @@
       /* Surface: Used for non-overlay components (cards, accordions, disclosure groups) */
       --surface: oklch(0.2 0.048 295);
       --surface-foreground: oklch(0.9 0.015 295);
+      --surface-secondary: oklch(0.23 0.05 295);
+      --surface-secondary-foreground: var(--surface-foreground);
+      --surface-tertiary: oklch(0.26 0.05 295);
+      --surface-tertiary-foreground: var(--surface-foreground);
 
       /* Overlay: Used for floating/overlay components (dialogs, popovers, modals, menus) */
       --overlay: oklch(0.23 0.045 295);
       --overlay-foreground: oklch(0.9 0.015 295);
+      --backdrop: oklch(0% 0 0 / 20%);
 
       --muted: oklch(0.5 0.04 295);
 
@@ -92,8 +114,14 @@
 
       /* Misc Colors */
       --border: oklch(0 0 0 / 0%);
-      --divider: oklch(0.28 0.045 295);
+      --separator: oklch(0.28 0.045 295);
+      --focus: var(--accent);
       --link: oklch(0.75 0.18 320);
+
+      /* Shadows */
+      --surface-shadow: 0 0 0 0 transparent inset;
+      --overlay-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+      --field-shadow: 0 0 0 0 transparent inset;
     }
   }
 }

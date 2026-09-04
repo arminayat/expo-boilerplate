@@ -2,7 +2,7 @@
   "expo": {
     "name": "HeroUI Native Example",
     "slug": "heroui-native-example",
-    "version": "v1.0.0-alpha.13",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "heroui-native-example",
@@ -41,7 +41,8 @@
       "expo-secure-store",
       "expo-web-browser",
       "expo-font",
-      "expo-image"
+      "expo-image",
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true,
