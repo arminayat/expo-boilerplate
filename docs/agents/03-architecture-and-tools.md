@@ -2,7 +2,7 @@
 
 ## High-Level Architecture
 
-This is a client-only Expo Router app. The app uses file-based routes in `src/app`, global providers in `src/contexts`, Supabase for auth/data/storage access, TanStack Query for server-state reads, MMKV/SecureStore for local storage, Uniwind plus HeroUI Native for styling, and demo-specific components under `src/components`.
+This is a client-only Expo Router app. The app uses file-based routes in `src/app`, Expo Router native tabs for the main tab shell, global providers in `src/contexts`, Supabase for auth/data/storage access, TanStack Query for server-state reads, MMKV/SecureStore for local storage, Uniwind plus HeroUI Native for styling, and demo-specific components under `src/components`.
 
 There is no local backend runtime in the repository. Backend behavior is assumed to live in Supabase and external services.
 
@@ -12,20 +12,21 @@ Source of truth: `package.json` and `package-lock.json`.
 
 - Package manager: npm. `package-lock.json` lockfile version 3 is present; no yarn, pnpm, or bun lockfile is present.
 - Entry point: `expo-router/entry`.
-- Expo: `^55.0.25`.
-- Expo Router: `~55.0.15`.
-- React: `19.2.0`.
-- React Native: `0.83.6`.
-- TypeScript: `~5.9.2`.
-- HeroUI Native: `1.0.3` pinned exactly.
-- Supabase JS: `2.106.0` pinned exactly.
-- React Native New Architecture: SDK 55 only supports the New Architecture; no explicit `newArchEnabled` flag is needed in `app.json`.
+- Expo: `~57.0.20`.
+- Expo Router: `~57.0.19`.
+- React: `19.2.3`.
+- React Native: `0.86.3`.
+- TypeScript: `~6.0.3`.
+- HeroUI Native: `1.0.9` pinned exactly; Uniwind `1.12.0` with Tailwind `~4.3.3`.
+- Supabase JS: `2.115.0` pinned exactly. Normal imports exclude optional tracing and compile with Hermes.
+- React Native New Architecture: SDK 57 uses the New Architecture; no explicit `newArchEnabled` flag is needed in `app.json`.
 - Expo experiments: typed routes and React Compiler are enabled in `app.json`.
-- Expo SDK boundary: dependencies are currently held on SDK 55-compatible versions. SDK 55 uses React Native `0.83.x`; do not jump to React Native `0.85.x` or Expo SDK 56-era native package versions as a "safe dependency update" without treating it as a framework upgrade.
+- Expo SDK boundary: SDK 57 is stable; SDK 58 is canary. Use Expo's tested RN/React/native package set. Reanimated `4.5.1` and Worklets `0.10.1` must move together. Do not independently upgrade to RN 0.87, Gesture Handler 3, or Reanimated 4.6.
+- SDK 56 routing boundary: `@react-navigation/*` packages are not direct dependencies. Application code that needs navigation themes, focus hooks, or header height imports them from `expo-router` or `expo-router/react-navigation`.
 
 ## Important Config Files
 
-- `app.json`: app identity, Expo plugins, splash config, web static output, typed routes, and React Compiler. Current plugins include `expo-router`, `expo-splash-screen`, `expo-secure-store`, `expo-web-browser`, `expo-font`, and `expo-image`.
+- `app.json`: app identity, Expo plugins, splash config, web static output, typed routes, and React Compiler. Current plugins include `expo-router`, `expo-splash-screen`, `expo-secure-store`, `expo-web-browser`, `expo-font`, `expo-image`, and `expo-status-bar`.
 - `package.json`: scripts, dependencies, npm package metadata.
 - `package-lock.json`: npm lockfile.
 - `tsconfig.json`: extends Expo base config, strict mode, `@/*` path alias to `src/*`.
@@ -34,7 +35,10 @@ Source of truth: `package.json` and `package-lock.json`.
 - `global.css`: imports Tailwind CSS, Uniwind, HeroUI Native styles, and project theme files.
 - `eslint.config.js`: Expo flat ESLint config, ignores `dist/*`, registers `eslint-plugin-react-native`, and disables `react/no-unescaped-entities` for copied demo/example copy.
 - `src/types/expo-router-relaxed.d.ts`: local type shim that lets `useRouter()` accept plain string hrefs used by mirrored HeroUI Native example routes while `app.json` typed routes remain enabled.
-- `.prettierrc`: enables `prettier-plugin-tailwindcss`.
+- `.prettierrc`: enables the development-only `prettier-plugin-tailwindcss`; Prettier is an explicit dev dependency.
+- `.nvmrc`: verified Node 22.23.2; `packageManager` pins npm 10.9.8. Babel 7, ESLint 9, and TypeScript 6 are retained for the Expo lint/preset peer constraints.
+- `.github/workflows/validate.yml`: clean install, typecheck/lint, Expo alignment/Doctor, installed peers, high/critical security-audit gate, and iOS/Android Hermes exports on main pushes and PRs. No deployment or backend credentials. The documented moderate Router decoder advisory remains unresolved.
+- Uniwind Metro peers (`metro`, `metro-cache`, `metro-transform-worker`) are explicitly pinned to Expo's `0.84.5` in devDependencies. Do not let npm choose standalone latest Metro for the `*` peers. The `xcode` tool has a scoped `uuid: 11.1.1` override to remove a vulnerable legacy dependency while retaining CommonJS `v4()` compatibility.
 - `.env.example`: documents environment variable names.
 
 ## Routing And Entry Points
@@ -45,8 +49,10 @@ Source of truth: `package.json` and `package-lock.json`.
 - Main tabs: `src/app/(tabs)/`.
 - Onboarding group: `src/app/(onboarding)/`.
 - Demo group: `src/app/(demo)/`.
+- Settings group: `src/app/(settings)/`.
+- Not-found fallback: `src/app/+not-found.tsx`.
 
-Root stack currently declares `(auth)`, `(tabs)`, `(demo)`, `(settings)`, and `+not-found`. `(settings)` and `+not-found` are not implemented as files.
+Root stack currently declares `(auth)`, `(tabs)`, `(demo)`, `(settings)`, and `+not-found`.
 
 ## Provider Stack
 
@@ -54,14 +60,15 @@ Implemented provider order:
 
 1. `GestureHandlerRootView`
 2. `KeyboardProvider`
-3. `PostHogProvider`
+3. `PostHogProvider`; configured as disabled and in-memory when `EXPO_PUBLIC_POSTHOG_API_KEY` is blank
 4. `AuthProvider`
 5. `QueryClientProvider`
 6. `SignedUrlCacheProvider`
 7. `AppThemeProvider`
 8. `HeroUINativeProvider` inside `src/app/_layout.tsx`
-9. Expo Router stack
-10. Global `react-native-toast-message` toast host
+9. Expo Router `ThemeProvider` from `expo-router/react-navigation`, derived from `AppThemeProvider` light/dark state
+10. Expo Router stack
+11. Global `react-native-toast-message` toast host
 
 ## State And Data Layer
 
@@ -112,7 +119,7 @@ Backend types available but mostly not implemented in UI:
 ## External Integrations
 
 - Supabase: auth, database, storage signed URLs.
-- PostHog: provider configured with EU host. Autocapture is currently disabled with `autocapture={false}`, while lifecycle capture is enabled through `options.captureAppLifecycleEvents`.
+- PostHog: provider configured with EU host. Autocapture is currently disabled with `autocapture={false}`, while lifecycle capture is enabled through `options.captureAppLifecycleEvents`. If `EXPO_PUBLIC_POSTHOG_API_KEY` is blank or unset, the provider still supplies a client for `usePostHog()` callers but disables tracking, remote config, surveys, and persistent PostHog storage.
 - RevenueCat: helper functions configure/login/logout and fetch offerings. iOS API key is supported; Android configuration is commented out.
 - Apple Authentication: iOS sign-in with Supabase ID token.
 - Expo SecureStore: stores the MMKV v4 AES-256 encryption key for session storage.
@@ -149,14 +156,13 @@ Listed in `.env.example` but not referenced by current code:
 
 ## Testing, Build, And Deployment Tooling
 
-- Lint command: `npm run lint` -> `expo lint`.
+- Lint command: `npm run lint` -> `eslint . --max-warnings=0`.
 - No test command, test config, or test files are present.
-- Native commands: `npm run ios`, `npm run android`, `npm run pod-install`.
-- No `ios/` directory exists in the current working tree; `npm run pod-install` is not usable until a native iOS project exists.
+- Native commands: `npm run ios` (simulator), `npm run ios:device`, `npm run android`, `npm run ios:pods` (existing native project).
+- Native projects are generated by Expo and ignored by git, not tracked. SDK 57 prebuild cleans native directories by default; preserve manual native work before regenerating. MMKV/Nitro and RevenueCat require a native build rather than Expo Go.
 - Web command: `npm run web`; `app.json` sets web output to `static`.
 - EAS deployment is described in the README but no `eas.json` exists.
-- `npx expo install --check` and `npx expo-doctor` currently pass for the SDK 55 dependency set.
-- `npx expo export -p ios --clear --output-dir /private/tmp/expo-boilerplate-export-ios` currently passes.
-- `npx tsc --noEmit` currently passes.
-- `npm run lint` currently passes with warnings from copied demo/example code, mostly unused demo variables, unused `react-native/no-inline-styles` disable comments, `Array<T>` style warnings, one `require()` style import, and hook dependency warnings.
-- `npm audit --audit-level=moderate` currently reports no vulnerabilities.
+- `npm run check`, `npm run doctor` (21/21), and installed-peer validation pass on the SDK 57 set. `npm run export:native` passes for iOS and Android with Hermes bytecode enabled; the old Supabase dynamic-import failure is resolved upstream.
+- A normally signed Release build launches on iPhone 17 Pro / iOS 26.5 with Xcode 26.6; navigation, theme, dialog, bottom-sheet button dismissal, and text-entry smoke checks pass. Do not disable simulator signing: SecureStore requires Keychain entitlements. Android native builds and live service flows remain unverified.
+- Web static export fails at native SecureStore initialization: there is no web session-storage adapter. Do not replace encrypted storage with plaintext browser storage as an upgrade workaround.
+- Detailed package decisions, native runtime verification, security findings, and unverified external integrations belong in `docs/dependency-upgrade-audit.md`; primary-source compatibility research is in `docs/dependency-compatibility-research.md`.

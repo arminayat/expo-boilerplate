@@ -4,7 +4,7 @@
 
 Current implementation combines two surfaces:
 
-- App shell: minimal placeholder tabs and simple auth screens, with some early custom colors such as `bg-lightYellow`, `text-purple`, and `bg-yellow`.
+- App shell: native Expo Router tabs, placeholder tab content, and simple auth screens, with some early custom colors such as `bg-lightYellow`, `text-purple`, and `bg-yellow`.
 - Demo shell: polished HeroUI Native showcase with tokenized backgrounds/surfaces, translucent headers, theme switching, animated cards, dialogs, popovers, and full-screen showcase compositions.
 
 The most established design direction in code is the HeroUI Native demo system: token-driven light/dark themes, soft surfaces, animated interactions, icon-rich controls, and mobile-first layouts.
@@ -14,6 +14,7 @@ The most established design direction in code is the HeroUI Native demo system: 
 Implemented:
 
 - Root layout loads Roboto Slab weights 100 through 900 using `@expo-google-fonts/roboto-slab`.
+- Root also loads Inter 600 for native headers and Lora 400/500 for toasts, and waits for fonts before mounting providers/routes (font errors allow fallback rendering).
 - `HeroUINativeProvider` sets `textProps.allowFontScaling` to `false`; theme selection is handled by `AppThemeProvider` and Uniwind rather than provider `theme` or `colorScheme` config.
 - `AppText` wraps React Native `Text` with `font-normal`.
 
@@ -22,7 +23,7 @@ Referenced but not fully wired:
 - README documents custom font weights.
 - Demo header styles reference `Inter_600SemiBold`.
 - Toast styles reference `Lora_500Medium` and `Lora_400Regular`.
-- Root font loading currently does not load Inter or Lora.
+- Inter/Lora references are backed by root font loading.
 
 ## Colors And Theme Tokens
 
@@ -40,7 +41,8 @@ Primary token families used in code:
 - Text/support: `muted`, `link`.
 - Action: `accent`, `accent-foreground`, `default`, `default-foreground`.
 - Status: `success`, `warning`, `danger`.
-- Structure: `border`, `divider`, `segment`.
+- Structure: `border`, `separator`, `segment`.
+- Surface hierarchy: `surface`, `surface-secondary`, and `surface-tertiary`.
 - Forms: `field-background`, `field-foreground`, `field-placeholder`, `field-border`.
 
 ## Spacing And Layout Principles
@@ -49,7 +51,7 @@ Implemented patterns:
 
 - Mobile-first vertical stacks with `flex-1`, `gap-*`, `px-*`, and safe-area/header offsets.
 - `ScreenScrollView` sets `bg-background`, default horizontal padding, top padding from header height, and bottom padding from safe-area insets.
-- `SafeAreaView` sets `bg-background` and safe-area bottom padding; on iOS it uses header height for top padding.
+- `SafeAreaView` fills the screen, sets `bg-background`, and applies safe-area bottom padding; on iOS it uses header height for top padding.
 - Demo cards and component surfaces often use `rounded-2xl` or larger radii, while auth screens use a different early style.
 - Showcases favor full-screen compositions rather than nested page cards.
 
@@ -58,6 +60,7 @@ Implemented patterns:
 Primary UI library:
 
 - `heroui-native` for buttons, cards, chips, dialogs, popovers, selects, tabs, surfaces, radio groups, checkboxes, form fields, toasts, utility `cn`, and `useThemeColor`.
+- Expo Router `NativeTabs` for the main app tab bar, using SF Symbols on iOS and Material symbols on Android.
 
 Supporting UI/interaction libraries:
 
@@ -85,6 +88,7 @@ Current concerns:
 ## Product UX Principles Reflected In Code
 
 - Keep the main app shell simple until real product behavior exists.
+- Prefer platform-native tab behavior for the main shell; on iOS 26+ the native tab bar provides the Liquid Glass appearance through system tabs.
 - Use tokenized theme classes rather than hard-coded colors for reusable surfaces.
 - Prefer HeroUI Native primitives before custom-building common controls.
 - Keep demo/showcase state local unless it represents real app data.
@@ -114,6 +118,7 @@ Implemented:
 
 - Theme-aware Uniwind/AppThemeProvider integration with HeroUI Native token classes.
 - Light/dark plus lavender/mint/sky theme variants.
+- Extra theme files define the HeroUI Native 1.0 token set, compatible with 1.0.9, including secondary/tertiary surfaces, backdrop, separator, focus, and component shadows. The demo version badge reads the installed HeroUI package version.
 - Demo theme selector and theme toggle.
 - Token-based CSS themes.
 - Reanimated demo transitions and local component interactions.
@@ -124,5 +129,4 @@ Intended or incomplete:
 - Consistent product-wide visual direction outside the demo area.
 - Full onboarding UX.
 - Real paywall and subscription UX.
-- Fully loaded/consistent font system for Roboto Slab, Inter, and Lora references.
 - Accessibility policy for font scaling, reduced transparency, labels, and final product flows.

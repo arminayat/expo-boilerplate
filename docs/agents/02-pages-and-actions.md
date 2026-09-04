@@ -4,13 +4,23 @@
 
 ### `src/app/_layout.tsx`
 
-- Behavior: root Expo Router layout. Imports `global.css`, configures Reanimated logger, loads Roboto Slab fonts, wraps routes with `Providers`, and renders the root stack through `HeroUINativeProvider`.
+- Behavior: root Expo Router layout. Imports `global.css`, configures Reanimated logger, loads Roboto Slab fonts, wraps routes with `Providers`, aligns React Navigation light/dark theme colors with `AppThemeProvider`, and renders the root stack through `HeroUINativeProvider`.
 - Source files: `src/app/_layout.tsx`, `src/contexts/Providers.tsx`, `global.css`.
 - User actions: none directly.
 - Writes/mutations: none.
 - External calls: font loading through Expo font package at runtime.
 - Persistence: none.
-- Placeholders: root stack declares `(settings)` and `+not-found`, but corresponding route files are not present.
+- Notes: root stack declares `(settings)` as a modal and `+not-found` as a fallback route.
+
+### `src/app/+not-found.tsx`
+
+- Behavior: placeholder not-found screen with a short message and a `Go home` button.
+- Source files: `src/app/+not-found.tsx`.
+- User actions: tap `Go home` to replace navigation state with `/`.
+- Writes/mutations: none.
+- External calls: none.
+- Persistence: none.
+- Placeholder: no branded or product-specific error recovery is implemented.
 
 ### `src/app/index.tsx`
 
@@ -65,16 +75,29 @@
 - Requirements: `EXPO_PUBLIC_WEB_PASSWORD_RESET_URL` must be configured.
 - Placeholder: no in-app reset-password completion route exists.
 
+## Settings
+
+### `src/app/(settings)/index.tsx`
+
+- Behavior: placeholder settings modal with a short message and close button.
+- Source files: `src/app/(settings)/_layout.tsx`, `src/app/(settings)/index.tsx`.
+- User actions: tap `Close` to navigate back.
+- Writes/mutations: none.
+- External calls: none.
+- Persistence: none.
+- Placeholder: real settings behavior is not implemented.
+
 ## Main Tabs
 
 ### `src/app/(tabs)/_layout.tsx`
 
-- Behavior: renders three Expo Router tabs: `tab1`, `tab2`, and `tab3`.
+- Behavior: renders three Expo Router native tabs through `expo-router/unstable-native-tabs`: `tab1/index`, `tab2/index`, and `tab3/index`.
 - Source files: `src/app/(tabs)/_layout.tsx`, `src/hooks/useUserOnboarding.tsx`.
-- User actions: switch tabs.
+- User actions: switch tabs through the platform-native tab bar.
 - Writes/mutations: none directly.
 - External calls: `useCheckUserOnboarding()` reads user data through `useUser()`.
 - Persistence: none directly.
+- UI notes: iOS uses native system tabs with `systemDefault` blur, dynamic icon/label colors, and SF Symbols for the tab icons. Android uses Material symbol names and theme-aware fallback colors.
 - Placeholder/gotcha: `useCheckUserOnboarding()` redirects to the implemented `/(onboarding)` index when `profile.onboarding_completed_at === null`, but the onboarding route is still only a placeholder. The generated `profile` type does not include `onboarding_completed_at`.
 
 ### `src/app/(tabs)/tab1/index.tsx`
@@ -196,12 +219,16 @@ Source: `package.json`.
 
 - `npm start`: runs `expo start -c`.
 - `npm run android`: runs `expo run:android`.
-- `npm run ios`: runs `expo run:ios --device`.
+- `npm run ios`: runs `expo run:ios` for simulator builds; `npm run ios:device` selects a device.
 - `npm run web`: runs `expo start --web -c`.
-- `npm run lint`: runs `expo lint`.
-- `npm run pod-install`: changes into `ios` and runs CocoaPods with `RCT_NEW_ARCH_ENABLED=1`.
+- `npm run lint`: runs `eslint . --max-warnings=0`.
+- `npm run typecheck`: runs TypeScript without emitting output.
+- `npm run check`: runs typecheck, lint, and Expo SDK version alignment.
+- `npm run doctor`: runs pinned Expo Doctor.
+- `npm run export:native`: creates iOS and Android production Hermes bundles.
+- `npm run ios:pods`: runs pinned `pod-install` for an existing generated iOS project.
 - `npm run generate-types`: runs Supabase type generation into `src/lib/supabase/types.ts`; the project ID placeholder must be replaced.
-- `npm run reset-project`: references `node ./scripts/reset-project.js`, but no `scripts/` directory exists in the current working tree.
+- The broken `reset-project` script was removed; there is no reset helper in this repo.
 
 ## API Endpoints And Background Jobs
 

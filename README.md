@@ -1,6 +1,6 @@
 # React Native App Boilerplate
 
-A production-ready React Native boilerplate built with modern tools and best practices. This boilerplate includes authentication, subscriptions, analytics, beautiful UI components, and a complete onboarding flow - everything you need to jumpstart your next mobile app.
+A mobile-first Expo SDK 57 / React Native 0.86 boilerplate and HeroUI Native demo app. Authentication plumbing, encrypted native storage, themes, and component showcases are implemented. Product tabs and onboarding are placeholders; the paywall showcases simulate purchases. See [current app behavior](docs/agents/01-app-overview.md) and the [dependency upgrade audit](docs/dependency-upgrade-audit.md) for verified capabilities and remaining limitations.
 
 ## ✨ Features
 
@@ -10,7 +10,7 @@ A production-ready React Native boilerplate built with modern tools and best pra
 - 📊 **Analytics** with PostHog
 - 🎨 **Modern UI** using HeroUI Native component library
 - 🌈 **Theming System** with multiple pastel themes
-- 💅 **TailwindCSS Styling** via NativeWind
+- 💅 **TailwindCSS Styling** via Uniwind
 - 🔒 **Secure Storage** with encrypted MMKV and SecureStore
 - 📱 **Onboarding Flow** for new users
 - 🚀 **New Architecture** enabled for better performance
@@ -27,7 +27,7 @@ A production-ready React Native boilerplate built with modern tools and best pra
 
 ### UI & Styling
 - [HeroUI Native](https://www.npmjs.com/package/heroui-native) - Component library
-- [NativeWind](https://www.nativewind.dev/) - TailwindCSS for React Native
+- [Uniwind](https://docs.uniwind.dev/) - TailwindCSS for React Native
 - [Lucide Icons](https://lucide.dev/) - Icon library
 - [Expo Blur](https://docs.expo.dev/versions/latest/sdk/blur-view/) - Blur effects
 - [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/) - Animations
@@ -47,10 +47,10 @@ A production-ready React Native boilerplate built with modern tools and best pra
 
 ## 📋 Prerequisites
 
-- Node.js 18+ and npm
-- iOS: Xcode 15+ and CocoaPods
+- Node.js 22.23.2 (`nvm use`) and npm 10.9.8, matching the verified toolchain
+- iOS: Xcode 26.4+ and CocoaPods (verified with Xcode 26.6 / CocoaPods 1.16.2)
 - Android: Android Studio and JDK 17+
-- Expo CLI: `npm install -g expo-cli`
+- Use the project-local Expo CLI through `npx expo`; do not install legacy `expo-cli` globally
 
 ## 🚀 Getting Started
 
@@ -64,13 +64,13 @@ cd app-boilerplate
 ### 2. Install Dependencies
 
 ```bash
-npm install
+npm ci
 ```
 
-For iOS, also install CocoaPods dependencies:
+Native folders are generated and ignored by git. The first `npm run ios` generates the iOS project and installs CocoaPods. To refresh pods after a native project exists:
 
 ```bash
-npm run pod-install
+npm run ios:pods
 ```
 
 ### 3. Configure Environment Variables
@@ -118,15 +118,30 @@ EXPO_PUBLIC_POSTHOG_API_KEY=your_posthog_api_key
 # Start development server
 npm start
 
-# Run on iOS device
+# Build and run on an iOS simulator
 npm run ios
+
+# Select an iOS device
+npm run ios:device
 
 # Run on Android
 npm run android
 
-# Run on web
+# Experimental web target (see limitations below)
 npm run web
 ```
+
+Use a native build, not Expo Go: MMKV/Nitro and RevenueCat require custom native modules. After an SDK/native dependency upgrade, rebuild the app. SDK 57 `expo prebuild` regenerates native folders by default, so preserve any manual native changes first.
+
+### Verify dependency changes
+
+```bash
+npm run check          # TypeScript, zero-warning lint, Expo version alignment
+npm run doctor         # Expo project and native dependency checks
+npm run export:native  # iOS + Android production bundles with Hermes bytecode
+```
+
+GitHub Actions runs these checks on main pushes and pull requests. They do not replace native compilation and simulator/device testing. The current web static export is blocked by the native SecureStore session adapter, and HeroUI Native does not guarantee web support; browser runtime is not certified. See the [audit](docs/dependency-upgrade-audit.md) for exact verification results.
 
 ## 📁 Project Structure
 
@@ -225,7 +240,8 @@ GestureHandlerRootView
 ```bash
 # Development
 npm start              # Start Expo dev server (clears cache)
-npm run ios           # Run on iOS device
+npm run ios           # Build and run on iOS simulator
+npm run ios:device    # Select an iOS device
 npm run android       # Run on Android
 npm run web           # Run web version
 
@@ -236,7 +252,7 @@ npm run lint          # Run ESLint
 npm run generate-types # Generate TypeScript types from Supabase
 
 # iOS
-npm run pod-install   # Install CocoaPods dependencies
+npm run ios:pods      # Install CocoaPods for an existing generated iOS project
 ```
 
 ## 🔧 Configuration
@@ -270,7 +286,7 @@ Custom font weights (100-900) using Roboto Slab:
 
 ## 🎨 Styling Guidelines
 
-This boilerplate uses NativeWind (TailwindCSS) for styling:
+This boilerplate uses Uniwind (TailwindCSS) for styling:
 
 ```tsx
 import { View, Text } from "react-native";
@@ -295,6 +311,8 @@ export function MyComponent() {
 
 ## 🚢 Deployment
 
+There is no configured EAS project, `eas.json`, signing setup, or automatic deployment in this repository. The following are setup steps, not a verified store release. Native dependency upgrades require a new binary; do not deliver them only as an OTA update. This upgrade adds no database migration or new environment variable. Configure the existing Supabase variables to launch and optional RevenueCat/PostHog keys to test those services.
+
 ### iOS
 
 1. Update bundle identifier in `app.json`
@@ -316,7 +334,7 @@ See [Expo Application Services](https://expo.dev/eas) for full deployment docume
 - [Expo Router Documentation](https://docs.expo.dev/router/introduction/)
 - [Supabase Documentation](https://supabase.com/docs)
 - [RevenueCat Documentation](https://www.revenuecat.com/docs)
-- [NativeWind Documentation](https://www.nativewind.dev/)
+- [Uniwind Documentation](https://docs.uniwind.dev/)
 
 ## 🤝 Contributing
 
@@ -333,4 +351,3 @@ For issues and questions, please refer to the documentation of the respective li
 ---
 
 **Built with ❤️ using React Native and Expo**
-

@@ -31,6 +31,9 @@
 
 - `AGENTS.md`: single entry point for agent instructions and memory index.
 - `docs/agents/`: durable project memory. Do not create `docs/agents/README.md`.
+- `docs/dependency-*.md`: dependency compatibility decisions, primary-source research, and upgrade verification record.
+- `.github/workflows/validate.yml`: npm/Expo validation and native Hermes export CI; no deployment.
+- `.nvmrc`: verified local/CI Node version.
 - `package.json` / `package-lock.json`: npm scripts and dependency graph.
 - `app.json`: Expo app config and native/web app identity.
 - `babel.config.js`, `metro.config.js`, `tsconfig.json`, `eslint.config.js`, `.prettierrc`: build, module resolution, TypeScript, lint, and formatting config.
@@ -47,8 +50,8 @@ Expo Router routes live here.
 - Keep group layouts in `_layout.tsx`.
 - Add tab screens under `src/app/(tabs)/<tab-name>/index.tsx`.
 - Add modal or stack screens under the nearest owning route group.
-- Do not assume `src/app/(settings)` exists; create it only when implementing settings behavior.
-- Do not assume `src/app/+not-found.tsx` exists; create it only when implementing not-found behavior.
+- `src/app/(settings)` currently contains a placeholder modal route. Extend it only when implementing settings behavior.
+- `src/app/+not-found.tsx` currently contains a placeholder fallback route. Extend it only when implementing not-found behavior.
 
 Current route groups:
 
@@ -56,6 +59,7 @@ Current route groups:
 - `(tabs)`: main three-tab shell.
 - `(onboarding)`: placeholder onboarding index only.
 - `(demo)`: HeroUI Native component, theme, and showcase demos.
+- `(settings)`: placeholder settings modal layout and index route only.
 
 ## `src/components`
 
@@ -150,7 +154,6 @@ Do not assume these exist:
 - `src/app/api/`
 - `docs/agents/README.md`
 - `scripts/`
-- `.github/`
 
 Create a missing folder only when the change introduces a real ownership boundary. For example, `src/features` may be reasonable for a substantial domain feature, but it is not an established convention in this repo today.
 
