@@ -1,5 +1,5 @@
 {
-  "name": "heroui-native-example",
+  "name": "expo-boilerplate",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -14,7 +14,7 @@
     "check": "npm run typecheck && npm run lint && npm run test:integrations && expo install --check",
     "export:native": "expo export --platform ios --platform android",
     "ios:pods": "pod-install",
-    "generate-types": "npx supabase gen types typescript --project-id SUPABASE_PROJECT_ID --schema public > src/lib/supabase/types.ts",
+    "generate-types": "node scripts/generate-supabase-types.cjs",
     "test:integrations": "node scripts/check-revenuecat.cjs"
   },
   "dependencies": {
@@ -97,5 +97,16 @@
     "node": "^22.13.0 || ^24.3.0 || >=26.0.0"
   },
   "packageManager": "npm@10.9.8",
-  "private": true
+  "private": true,
+  "description": "A native-first Expo starter with HeroUI Native, Supabase auth, encrypted storage, and optional analytics and billing.",
+  "license": "Apache-2.0",
+  "author": "Armin Ayat",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arminayat/expo-boilerplate.git"
+  },
+  "homepage": "https://github.com/arminayat/expo-boilerplate#readme",
+  "bugs": {
+    "url": "https://github.com/arminayat/expo-boilerplate/issues"
+  }
 }

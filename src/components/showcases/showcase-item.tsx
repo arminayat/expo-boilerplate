@@ -1,3 +1,6 @@
+// Derived from HeroUI Native (Copyright 2025 NextUI Inc.).
+// Adapted for Expo Boilerplate; local changes are described in Git history.
+// SPDX-License-Identifier: Apache-2.0
 import { Image as ExpoImage } from 'expo-image';
 import { type Href, useRouter } from 'expo-router';
 import { Chip, cn, Surface } from 'heroui-native';

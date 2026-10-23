@@ -1,3 +1,6 @@
+// Derived from HeroUI Native (Copyright 2025 NextUI Inc.).
+// Adapted for Expo Boilerplate; local changes are described in Git history.
+// SPDX-License-Identifier: Apache-2.0
 import { useSelect, useSelectAnimation } from 'heroui-native';
 import { Pressable, StyleSheet } from 'react-native';
 import { interpolate, useDerivedValue } from 'react-native-reanimated';

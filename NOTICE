@@ -1,0 +1,20 @@
+Expo Boilerplate
+Copyright 2026 Armin Ayat and contributors
+https://github.com/arminayat/expo-boilerplate
+
+This project includes code and demonstration assets adapted from HeroUI Native:
+Copyright 2025 NextUI Inc.
+https://github.com/heroui-inc/heroui-native
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The HeroUI demo routes, supporting components/helpers/themes, and copied project
+configuration have been adapted for this starter. Source files identify this
+origin and local modification; Git history records the changes. A path-level
+inventory is provided in docs/third-party-notices.md.
+
+Expo starter assets retain the MIT notice in LICENSES/Expo-MIT.txt.
+The bundled Space Mono font retains the SIL Open Font License notice in
+LICENSES/SpaceMono-OFL.txt. Dependencies retain their respective package licenses.
+
+Product names and logos remain trademarks of their respective owners.
+No affiliation or endorsement is implied.

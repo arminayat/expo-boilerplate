@@ -1,3 +1,6 @@
+// Derived from HeroUI Native (Copyright 2025 NextUI Inc.).
+// Adapted for Expo Boilerplate; local changes are described in Git history.
+// SPDX-License-Identifier: Apache-2.0
 import { Button, Checkbox, ControlField, LinkButton } from 'heroui-native';
 import React from 'react';
 import { Alert, View } from 'react-native';

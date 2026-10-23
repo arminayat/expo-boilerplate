@@ -4,7 +4,7 @@
 
 Current implementation: this is an Expo Router React Native boilerplate and HeroUI Native demo shell. It demonstrates a mobile app foundation with authentication plumbing, a tab shell, theme switching, component showcases, Supabase client setup, PostHog provider setup, RevenueCat setup helpers, encrypted session storage, and React Query.
 
-Documented intent in `README.md`: a production-ready mobile boilerplate for apps that need authentication, subscriptions, analytics, onboarding, secure storage, theming, and reusable UI components.
+Public positioning in `README.md`: an independent native-first starter and HeroUI demo, with implemented capabilities and unfinished product flows clearly separated. The project is Apache-2.0 licensed; copied upstream material and assets retain the notices in `NOTICE` and `docs/third-party-notices.md`.
 
 Generated Supabase types indicate a much broader newsletter, RSS, document, collection, agent, subscription, and email-summary domain. That domain is mostly not surfaced in the current app UI. Treat those generated types as available backend shape, not implemented product behavior.
 

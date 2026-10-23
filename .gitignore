@@ -30,9 +30,10 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
+# Local environment files; only the documented empty template is public.
 .env
+.env.*
+!.env.example
 
 # typescript
 *.tsbuildinfo
@@ -43,3 +44,6 @@ app-example-src
 
 ios/
 android/
+
+# Temporary generated schema output
+src/lib/supabase/.types.ts.*.tmp

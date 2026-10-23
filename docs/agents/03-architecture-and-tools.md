@@ -39,7 +39,9 @@ Source of truth: `package.json` and `package-lock.json`.
 - `.nvmrc`: verified Node 22.23.2; `packageManager` pins npm 10.9.8. Babel 7, ESLint 9, and TypeScript 6 are retained for the Expo lint/preset peer constraints.
 - `.github/workflows/validate.yml`: clean install, `check` (types/lint/adapter tests/Expo alignment), Doctor, installed peers, high/critical security-audit gate, and iOS/Android Hermes exports on main pushes and PRs. No deployment or backend credentials. The audit gate currently fails: unpatched `braces` GHSA-vfj7-8cjw-p6xm and `node-forge` GHSA-86w9-cpqp-85rv advisories produce 25 propagated package flags. See the dependency audit for exact evidence; do not claim clean CI.
 - Expo 58 owns the exact Metro `0.87.1` graph and supplies Uniwind's Metro peers. Direct `metro`, `metro-cache`, and `metro-transform-worker` pins were removed. Expo's remote `^0.84.6` recommendation is stale relative to this installed SDK; do not reintroduce old Metro pins or suppress alignment checks. The scoped `xcode -> uuid: 11.1.1` override remains.
-- `.env.example`: documents environment variable names.
+- `.env.example`: documents the five client configuration values referenced by the app; no unused server-secret placeholders. `.gitignore` excludes `.env` and `.env.*`, except this template.
+- Public project metadata lives in `package.json` (Apache-2.0, repository, issues, homepage). `private: true` prevents accidental npm publication and is independent of GitHub repository visibility.
+- `LICENSE`, `NOTICE`, `LICENSES/`, and `docs/third-party-notices.md` preserve upstream license obligations. README/setup/contributing/security/conduct documents and GitHub issue/PR templates support public contributors.
 
 ## Routing And Entry Points
 
@@ -137,13 +139,6 @@ Referenced by code:
 - `EXPO_PUBLIC_POSTHOG_API_KEY`
 - `EXPO_PUBLIC_APPLE_PURCHASES_API_KEY`
 - `EXPO_PUBLIC_WEB_PASSWORD_RESET_URL`
-
-Listed in `.env.example` but not referenced by current code:
-
-- `SENTRY_AUTH_TOKEN`
-- `EXPO_PUBLIC_SENTRY_DSN`
-- `OPENAI_API_KEY`
-- `REVENUECAT_WEBHOOK_AUTH`
 
 ## Background Or Async Flows
 

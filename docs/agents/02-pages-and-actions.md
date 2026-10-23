@@ -147,7 +147,7 @@
 
 - Behavior: demo stack layout with themed headers, logo title, theme toggle, reduced-motion warning toast, and registered component/showcase screens.
 - Source files: `src/app/(demo)/_layout.tsx`, `src/components/theme-toggle.tsx`.
-- Mirror source: this route tree is copied from `/Users/armin/Projects/heroui-native-example/src/app/(home)`.
+- Mirror source: this route tree is copied from `https://github.com/heroui-inc/heroui-native/tree/main/example/src/app/(home)`.
 - User actions: navigate back, toggle theme.
 - Writes/mutations: theme toggle calls `Uniwind.setTheme()` through `AppThemeProvider`.
 - External calls: none.
@@ -228,7 +228,7 @@ Source: `package.json`.
 - `npm run doctor`: runs pinned Expo Doctor.
 - `npm run export:native`: creates iOS and Android production Hermes bundles.
 - `npm run ios:pods`: runs pinned `pod-install` for an existing generated iOS project.
-- `npm run generate-types`: runs Supabase type generation into `src/lib/supabase/types.ts`; the project ID placeholder must be replaced.
+- `npm run generate-types -- YOUR_PROJECT_ID`: validates the supplied project ID and runs the Supabase CLI through `scripts/generate-supabase-types.cjs`. It replaces `src/lib/supabase/types.ts` only after successful generation and preserves existing types on CLI failure. No database mutation is performed.
 - The broken `reset-project` script was removed; there is no reset helper in this repo.
 
 ## API Endpoints And Background Jobs

@@ -1,3 +1,6 @@
+// Derived from HeroUI Native (Copyright 2025 NextUI Inc.).
+// Adapted for Expo Boilerplate; local changes are described in Git history.
+// SPDX-License-Identifier: Apache-2.0
 /**
  * Central registry of all component screens displayed in the example app.
  * Consumed by the component list, navigation layout, and home page.

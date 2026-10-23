@@ -1,3 +1,6 @@
+// Derived from HeroUI Native (Copyright 2025 NextUI Inc.).
+// Adapted for Expo Boilerplate; local changes are described in Git history.
+// SPDX-License-Identifier: Apache-2.0
 /**
  * Multi-step detached bottom sheet with animated content transitions.
  * Demonstrates a 3-step flow with header, content, and footer

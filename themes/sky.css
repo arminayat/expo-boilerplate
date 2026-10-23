@@ -1,3 +1,6 @@
+/* Derived from HeroUI Native, Copyright 2025 NextUI Inc.
+ * Adapted for Expo Boilerplate; see Git history for local changes.
+ * SPDX-License-Identifier: Apache-2.0 */
 @layer theme {
   :root {
     @variant sky-light {

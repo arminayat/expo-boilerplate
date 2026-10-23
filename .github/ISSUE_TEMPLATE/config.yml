@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/arminayat/expo-boilerplate/security/advisories/new
+    about: Do not report security vulnerabilities or credentials in public issues.
+  - name: Setup guide
+    url: https://github.com/arminayat/expo-boilerplate/blob/main/docs/getting-started.md
+    about: Native build prerequisites, service configuration, and troubleshooting.

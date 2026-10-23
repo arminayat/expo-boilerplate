@@ -1,3 +1,6 @@
+// Derived from HeroUI Native (Copyright 2025 NextUI Inc.).
+// Adapted for Expo Boilerplate; local changes are described in Git history.
+// SPDX-License-Identifier: Apache-2.0
 import { Select, useSelect } from 'heroui-native';
 import { type FC } from 'react';
 import { StyleSheet, View } from 'react-native';

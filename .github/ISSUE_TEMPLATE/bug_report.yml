@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a reproducible problem in the starter.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include secrets or personal data. Report vulnerabilities through SECURITY.md. Check the README and dependency audit for known limitations."
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Commit, platform/device, OS, Node/npm, and relevant Expo/native tooling versions.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Include a minimal example and the command or screen that triggers the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs or screenshots
+      description: Redact credentials, user data, and private URLs.

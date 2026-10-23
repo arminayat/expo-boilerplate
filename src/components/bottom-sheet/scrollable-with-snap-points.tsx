@@ -1,3 +1,6 @@
+// Derived from HeroUI Native (Copyright 2025 NextUI Inc.).
+// Adapted for Expo Boilerplate; local changes are described in Git history.
+// SPDX-License-Identifier: Apache-2.0
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { BottomSheetFooter, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { BottomSheet, Button, Card, cn, Separator } from 'heroui-native';

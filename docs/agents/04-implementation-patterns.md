@@ -10,7 +10,7 @@
 - Local persistence adapters live in `src/storage`.
 - Shared UI components live in `src/components`.
 - Demo-specific components live under `src/components/showcases`, `src/components/themes-content`, `src/components/select`, `src/components/toast`, and `src/components/component-presentation`.
-- `src/app/(demo)` originates from `/Users/armin/Projects/heroui-native-example/src/app/(home)`. Preserve the upstream demo behavior when refreshing it. Prefer shared support files for compatibility fixes; the toast route also has a local `TextInputInstance` ref migration for RN 0.88.
+- `src/app/(demo)` originates from `https://github.com/heroui-inc/heroui-native/tree/main/example/src/app/(home)`. Preserve the upstream demo behavior when refreshing it. Prefer shared support files for compatibility fixes; the toast route also has a local `TextInputInstance` ref migration for RN 0.88.
 - Project assets are split between root `assets/` and `src/assets/`; current auth screens use `src/assets/images/logo.png`, while app/demo config and showcases use root `assets/`.
 
 ## Imports And Naming
@@ -103,6 +103,7 @@
 - SDK 58 does not use the old `android.edgeToEdgeEnabled` or `newArchEnabled` app config flags. Keep navigation imports routed through Expo Router entry points.
 - RN 0.88 refs use exported instance types: `TextInstance` in `AppText`, and `TextInputInstance` in the toast demo. `AppState.currentState` may be null; the OTA hook compares explicit inactive/background values rather than calling string methods on it.
 - Masked View 0.3.2 still declares the removed `NativeMethods` mixin. The Raycast progressive blur component has a local `ComponentType<MaskedViewProps>` bridge that retains its published props; do not globally weaken React Native types or change its runtime for this declaration mismatch.
+- Copied HeroUI source carries Apache-2.0 origin/modification notices. Preserve these when adapting or refreshing demos; keep the path inventory in `docs/third-party-notices.md` accurate.
 - The mirrored HeroUI Native example uses plain string `router.push()` values. Keep `src/types/expo-router-relaxed.d.ts` unless the mirrored source switches to strict `Href` values.
 
 ## What To Avoid

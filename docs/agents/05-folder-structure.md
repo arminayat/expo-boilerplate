@@ -31,6 +31,11 @@
 ## Root-Level Ownership
 
 - `AGENTS.md`: single entry point for agent instructions and memory index.
+- `README.md` and `docs/getting-started.md`: public feature overview, setup, customization, and verification limits.
+- `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md`: contributor workflow, community expectations, and private reporting.
+- `LICENSE` and `NOTICE`: Apache-2.0 license and project/upstream attribution.
+- `LICENSES/` and `docs/third-party-notices.md`: copied asset licenses and upstream path inventory.
+- `.github/ISSUE_TEMPLATE/` and `.github/pull_request_template.md`: bug/feature intake and contribution checklist.
 - `docs/agents/`: durable project memory. Do not create `docs/agents/README.md`.
 - `docs/dependency-*.md`: dependency compatibility decisions, primary-source research, and upgrade verification record.
 - `.github/workflows/validate.yml`: npm/Expo validation and native Hermes export CI; no deployment.
@@ -41,7 +46,7 @@
 - `global.css`: styling entry file imported by the root layout.
 - `themes/`: Uniwind/HeroUI theme CSS files.
 - `assets/`: root assets used by Expo config and demos.
-- `scripts/`: small repository checks. `check-revenuecat.cjs` runs the isolated adapter tests through `npm run test:integrations`; it uses the built-in Node test runner and existing TypeScript dependency, with no live service calls.
+- `scripts/`: small repository checks. `check-revenuecat.cjs` runs the isolated adapter tests through `npm run test:integrations`; it uses the built-in Node test runner and existing TypeScript dependency, with no live service calls. `generate-supabase-types.cjs` accepts a project ID and safely replaces the sample database types after successful read-only CLI generation.
 
 ## `src/app`
 

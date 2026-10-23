@@ -1,3 +1,6 @@
+/* Derived from HeroUI Native, Copyright 2025 NextUI Inc.
+ * Adapted for Expo Boilerplate; see Git history for local changes.
+ * SPDX-License-Identifier: Apache-2.0 */
 @import "tailwindcss";
 @import "uniwind";
 @import "heroui-native/styles";
