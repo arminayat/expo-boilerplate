@@ -50,7 +50,7 @@
 - Source files: `src/app/(auth)/sign-in.tsx`, `src/components/auth/SignInForm.tsx`, `src/components/auth/Auth.native.tsx`.
 - User actions: enter email/password, submit sign-in, open forgot-password link, open sign-up link, use Apple sign-in on iOS, trigger hidden developer-mode toast through repeated taps on "Or".
 - Writes/mutations: calls `supabase.auth.signInWithPassword()`, which creates/updates auth session storage through the Supabase client storage adapter.
-- External calls: Supabase Auth, PostHog event capture, Apple auth on iOS, RevenueCat login indirectly after auth state changes.
+- External calls: Supabase Auth, PostHog event capture, Apple auth on iOS, and optional RevenueCat login after auth state changes when an iOS key is configured.
 - Persistence: Supabase session is persisted by `src/storage/session.ts` in encrypted MMKV.
 - Placeholders: Android native auth is not implemented.
 
@@ -91,7 +91,7 @@
 
 ### `src/app/(tabs)/_layout.tsx`
 
-- Behavior: renders three Expo Router native tabs through `expo-router/unstable-native-tabs`: `tab1/index`, `tab2/index`, and `tab3/index`.
+- Behavior: renders three Expo Router native tabs through the stable `expo-router/native-tabs` entry point: `tab1/index`, `tab2/index`, and `tab3/index`.
 - Source files: `src/app/(tabs)/_layout.tsx`, `src/hooks/useUserOnboarding.tsx`.
 - User actions: switch tabs through the platform-native tab bar.
 - Writes/mutations: none directly.
@@ -223,7 +223,8 @@ Source: `package.json`.
 - `npm run web`: runs `expo start --web -c`.
 - `npm run lint`: runs `eslint . --max-warnings=0`.
 - `npm run typecheck`: runs TypeScript without emitting output.
-- `npm run check`: runs typecheck, lint, and Expo SDK version alignment.
+- `npm run check`: runs typecheck, lint, isolated integration tests, and Expo SDK version alignment.
+- `npm run test:integrations`: runs the RevenueCat adapter checks in `scripts/check-revenuecat.cjs` with mocked native/React boundaries and no live service calls.
 - `npm run doctor`: runs pinned Expo Doctor.
 - `npm run export:native`: creates iOS and Android production Hermes bundles.
 - `npm run ios:pods`: runs pinned `pod-install` for an existing generated iOS project.

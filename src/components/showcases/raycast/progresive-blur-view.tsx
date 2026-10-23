@@ -1,9 +1,15 @@
-import MaskedView from '@react-native-masked-view/masked-view';
+import NativeMaskedView, {
+  type MaskedViewProps,
+} from '@react-native-masked-view/masked-view';
 import { BlurView, type BlurViewProps } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { cn, colorKit, useThemeColor } from 'heroui-native';
-import { type FC } from 'react';
+import { type ComponentType, type FC } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
+
+// Masked View 0.3.2 still types its class with the removed RN NativeMethods mixin.
+// Its runtime is a React component; retain its published props at this boundary.
+const MaskedView = NativeMaskedView as unknown as ComponentType<MaskedViewProps>;
 
 type Props = {
   position?: 'top' | 'bottom';

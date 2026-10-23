@@ -1,6 +1,6 @@
 import { useAppTheme } from "@/contexts/app-theme-context";
 import { useCheckUserOnboarding } from "@/hooks/useUserOnboarding";
-import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { NativeTabs } from "expo-router/native-tabs";
 import { DynamicColorIOS, Platform, type ColorValue } from "react-native";
 
 interface NativeTabColors {

@@ -1,46 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Platform } from "react-native";
 import Purchases, { PurchasesOfferings } from "react-native-purchases";
 
-export const configureRevenueCat = async ({ userId }: { userId?: string }) => {
-  console.log("Configuring RevenueCat");
-  const isConfigured = await Purchases.isConfigured();
-  if (isConfigured) {
-    console.log("RevenueCat already configured");
-    return;
-  }
-  // Configure Purchases
-  if (Platform.OS === "ios") {
-    Purchases.configure({
-      apiKey: process.env.EXPO_PUBLIC_APPLE_PURCHASES_API_KEY!,
-      appUserID: userId,
+const getApiKey = () =>
+  Platform.OS === "ios"
+    ? process.env.EXPO_PUBLIC_APPLE_PURCHASES_API_KEY?.trim()
+    : undefined;
+
+let configurationPromise: Promise<boolean> | undefined;
+
+export const configureRevenueCat = ({ userId }: { userId?: string }) => {
+  const apiKey = getApiKey();
+  if (!apiKey) return Promise.resolve(false);
+
+  if (!configurationPromise) {
+    configurationPromise = (async () => {
+      if (!(await Purchases.isConfigured())) {
+        Purchases.configure({ apiKey, appUserID: userId });
+        await Purchases.enableAdServicesAttributionTokenCollection();
+      }
+      return true;
+    })().finally(() => {
+      configurationPromise = undefined;
     });
-  } else if (Platform.OS === "android") {
-    // Purchases.configure({ apiKey: process.env.EXPO_PUBLIC_GOOGLE_API_KEY });
   }
 
-  Purchases.enableAdServicesAttributionTokenCollection();
+  return configurationPromise;
 };
 
 export const loginWithRevenueCat = async ({ userId }: { userId: string }) => {
-  Purchases.setLogLevel(Purchases.LOG_LEVEL.DEBUG);
-  console.log("Logging in with RevenueCat");
-  const isConfigured = await Purchases.isConfigured();
-  if (!isConfigured) {
-    configureRevenueCat({ userId });
-    return;
-  }
-  return await Purchases.logIn(userId);
+  if (!(await configureRevenueCat({ userId }))) return;
+  return Purchases.logIn(userId);
 };
 
 export const logoutFromRevenueCat = async () => {
-  return await Purchases.logOut();
+  if (!getApiKey() || !(await Purchases.isConfigured())) return;
+  return Purchases.logOut();
 };
 
 export const useGetOffering = () => {
   const [offering, setOffering] = useState<PurchasesOfferings | null>(null);
-  Purchases.getOfferings().then((offerings) => {
-    setOffering(offerings);
-  });
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadOfferings = async () => {
+      try {
+        if (!(await configureRevenueCat({})) || !isMounted) return;
+        const offerings = await Purchases.getOfferings();
+        if (isMounted) setOffering(offerings);
+      } catch (error) {
+        console.warn("Unable to load RevenueCat offerings", error);
+      }
+    };
+
+    void loadOfferings();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return offering?.all;
 };

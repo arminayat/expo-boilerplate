@@ -28,7 +28,8 @@ jobs:
       - run: npm run check
       - run: npm run doctor
       - run: npm ls --all --omit=optional
-      # The known moderate Router decoder advisory is documented in the audit.
-      - run: npm audit --audit-level=high --fetch-retries=1 --fetch-timeout=60000
       # Keep Hermes enabled: a JS-only export missed the old Supabase regression.
       - run: npm run export:native
+      # Run last so advisories do not prevent bundle verification; keep the gate failing.
+      # Unpatched braces/node-forge advisories are documented in the audit.
+      - run: npm audit --audit-level=high --fetch-retries=1 --fetch-timeout=60000

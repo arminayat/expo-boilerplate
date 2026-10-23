@@ -14,6 +14,7 @@
 ├── tsconfig.json
 ├── assets/
 ├── docs/agents/
+├── scripts/
 ├── src/
 │   ├── app/
 │   ├── assets/
@@ -40,6 +41,7 @@
 - `global.css`: styling entry file imported by the root layout.
 - `themes/`: Uniwind/HeroUI theme CSS files.
 - `assets/`: root assets used by Expo config and demos.
+- `scripts/`: small repository checks. `check-revenuecat.cjs` runs the isolated adapter tests through `npm run test:integrations`; it uses the built-in Node test runner and existing TypeScript dependency, with no live service calls.
 
 ## `src/app`
 
@@ -154,7 +156,6 @@ Do not assume these exist:
 - `src/api/`
 - `src/app/api/`
 - `docs/agents/README.md`
-- `scripts/`
 
 Create a missing folder only when the change introduces a real ownership boundary. For example, `src/features` may be reasonable for a substantial domain feature, but it is not an established convention in this repo today.
 

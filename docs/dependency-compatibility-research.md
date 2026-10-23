@@ -1,54 +1,52 @@
 # Dependency Compatibility Research
 
-Checked 2026-09-04 against package publishers' npm metadata, release notes, and source. This is an upgrade decision record, not evidence that the resulting application has passed build/runtime checks. The installed graph remains authoritative in `package-lock.json`.
+Verified 2026-10-23. Publisher package metadata, exact installed manifests, and the current source code take precedence over older audit notes. This research supports the [upgrade audit](dependency-upgrade-audit.md); it does not certify live service behavior.
 
-## Framework boundary
+## Expo and native runtime
 
-Expo SDK 57 is stable, released June 30, 2026. npm currently marks `expo@57.0.20` as `latest`; SDK 58 is canary. SDK 57 is especially relevant here: React Native 0.86.3 fixes Hermes v1 regressions affecting memory use with Reanimated/Worklets and development startup. The earlier SDK 56-only assumption is therefore stale. Sources: [Expo release](https://expo.dev/changelog/sdk-57), [published Expo metadata](https://registry.npmjs.org/expo).
+Expo SDK 58 is stable (released October 15), targeting React Native 0.88 and React 19.3. Use Expo 58.0.17's exact [bundledNativeModules manifest](https://unpkg.com/expo@58.0.17/bundledNativeModules.json), rather than independently selecting every native package's latest tag. Selected React/React DOM 19.3.0, FlashList 2.3.2, keyboard controller 1.22.7, and Gesture Handler ~3.3.0 intentionally trail their independent latest releases. Sources: [SDK 58 release](https://expo.dev/changelog/sdk-58), [upgrade guide](https://expo.dev/blog/how-to-upgrade-to-sdk-58), [version reference](https://docs.expo.dev/versions/v58.0.0/).
 
-Use Expo's SDK 57 package manifest as one compatibility set, not each native package's independent `latest` tag:
+Reanimated 4.7.1 requires Worklets 0.13.x and supports RN 0.86–0.88. Keep this pair together and use the New Architecture. Sources: [4.7.1 package peers](https://registry.npmjs.org/react-native-reanimated/4.7.1), [compatibility guide](https://docs.swmansion.com/react-native-reanimated/docs/guides/compatibility/).
 
-| Package | SDK 57 selection | Independent latest, if different |
-| --- | --- | --- |
-| Expo | 57.0.20 | — |
-| React Native | 0.86.3 | 0.87.1: outside this SDK's target |
-| React / React DOM | 19.2.3 | 19.2.8: keep the SDK-selected pair |
-| Reanimated | 4.5.1 | 4.6.0: requires Worklets 0.12.x |
-| Worklets | 0.10.1 | 0.12.1: outside Reanimated 4.5.1's peer range |
-| Gesture Handler | ~2.32.0 | Keep the SDK-selected minor |
-| Screens | ~4.26.0 | Keep the SDK-selected minor |
-| Keyboard Controller | 1.21.9 | Keep the SDK-selected version |
-| Safe Area Context | ~5.7.0 | Keep the SDK-selected minor |
-| SVG | 15.15.4 | Keep the SDK-selected version |
-| WebView | 13.16.1 | Keep the SDK-selected version |
-| React Native Web | ~0.21.0 | Keep the SDK-selected minor |
-| FlashList | 2.0.2 | Keep the SDK-selected version |
+Gesture Handler is an explicit evidence boundary: Expo selects 3.3.x, but the publisher's [compatibility table](https://docs.swmansion.com/react-native-gesture-handler/docs/fundamentals/getting-started/) lists RN 0.88 under 3.4.x. The upstream [RN 0.88 upgrade diff](https://github.com/software-mansion/react-native-gesture-handler/pull/4517/files) principally updates examples and removes outdated codegen type assertions. Keep the Expo set and validate native compilation/gesture interactions; broad npm peers alone do not establish runtime compatibility.
 
-Source for every SDK selection: [Expo 57.0.20 bundledNativeModules.json](https://unpkg.com/expo@57.0.20/bundledNativeModules.json). Independent latest tags: [React Native](https://registry.npmjs.org/react-native), [React](https://registry.npmjs.org/react), [Reanimated](https://registry.npmjs.org/react-native-reanimated), [Worklets](https://registry.npmjs.org/react-native-worklets).
+Native requirements: Xcode 26.4+, iOS 16.4+, Android 7+, compile SDK 37 and target SDK 36. Node 22.23.2 satisfies the SDK and Supabase engines. SDK 58 generates SceneDelegate and enables Android R8 release shrinking by default. Preserve manual edits before Expo regenerates native projects. A fresh signed native build is required for MMKV, Nitro, gestures, and secure storage; Hermes exports alone cannot prove these integrations.
 
-Reanimated 4 requires New Architecture. Its 4.5 line supports RN 0.86; the exact 4.5.1 package requires Worklets `0.10.x`. Broad compatibility tables assume the latest patch, so exact package peers take precedence when selecting an earlier patch. Sources: [Reanimated compatibility](https://docs.swmansion.com/react-native-reanimated/docs/guides/compatibility/), [4.5.1 metadata](https://registry.npmjs.org/react-native-reanimated/4.5.1).
+## Source migrations
 
-## UI and styling
+RN 0.88 enables its strict public TypeScript API by default. Native component values are no longer ref-instance types. Migrate AppText to TextInstance and the toast input ref to TextInputInstance. AppState.currentState may be null/undefined, so use explicit state comparisons. Source: [strict TypeScript migration](https://reactnative.dev/docs/strict-typescript-api).
 
-- Upgrade HeroUI Native 1.0.3 → **1.0.9**. Its published peers accept the SDK 57 native set, React 19, Bottom Sheet 5, Tailwind Merge 3, and Tailwind Variants 3. Keep Uniwind + Tailwind 4; introducing another styling engine is unnecessary. Sources: [1.0.9 package peers](https://registry.npmjs.org/heroui-native/1.0.9), [HeroUI setup](https://heroui.com/en/docs/native/getting-started/quick-start).
-- HeroUI patch releases include typography, input, popup/portal, accessibility, and toast fixes. Smoke-test these components and custom themes; 1.0.9 also removes LinkButton's default corner radius. Starting at 1.0.8, HeroUI's stylesheet registers its own Tailwind source, so the repository's explicit `@source` is redundant, not a new requirement. Sources: [1.0.9 release](https://github.com/heroui-inc/heroui-native/releases/tag/v1.0.9), [1.0.8 release](https://github.com/heroui-inc/heroui-native/releases/tag/v1.0.8).
-- Upgrade Uniwind 1.6.5 → **1.12.0** with Tailwind **4.3.3**. Uniwind's current package requires React >=19, RN >=0.81, Tailwind >=4, and internally pins Tailwind compiler packages to 4.3.3. These peers admit SDK 57. Version 1.10.1 explicitly updated its example to Expo 57; 1.12.0 fixes React lifecycle subscriptions and unnecessary stylesheet reinitialization. Sources: [1.12.0 metadata](https://registry.npmjs.org/uniwind/1.12.0), [1.10.1 release](https://github.com/uni-stack/uniwind/releases/tag/v1.10.1), [1.12.0 release](https://github.com/uni-stack/uniwind/releases/tag/v1.12.0).
-- Retain the existing `withUniwindConfig` Metro wrapper and CSS entry-point imports. No Uniwind Babel preset is required. HeroUI currently targets native iOS/Android and does not recommend its native library for web; a successful web export should not be described as browser-runtime certification. Sources: [Uniwind setup](https://docs.uniwind.dev/quickstart), [HeroUI platform guidance](https://heroui.com/en/docs/native/getting-started/quick-start).
+Masked View 0.3.2 is still the latest package, but its declaration uses the removed NativeMethods mixin. A local ComponentType<MaskedViewProps> assertion at the one app usage preserves the actual React component implementation and its published props. Do not globally disable strict RN types or weaken all app props to any.
 
-## MMKV and Nitro
+Use `expo-router/native-tabs`. The old unstable entry remains a deprecated re-export, so this removes deprecated usage rather than fixing a missing module. Expo Router still exports the used navigation themes and header helper through `expo-router/react-navigation`; direct @react-navigation dependencies are unnecessary. Demo headers already explicitly configure transparency, and other app stacks hide their headers, so no global header compatibility switch is needed. Source: [Router SDK 57 to 58 migration](https://docs.expo.dev/router/migrate/sdk-57-to-58/).
 
-Upgrade MMKV **4.3.2** and consider Nitro **0.37.1** as a pair requiring an actual native build. MMKV v4 needs RN >=0.76 and Nitro Modules; npm's wildcard Nitro peer is not proof of every native ABI combination. MMKV 4.3.2 was published with Nitro 0.35.9 in its development graph. Its current release improves external-memory reporting and newer-RN support; Nitro 0.37.1 fixes public-header version checks and reports native ArrayBuffer memory pressure. There is no published exact MMKV 4.3.2/Nitro 0.37.1 compatibility guarantee, so retain a native compilation/runtime gate. Sources: [MMKV metadata](https://registry.npmjs.org/react-native-mmkv/4.3.2), [MMKV requirements](https://github.com/mrousavy/react-native-mmkv/blob/v4.3.2/README.md), [MMKV release](https://github.com/mrousavy/react-native-mmkv/releases/tag/v4.3.2), [Nitro release](https://github.com/margelo/nitro/releases/tag/v0.37.1).
+## UI, styling, and bundling
 
-No storage-data migration is indicated for the 4.3.1 → 4.3.2 patch. Preserve existing store IDs, encryption configuration, and SecureStore keys; test relaunch persistence instead of clearing storage to make the app start.
+HeroUI Native 1.0.11 permits React >=19, RN >=0.81, Gesture Handler ^2.28 or ^3, Reanimated ^4.1.1, Worklets >=0.5.1, and the installed supporting UI packages. It fixes native input refs, Android portal interactions, and controlled bottom-sheet reopening. Existing standalone field/control APIs and provider config remain valid. Sources: [published peers](https://registry.npmjs.org/heroui-native/1.0.11), [release notes](https://github.com/heroui-inc/heroui-native/releases/tag/v1.0.11).
 
-## Supabase / Hermes release-build failure
+Uniwind 1.13.0 retains React >=19/RN >=0.81 and pins its Tailwind compiler packages to 4.3.3. It improves RN export forwarding and CSS cascade/import behavior. Keep existing `withUniwindConfig`, CSS imports, theme registration, and Tailwind 4.3.3. Sources: [metadata](https://registry.npmjs.org/uniwind/1.13.0), [release notes](https://github.com/uni-stack/uniwind/releases/tag/v1.13.0).
 
-The failure in **2.106.0** is an upstream regression: optional tracing left a dynamic `import('@opentelemetry/api')` in the CJS bundle, which Hermes rejects during bytecode compilation. Metro success or `--no-bytecode` export does not prove release-build compatibility. The first upstream fix shipped in **2.106.1**; version **2.112.0** subsequently moved tracing into a separate opt-in entry point. Sources: [reported regression](https://github.com/supabase/supabase-js/issues/2380), [first fixed release](https://github.com/supabase/supabase-js/releases/tag/v2.106.1), [tracing separation release](https://github.com/supabase/supabase-js/releases/tag/v2.112.0).
+Expo's [remote versions endpoint](https://api.expo.dev/v2/versions) incorrectly recommends Metro ^0.84.6 for SDK 58, while [@expo/metro 58.0.0](https://registry.npmjs.org/@expo%2fmetro/58.0.0) explicitly owns the 0.87.1 Metro family. The CLI merges the remote related-package map last, causing a false warning for a direct Metro declaration. Remove the three redundant direct Metro dependencies; Expo's exact dependencies supply Uniwind's peers. Validate a clean install, one deduplicated 0.87.1 graph, Expo Doctor, and actual exports. No validation exclusions or forced outdated bundler are necessary.
 
-Preferred solution: pin current stable **@supabase/supabase-js 2.115.0**, keep normal `createClient` imports, and do not add OpenTelemetry or `@supabase/supabase-js/tracing` when tracing is not used. The upstream split keeps OpenTelemetry out of the ordinary bundle. Avoid a custom Metro shim, package patch, disabling Hermes, or accepting a no-bytecode-only export as the fix. Sources: [2.115.0 package metadata](https://registry.npmjs.org/@supabase%2fsupabase-js/2.115.0), [Supabase tracing design](https://supabase.com/blog/connect-client-traces-to-your-logs).
+## Development tool constraints
 
-Supabase 2.115.0 requires Node >=22 for Node/tooling environments. React Native 0.86.3 permits Node `^20.19.4 || ^22.13.0 || ^24.3.0 || >=25.0.0`; use a supported intersection such as Node 24 LTS >=24.3.0. Sources: [Supabase Node deprecation](https://supabase.com/changelog/45715-deprecation-notice-dropping-support-for-node-js-20), [RN package engines](https://registry.npmjs.org/react-native/0.86.3).
+- Babel remains 7.29.7: Expo's Metro/Babel preset uses Babel 7 transforms and ^7 peers; Babel 8 is not a drop-in upgrade.
+- ESLint remains 9.39.5: eslint-plugin-react, eslint-plugin-import, and eslint-plugin-react-native do not all accept ESLint 10.
+- TypeScript remains 6.0.3: the current @typescript-eslint parser accepts >=4.8.4 <6.1.0, excluding TypeScript 7.
+- Metro moves to 0.87.1 through Expo ownership. All other retained direct development dependencies are updated to their compatible latest versions.
 
-## Verification required after implementation
+Sources: [Expo preset](https://registry.npmjs.org/babel-preset-expo/58.0.19), [Expo lint config](https://registry.npmjs.org/eslint-config-expo/58.0.4), [React ESLint plugin](https://registry.npmjs.org/eslint-plugin-react/7.37.5), [Import plugin](https://registry.npmjs.org/eslint-plugin-import/2.32.0), [TypeScript parser](https://registry.npmjs.org/@typescript-eslint%2fparser/8.72.0).
 
-Run Expo alignment and Doctor, dependency-peer validation, typecheck/lint, and iOS/Android production exports **with Hermes bytecode enabled**. Then regenerate/build the native simulator app and exercise authentication-screen rendering, navigation, representative UI components, themes, and persisted state. SDK 57 changes `expo prebuild` to clean generated native folders by default; preserve any manual native changes before running it. A real simulator build is required for MMKV/Nitro validation; an Expo Go launch or plain Metro export is insufficient. See [Expo upgrade instructions](https://expo.dev/changelog/sdk-57) and [MMKV installation](https://github.com/mrousavy/react-native-mmkv/blob/v4.3.2/README.md).
+## Storage and service clients
+
+MMKV 4.3.2 and Nitro 0.37.1 are still latest. Their versions, store IDs, AES-256 encryption setting, and SecureStore key remain unchanged. The RN upgrade still requires native compilation/runtime validation of their ABI. Do not clear user storage to work around startup problems. Sources: [MMKV metadata](https://registry.npmjs.org/react-native-mmkv/4.3.2), [Nitro metadata](https://registry.npmjs.org/react-native-nitro-modules/0.37.1).
+
+Supabase JS 2.118.0 retains Node >=22 and normal createClient imports. The [current changelog](https://supabase.com/changelog.md) introduces no required app schema migration for this client upgrade. Optional OpenTelemetry tracing remains out of the ordinary client entry point. Keep Hermes bytecode enabled to catch the historical dynamic-import regression. Source: [2.118.0 metadata](https://registry.npmjs.org/@supabase%2fsupabase-js/2.118.0).
+
+RevenueCat 10.15.1 keeps synchronous configure and asynchronous isConfigured/login/attribution methods. The scoped app fixes handle optional configuration and promise failures, share concurrent setup, and move offering reads out of render. Isolated adapter tests verify those behaviors without claiming purchase/provider acceptance. PostHog 4.81.10 retains the disabled in-memory provider path for absent keys. Sources: [Purchases metadata](https://registry.npmjs.org/react-native-purchases/10.15.1), [PostHog metadata](https://registry.npmjs.org/posthog-react-native/4.81.10).
+
+## Security and acceptance boundaries
+
+Latest published braces 3.0.3 and node-forge 1.4.0 are affected by [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) and [GHSA-86w9-cpqp-85rv](https://github.com/advisories/GHSA-86w9-cpqp-85rv). Both report no patched version as of this audit. The 25 high package flags are propagation from these two advisories. Keep the existing high/critical CI audit gate and disclose its failure; npm's suggested major framework downgrades are not compatible fixes.
+
+Native app checks use placeholders, not live backend credentials. Android native release verification requires an installed SDK. Browser testing is prohibited for this task, and the existing native SecureStore/MMKV adapter remains unsupported on web. Use the audit's verification table for actual receipts; package peer declarations do not prove live auth, analytics, billing, or deployment.

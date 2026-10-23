@@ -1,6 +1,6 @@
 # React Native App Boilerplate
 
-A mobile-first Expo SDK 57 / React Native 0.86 boilerplate and HeroUI Native demo app. Authentication plumbing, encrypted native storage, themes, and component showcases are implemented. Product tabs and onboarding are placeholders; the paywall showcases simulate purchases. See [current app behavior](docs/agents/01-app-overview.md) and the [dependency upgrade audit](docs/dependency-upgrade-audit.md) for verified capabilities and remaining limitations.
+A mobile-first Expo SDK 58 / React Native 0.88 boilerplate and HeroUI Native demo app. Authentication plumbing, encrypted native storage, themes, and component showcases are implemented. Product tabs and onboarding are placeholders; the paywall showcases simulate purchases. See [current app behavior](docs/agents/01-app-overview.md) and the [dependency upgrade audit](docs/dependency-upgrade-audit.md) for verified capabilities and remaining limitations.
 
 ## ✨ Features
 
@@ -25,6 +25,8 @@ A mobile-first Expo SDK 57 / React Native 0.86 boilerplate and HeroUI Native dem
 - [Expo](https://expo.dev/) - Development platform
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
 
+The current compatibility set is Expo 58.0.17, Expo Router 58.0.25, React Native 0.88.0, React 19.3.0, HeroUI Native 1.0.11, Uniwind 1.13.0, and Supabase JS 2.118.0. Reanimated 4.7.1 and Worklets 0.13.0 move together. Babel 7, ESLint 9, and TypeScript 6 remain within the framework's supported peer ranges; independent latest major versions are not interchangeable with this set.
+
 ### UI & Styling
 - [HeroUI Native](https://www.npmjs.com/package/heroui-native) - Component library
 - [Uniwind](https://docs.uniwind.dev/) - TailwindCSS for React Native
@@ -48,7 +50,7 @@ A mobile-first Expo SDK 57 / React Native 0.86 boilerplate and HeroUI Native dem
 ## 📋 Prerequisites
 
 - Node.js 22.23.2 (`nvm use`) and npm 10.9.8, matching the verified toolchain
-- iOS: Xcode 26.4+ and CocoaPods (verified with Xcode 26.6 / CocoaPods 1.16.2)
+- iOS: Xcode and CocoaPods compatible with Expo SDK 58; see the audit for the local toolchain and native-build results
 - Android: Android Studio and JDK 17+
 - Use the project-local Expo CLI through `npx expo`; do not install legacy `expo-cli` globally
 
@@ -106,6 +108,8 @@ EXPO_PUBLIC_POSTHOG_API_KEY=your_posthog_api_key
 3. Configure your subscription products
 4. Add your API key to `.env`
 
+RevenueCat is optional: a missing or blank iOS key disables its adapter, and Android configuration is not implemented. Concurrent callers share initialization; optional service failures are handled without interrupting auth. Offering reads run after mounting and ignore results after unmount. The showcase paywalls still simulate purchases.
+
 ### 6. Configure PostHog
 
 1. Create a project on [PostHog](https://posthog.com)
@@ -131,17 +135,21 @@ npm run android
 npm run web
 ```
 
-Use a native build, not Expo Go: MMKV/Nitro and RevenueCat require custom native modules. After an SDK/native dependency upgrade, rebuild the app. SDK 57 `expo prebuild` regenerates native folders by default, so preserve any manual native changes first.
+Use a native build, not Expo Go: MMKV/Nitro and RevenueCat require custom native modules. After an SDK/native dependency upgrade, rebuild the app. Expo prebuild regenerates native folders by default, so preserve any manual native changes first.
 
 ### Verify dependency changes
 
 ```bash
-npm run check          # TypeScript, zero-warning lint, Expo version alignment
+npm run check          # TypeScript, lint, adapter tests, Expo version alignment
+npm run test:integrations # Isolated RevenueCat adapter tests; no live services
 npm run doctor         # Expo project and native dependency checks
 npm run export:native  # iOS + Android production bundles with Hermes bytecode
+npm audit --audit-level=high # Current upstream advisories fail this gate
 ```
 
-GitHub Actions runs these checks on main pushes and pull requests. They do not replace native compilation and simulator/device testing. The current web static export is blocked by the native SecureStore session adapter, and HeroUI Native does not guarantee web support; browser runtime is not certified. See the [audit](docs/dependency-upgrade-audit.md) for exact verification results.
+GitHub Actions runs validation on main pushes and pull requests. The security gate currently fails on two unpatched upstream high-severity advisories in `braces` and `node-forge`; a clean CI result is not claimed. These checks do not replace native compilation and simulator/device testing.
+
+Native SecureStore session storage has no web adapter, and HeroUI Native does not guarantee web support. Browser testing was not performed, Android has no local SDK, and live services remain unverified. See the [audit](docs/dependency-upgrade-audit.md) for current build and check results; earlier SDK 57 results do not certify SDK 58.
 
 ## 📁 Project Structure
 
@@ -247,6 +255,8 @@ npm run web           # Run web version
 
 # Code Quality
 npm run lint          # Run ESLint
+npm run check         # Types, lint, adapter tests, and Expo alignment
+npm run test:integrations # Run isolated RevenueCat adapter tests
 
 # Database
 npm run generate-types # Generate TypeScript types from Supabase

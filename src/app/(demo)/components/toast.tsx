@@ -7,7 +7,7 @@ import {
   type ToastComponentProps,
 } from 'heroui-native';
 import { useCallback, useRef, useState } from 'react';
-import { Platform, TextInput, View } from 'react-native';
+import { Platform, TextInput, View, type TextInputInstance } from 'react-native';
 import { withUniwind } from 'uniwind';
 import type { UsageVariant } from '../../../components/component-presentation/types';
 import { UsageVariantFlatList } from '../../../components/component-presentation/usage-variant-flatlist';
@@ -296,7 +296,7 @@ const KeyboardAvoidingContent = () => {
 
   const { toast } = useToast();
 
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<TextInputInstance>(null);
 
   const themeColorForeground = useThemeColor('foreground');
 

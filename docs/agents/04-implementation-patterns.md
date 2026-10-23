@@ -3,14 +3,14 @@
 ## File And Component Conventions
 
 - Routes live in `src/app` using Expo Router file conventions and route groups like `(auth)`, `(tabs)`, `(onboarding)`, and `(demo)`.
-- The main `(tabs)` layout uses `NativeTabs` from `expo-router/unstable-native-tabs`; tab bar entries are declared explicitly with static `NativeTabs.Trigger` children whose `name` values match the route manifest entries.
+- The main `(tabs)` layout uses `NativeTabs` from the stable `expo-router/native-tabs` entry point; tab bar entries are declared explicitly with static `NativeTabs.Trigger` children whose `name` values match the route manifest entries.
 - Shared app providers live in `src/contexts`.
 - Shared hooks live in `src/hooks`.
 - Service clients and integration helpers live in `src/lib`.
 - Local persistence adapters live in `src/storage`.
 - Shared UI components live in `src/components`.
 - Demo-specific components live under `src/components/showcases`, `src/components/themes-content`, `src/components/select`, `src/components/toast`, and `src/components/component-presentation`.
-- `src/app/(demo)` is intentionally mirrored from `/Users/armin/Projects/heroui-native-example/src/app/(home)`. When refreshing it, copy that tree exactly and put compatibility fixes in shared support files instead of editing mirrored route files.
+- `src/app/(demo)` originates from `/Users/armin/Projects/heroui-native-example/src/app/(home)`. Preserve the upstream demo behavior when refreshing it. Prefer shared support files for compatibility fixes; the toast route also has a local `TextInputInstance` ref migration for RN 0.88.
 - Project assets are split between root `assets/` and `src/assets/`; current auth screens use `src/assets/images/logo.png`, while app/demo config and showcases use root `assets/`.
 
 ## Imports And Naming
@@ -20,7 +20,7 @@
 - Components are PascalCase. Hooks use `use*`.
 - Route files generally default-export screen components.
 - Shared wrapper text component is `AppText`; many demo components use it, while placeholder app tabs use React Native `Text`.
-- With SDK 56, do not import `@react-navigation/*` directly from app code. Use `expo-router` for router hooks such as `useFocusEffect`, and `expo-router/react-navigation` for navigation theme/header helpers such as `ThemeProvider`, `DarkTheme`, `DefaultTheme`, and `useHeaderHeight`.
+- Do not import `@react-navigation/*` directly from app code. Use `expo-router` for router hooks such as `useFocusEffect`, and `expo-router/react-navigation` for navigation theme/header helpers such as `ThemeProvider`, `DarkTheme`, `DefaultTheme`, and `useHeaderHeight`.
 
 ## Styling Patterns
 
@@ -28,12 +28,12 @@
 - HeroUI Native supplies components and helpers such as `Button`, `Card`, `Chip`, `Dialog`, `Select`, `Surface`, `Toast`, `cn`, and `useThemeColor`.
 - Use `withUniwind()` for icon or animated components that need className styling.
 - Theme tokens are CSS variables in `themes/*.css` and consumed through HeroUI/Uniwind token classes such as `bg-background`, `text-foreground`, `text-muted`, and `bg-surface`.
-- Extra theme files must define the same variable set as HeroUI Native 1.0.3 default themes, including `surface-secondary`, `surface-tertiary`, `backdrop`, `separator`, `focus`, and shadow variables. Use `separator`, not the older `divider` token.
+- Extra theme files must define the HeroUI Native 1.0 token set, including `surface-secondary`, `surface-tertiary`, `backdrop`, `separator`, `focus`, and shadow variables. Use `separator`, not the older `divider` token.
 - Native tab colors are configured in `src/app/(tabs)/_layout.tsx`; iOS uses `DynamicColorIOS` so Liquid Glass tab items adapt between light and dark appearances, while Android/web use theme-aware fallback colors.
 - `global.css` imports Tailwind, Uniwind, HeroUI Native styles, and theme CSS.
 - Use `cn()` from `heroui-native` to combine class strings in existing patterns.
-- HeroUI Native 1.0.3 uses standalone field subcomponents: `TextField` wraps standalone `Label`, `Input`, `Description`, and `FieldError`; `ControlField` replaces the older `FormField` root; `Separator` replaces the older `Divider` component.
-- For HeroUI 1.0.3 selection controls, `RadioGroup.Item` wraps standalone `Radio`, `Radio.Indicator`, and `Radio.IndicatorThumb`; do not use the removed `RadioGroup.Label`, `RadioGroup.Description`, `RadioGroup.ErrorMessage`, or `RadioGroup.Indicator` API.
+- HeroUI Native 1.0 uses standalone field subcomponents: `TextField` wraps standalone `Label`, `Input`, `Description`, and `FieldError`; `ControlField` replaces the older `FormField` root; `Separator` replaces the older `Divider` component.
+- For HeroUI 1.0 selection controls, `RadioGroup.Item` wraps standalone `Radio`, `Radio.Indicator`, and `Radio.IndicatorThumb`; do not use the removed `RadioGroup.Label`, `RadioGroup.Description`, `RadioGroup.ErrorMessage`, or `RadioGroup.Indicator` API.
 - `Popover.Content` and `Select.Content` should declare `presentation` (`popover`, `dialog`, or `bottom-sheet`) explicitly. `Select` value handlers often need local option-type casts because the library exposes a generic `SelectOption`.
 - `SafeAreaView` is an animated full-height `View` wrapper. `SafeAreaView` and `ScreenScrollView` pad the top by `Math.max(useHeaderHeight(), insets.top)` so headerless tab screens still stay below the status area. Use `ScreenScrollView` for scroll-view props such as `contentContainerClassName`.
 
@@ -66,7 +66,8 @@
 - Supabase Auth persistence uses an AsyncStorage-compatible adapter over encrypted MMKV.
 - MMKV stores are created with the v4 `createMMKV()` API. Use `mode: "multi-process"` for shared local stores and `storage.remove(key)` for deletes.
 - The MMKV session store uses id `session-v4`, `encryptionType: "AES-256"`, and a 32-character key generated with Expo Crypto and stored in Expo SecureStore. Older v3 sessions are intentionally not migrated, so users may need to sign in once after the v4 change.
-- On sign-in, `AuthProvider` redirects to the configured entrance tab, logs in to RevenueCat, and identifies the user in PostHog.
+- On sign-in, `AuthProvider` redirects to the configured entrance tab, attempts optional RevenueCat login, and identifies the user in PostHog. It catches RevenueCat rejection without changing the Supabase session.
+- RevenueCat native calls require iOS and a nonblank `EXPO_PUBLIC_APPLE_PURCHASES_API_KEY`. Share concurrent initialization, await native promise-returning APIs, and let failed initialization retry. `Purchases.configure()` itself returns `void`. Offering reads belong in an effect; ignore results after unmount and handle errors. Android purchases remain unimplemented.
 - On sign-out, `AuthProvider` redirects to `/(auth)/sign-in`.
 - Root `src/app/index.tsx` currently bypasses auth gating for unauthenticated users; do not assume auth protection is enforced by root routing.
 - PostHog provider config uses `autocapture={false}` and `options.captureAppLifecycleEvents: true`. Do not use the older `autocapture.captureLifecycleEvents` option shape with the current `posthog-react-native` version. When `EXPO_PUBLIC_POSTHOG_API_KEY` is blank, `Providers` passes a disabled in-memory PostHog client so hooks remain safe without emitting the missing-key runtime error.
@@ -80,10 +81,10 @@
 
 ## Testing Patterns
 
-- No project test patterns are established.
-- No test command, test framework config, or test files are present.
-- For now, validate changes with TypeScript/Expo build/lint commands that are relevant to the change. Add a test framework only when a task explicitly requires it or the scope justifies it.
-- SDK 56 lint includes stricter React hooks/Compiler rules. For Reanimated shared values, prefer the compiler-compatible `sharedValue.get()` and `sharedValue.set(...)` APIs over mutating or reading `.value` in render-time callbacks.
+- `npm run test:integrations` runs `scripts/check-revenuecat.cjs` with Node's built-in test runner. It transpiles the actual adapter with the existing TypeScript dependency and mocks React/native boundaries; it does not certify a device or live RevenueCat service.
+- `npm run check` includes those tests, TypeScript, zero-warning lint, and Expo alignment. No UI/end-to-end test framework is installed; add one only when the task justifies it.
+- Keep Hermes bytecode enabled for native exports, and use native compilation/runtime checks for native ABI changes. Consult the dependency audit for current results and known security gate failures.
+- For Reanimated shared values, prefer the compiler-compatible `sharedValue.get()` and `sharedValue.set(...)` APIs over mutating or reading `.value` in render-time callbacks.
 
 ## Framework-Specific Gotchas
 
@@ -98,9 +99,10 @@
 - Use `npm run check`, `npm run doctor`, and `npm run export:native` when changing dependencies. No reset-project helper exists.
 - `src/uniwind-types.d.ts` is generated; do not edit it manually.
 - `src/types/expo-runtime.d.ts` references Expo's ambient asset types so clean-checkout typechecking does not depend on ignored CLI-generated `expo-env.d.ts` or `.expo/` files.
-- `heroui-native` is pinned exactly to `1.0.9`; it keeps the 1.0 standalone field/control APIs. Do not reintroduce removed APIs such as `TextField.Input`, `FormField`, `Divider`, `ErrorView`, or `RadioGroup.Label`. HeroUI styles now register their own Tailwind source.
-- SDK 56 rejects the old `android.edgeToEdgeEnabled` app config field and no longer needs an explicit `newArchEnabled` flag.
-- SDK 56 Expo Router is not compatible with direct app dependencies on `@react-navigation/*`; keep navigation imports routed through Expo Router entry points.
+- `heroui-native` is pinned exactly to `1.0.11`; it keeps the 1.0 standalone field/control APIs. Do not reintroduce removed APIs such as `TextField.Input`, `FormField`, `Divider`, `ErrorView`, or `RadioGroup.Label`. HeroUI styles register their own Tailwind source.
+- SDK 58 does not use the old `android.edgeToEdgeEnabled` or `newArchEnabled` app config flags. Keep navigation imports routed through Expo Router entry points.
+- RN 0.88 refs use exported instance types: `TextInstance` in `AppText`, and `TextInputInstance` in the toast demo. `AppState.currentState` may be null; the OTA hook compares explicit inactive/background values rather than calling string methods on it.
+- Masked View 0.3.2 still declares the removed `NativeMethods` mixin. The Raycast progressive blur component has a local `ComponentType<MaskedViewProps>` bridge that retains its published props; do not globally weaken React Native types or change its runtime for this declaration mismatch.
 - The mirrored HeroUI Native example uses plain string `router.push()` values. Keep `src/types/expo-router-relaxed.d.ts` unless the mirrored source switches to strict `Href` values.
 
 ## What To Avoid
@@ -111,7 +113,7 @@
 - Do not put backend secrets in app code; `EXPO_PUBLIC_*` variables are client-visible.
 - Do not assume generated Supabase types mean UI or workflows exist.
 - Do not edit generated Uniwind declarations by hand.
-- Native projects are generated and ignored. `npm run ios` creates the iOS project; `npm run ios:pods` only refreshes an existing project. SDK 57 prebuild regenerates native folders by default.
+- Native projects are generated and ignored. `npm run ios` creates the iOS project; `npm run ios:pods` only refreshes an existing project. Expo prebuild regenerates native folders by default.
 
 ## Current Gaps Worth Remembering
 
@@ -122,6 +124,5 @@
 - PostHog provider exists, but autocapture is disabled.
 - Supabase profile read path still needs schema alignment before being treated as production-ready; `useUser()` reads Supabase Auth user data rather than selecting the `profile` table.
 - Root font loading includes Roboto Slab, Inter 600, and Lora 400/500; route providers wait for font loading to finish.
-- `npm run lint` currently passes with no warnings.
-- `npx tsc --noEmit` currently passes.
-- Supabase 2.115.0 resolves the old OpenTelemetry/Hermes export failure. Keep Hermes enabled in production export checks; `--no-bytecode` is not a release validation substitute.
+- Current lint/typecheck/build evidence is recorded in `docs/dependency-upgrade-audit.md`; do not carry SDK 57 proof forward to SDK 58.
+- Supabase 2.118.0 retains the upstream optional-tracing separation. Keep normal `createClient` imports and Hermes bytecode enabled; do not add tracing shims or treat `--no-bytecode` as release verification.

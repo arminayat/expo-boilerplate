@@ -58,8 +58,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (newSession?.user?.id) {
-        loginWithRevenueCat({
+        void loginWithRevenueCat({
           userId: newSession.user.id,
+        }).catch((error) => {
+          console.warn("Unable to identify RevenueCat user", error);
         });
         posthog.identify(newSession.user.id);
       }

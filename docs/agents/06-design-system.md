@@ -60,7 +60,7 @@ Implemented patterns:
 Primary UI library:
 
 - `heroui-native` for buttons, cards, chips, dialogs, popovers, selects, tabs, surfaces, radio groups, checkboxes, form fields, toasts, utility `cn`, and `useThemeColor`.
-- Expo Router `NativeTabs` for the main app tab bar, using SF Symbols on iOS and Material symbols on Android.
+- Expo Router `NativeTabs` from `expo-router/native-tabs` for the main app tab bar, using SF Symbols on iOS and Material symbols on Android.
 
 Supporting UI/interaction libraries:
 
@@ -118,7 +118,7 @@ Implemented:
 
 - Theme-aware Uniwind/AppThemeProvider integration with HeroUI Native token classes.
 - Light/dark plus lavender/mint/sky theme variants.
-- Extra theme files define the HeroUI Native 1.0 token set, compatible with 1.0.9, including secondary/tertiary surfaces, backdrop, separator, focus, and component shadows. The demo version badge reads the installed HeroUI package version.
+- Extra theme files retain the HeroUI Native 1.0 token set with 1.0.11, including secondary/tertiary surfaces, backdrop, separator, focus, and component shadows. The demo version badge reads the installed HeroUI package version; upgrading it does not establish new visual acceptance evidence.
 - Demo theme selector and theme toggle.
 - Token-based CSS themes.
 - Reanimated demo transitions and local component interactions.
