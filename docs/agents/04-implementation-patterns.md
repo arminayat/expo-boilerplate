@@ -10,8 +10,27 @@
 - Local persistence adapters live in `src/storage`.
 - Shared UI components live in `src/components`.
 - Demo-specific components live under `src/components/showcases`, `src/components/themes-content`, `src/components/select`, `src/components/toast`, and `src/components/component-presentation`.
-- `src/app/(demo)` originates from `https://github.com/heroui-inc/heroui-native/tree/main/example/src/app/(home)`. Preserve the upstream demo behavior when refreshing it. Prefer shared support files for compatibility fixes; the toast route also has a local `TextInputInstance` ref migration for RN 0.88.
+- `src/app/(demo)` originates from `https://github.com/heroui-inc/heroui-native/tree/main/example/src/app/(home)`. Preserve the demonstrated component behavior when refreshing it, while applying the required native navigation rule to navigation chrome. Prefer shared support files for compatibility fixes; the toast route also has a local `TextInputInstance` ref migration for RN 0.88.
 - Project assets are split between root `assets/` and `src/assets/`; current auth screens use `src/assets/images/logo.png`, while app/demo config and showcases use root `assets/`.
+
+## Required iOS Native Navigation
+
+This is a mandatory implementation rule for the boilerplate and derived projects, including newly created or adapted screens. Existing code is not yet fully compliant; the gaps below describe current behavior, not approved alternatives.
+
+- Use Expo Router `Stack` for native navigation and `NativeTabs` from `expo-router/native-tabs` for app tabs. Each tab that needs a header or pushed routes owns a nested `Stack` in its `_layout.tsx`. Keep only one visible native header per screen; a parent navigator may hide its header when the child stack owns it.
+- Configure titles with a string `title` option or `<Stack.Title>`. Use `<Stack.Title large>` (or `headerLargeTitleEnabled`) for scrollable top-level screens where a large title is appropriate. Keep system title typography and built-in back buttons/gestures. Do not use body headings, logo renderers, `Stack.Title asChild`, or `Stack.Header asChild` as substitutes for the screen title/header.
+- Put header actions in `<Stack.Toolbar placement="left">` or `placement="right"`, using `Stack.Toolbar.Button`, `Stack.Toolbar.Menu`, and `Stack.Toolbar.MenuAction`. Supply meaningful labels, native icons, and disabled state when appropriate. These render native iOS bar items; wrapping a custom `Pressable`/HeroUI button in `headerRight`, `headerLeft`, or `Stack.Toolbar.View` does not meet this rule. Keep the system back action available.
+- Make the primary vertical `ScrollView`/`FlatList` fill the screen and remain discoverable by the native screen (prefer it as the first content child), with `contentInsetAdjustmentBehavior="automatic"`. Let the native container account for the header and tab bar; do not add the same header/safe-area inset again as padding. Keep content spacing separate from navigation insets. Large titles collapse when there is enough content to scroll; do not fake collapse with JS scroll listeners.
+- Preserve native scroll-edge transparency and header/action appearance. Do not set `disableTransparentOnScrollEdge` or force fixed backgrounds to suppress system behavior. On iOS 26+, use `NativeTabs`' `minimizeBehavior="onScrollDown"` for scroll-driven minimization/expansion; the system draws the tab background and ignores `disableTransparentOnScrollEdge`. Older iOS versions retain the supported native appearance without a custom emulation.
+- HeroUI tabs remain valid as in-page component examples or content selectors, not as the app navigation bar. Android uses supported platform behavior from the same navigation APIs.
+- Check native title collapse/expansion, header actions, scroll-edge transitions, tab minimization where supported, content insets, and back gestures on an iOS simulator/device when validating navigation changes. Typechecking/export alone does not prove this behavior. Do not browser-test unless explicitly requested.
+
+Current gaps, verified in source:
+
+- `src/app/(tabs)/_layout.tsx` uses native tabs but disables scroll-edge transparency on older iOS, leaves minimization at its default, and has no per-tab stacks or native titles. Adding tab layouts changes trigger names from `tab1/index` etc. to `tab1` etc.; update the declarations together.
+- Root, auth, and settings stacks hide their headers; the tab/profile/settings placeholders render headings or actions in body content. Parent header hiding is valid when a child owns the visible native header.
+- `src/app/(demo)/_layout.tsx` uses a native stack but supplies a custom logo title, custom `ThemeToggle` via `headerRight`, and explicit header styling. The showcase stack hides its headers. These are not compliant product-navigation templates.
+- `ScreenScrollView` currently adds manual top/bottom padding and does not set automatic content inset adjustment; `SafeAreaView` also adds header/safe-area padding. Adapt those wrappers before using them with native scroll-responsive headers, avoiding duplicate insets.
 
 ## Imports And Naming
 
@@ -35,7 +54,7 @@
 - HeroUI Native 1.0 uses standalone field subcomponents: `TextField` wraps standalone `Label`, `Input`, `Description`, and `FieldError`; `ControlField` replaces the older `FormField` root; `Separator` replaces the older `Divider` component.
 - For HeroUI 1.0 selection controls, `RadioGroup.Item` wraps standalone `Radio`, `Radio.Indicator`, and `Radio.IndicatorThumb`; do not use the removed `RadioGroup.Label`, `RadioGroup.Description`, `RadioGroup.ErrorMessage`, or `RadioGroup.Indicator` API.
 - `Popover.Content` and `Select.Content` should declare `presentation` (`popover`, `dialog`, or `bottom-sheet`) explicitly. `Select` value handlers often need local option-type casts because the library exposes a generic `SelectOption`.
-- `SafeAreaView` is an animated full-height `View` wrapper. `SafeAreaView` and `ScreenScrollView` pad the top by `Math.max(useHeaderHeight(), insets.top)` so headerless tab screens still stay below the status area. Use `ScreenScrollView` for scroll-view props such as `contentContainerClassName`.
+- Current legacy wrappers: `SafeAreaView` is an animated full-height `View`; it and `ScreenScrollView` pad the top by `Math.max(useHeaderHeight(), insets.top)` for the existing headerless/translucent screens. This is not the required native scroll-inset pattern; see the navigation guidance above before reuse. `contentContainerClassName` belongs to a scroll view, not `SafeAreaView`.
 
 ## Data Fetching Patterns
 

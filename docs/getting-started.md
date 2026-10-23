@@ -76,11 +76,13 @@ The app opens **Home** in the three-tab shell. The profile tab's **Demo** button
 
 1. Change the display name, slug, URL scheme, `ios.bundleIdentifier`, and `android.package` in `app.json`. Defaults still identify the HeroUI demo shell; choose identifiers you own.
 2. Replace icons, splash images, auth logo, and demonstration branding. Review [NOTICE](../NOTICE) and [asset notices](third-party-notices.md).
-3. Build your product routes in `src/app/(tabs)` and replace the placeholder onboarding/settings screens.
+3. Build your product routes in `src/app/(tabs)` and replace the placeholder onboarding/settings screens. Always use iOS native navigation and tabs, native screen titles, and native header actions, with system scroll behavior. Keep this requirement in your derived project's `AGENTS.md` and knowledge base.
 4. Set the unauthenticated redirect in `src/app/index.tsx` to your intended route. The current shell deliberately allows signed-out access.
 5. Replace sample schema types and hooks with your own data model and server-side authorization. Theme files live at the repository root under `themes/`.
 6. Remove the demo routes/supporting assets if you do not need the gallery. They include example store links and remote HeroUI-hosted imagery; adapt store/update helpers to your own app before release.
 7. Rebuild whenever native dependencies, plugins, identifiers, or entitlements change.
+
+Navigation is a required convention for every derived app: use Expo Router `Stack`, `NativeTabs`, native titles, and native `Stack.Toolbar` buttons/menus. Connect scrollable screens to automatic native insets so large titles, scroll-edge appearance, and supported tab minimization work naturally. Existing placeholders and copied demos still have navigation gaps; follow the [implementation guidance](agents/04-implementation-patterns.md#required-ios-native-navigation) when adapting them instead of copying custom header UI or manual inset handling.
 
 ## 6. Validate
 

@@ -4,6 +4,16 @@ This repository uses `docs/agents/` as persistent project memory. Start here, th
 
 Code is the source of truth. README files, briefs, specs, generated types, and product notes describe intent only when the behavior is not implemented in code. When intent and code disagree, document the current implementation separately from planned or aspirational behavior.
 
+## Required iOS Navigation
+
+This rule applies to this boilerplate and every project derived from it. Retain it when copying, customizing, or regenerating project instructions.
+
+- Always use actual iOS native navigation and tabs: Expo Router `Stack` and `NativeTabs` from `expo-router/native-tabs`. Do not substitute JavaScript tab bars or navigation components that only look native.
+- Screen titles, back navigation, and header actions belong to the native stack header. Use native text titles and `Stack.Toolbar` buttons/menus for header actions; do not recreate them in screen content, custom header renderers, or floating overlays.
+- Native navigation must respond to scrolling: use native large-title collapse where appropriate, preserve system scroll-edge appearance, and use native tab minimization on supported iOS versions. Connect the screen's scroll view/list to automatic native content insets; do not simulate header or tab transitions in JavaScript.
+- Keep native system typography, gestures, accessibility, and OS-version fallbacks. HeroUI Native remains appropriate for screen content, not as a replacement for navigation chrome.
+- Existing placeholder screens and copied demos do not override this rule. When adapting them into product screens, fix their navigation to comply. See [implementation guidance and current gaps](docs/agents/04-implementation-patterns.md#required-ios-native-navigation) and the [design system](docs/agents/06-design-system.md#required-navigation-and-scroll-behavior).
+
 ## Memory Index
 
 - `docs/agents/01-app-overview.md` - product purpose, implemented flows, intended direction, boundaries, and non-goals.

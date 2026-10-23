@@ -9,12 +9,21 @@ Current implementation combines two surfaces:
 
 The most established design direction in code is the HeroUI Native demo system: token-driven light/dark themes, soft surfaces, animated interactions, icon-rich controls, and mobile-first layouts.
 
+## Required Navigation And Scroll Behavior
+
+All projects based on this boilerplate must use actual iOS native navigation, tabs, titles, and header actions. This is a product requirement, not a visual preference. Expo Router owns navigation chrome; HeroUI Native styles the content inside screens.
+
+- Use the native stack header for the screen title, back button, and header actions, with system typography and native toolbar buttons/menus. Do not draw equivalent controls in a page header or overlay.
+- Let iOS respond to scrolling: large titles collapse into the compact native header where appropriate, native header/action surfaces respond at scroll edges, and native tabs minimize/expand on supported iOS versions. Preserve safe areas and content/indicator insets through native scroll integration.
+- Use the system's appearance on each supported iOS version, including Liquid Glass where available. Do not emulate it with custom blur, animated headers, or custom tab bars.
+- Copied showcases and placeholder screens are not exceptions or approved templates for product navigation. Current gaps and exact Expo APIs are documented in [implementation patterns](04-implementation-patterns.md#required-ios-native-navigation); this documentation update does not itself migrate those screens.
+
 ## Typography
 
 Implemented:
 
 - Root layout loads Roboto Slab weights 100 through 900 using `@expo-google-fonts/roboto-slab`.
-- Root also loads Inter 600 for native headers and Lora 400/500 for toasts, and waits for fonts before mounting providers/routes (font errors allow fallback rendering).
+- Root also loads Inter 600 for the existing demo headers and Lora 400/500 for toasts, and waits for fonts before mounting providers/routes (font errors allow fallback rendering). Required product headers use native system typography; the demo font override is a legacy pattern.
 - `HeroUINativeProvider` sets `textProps.allowFontScaling` to `false`; theme selection is handled by `AppThemeProvider` and Uniwind rather than provider `theme` or `colorScheme` config.
 - `AppText` wraps React Native `Text` with `font-normal`.
 
@@ -50,8 +59,8 @@ Primary token families used in code:
 Implemented patterns:
 
 - Mobile-first vertical stacks with `flex-1`, `gap-*`, `px-*`, and safe-area/header offsets.
-- `ScreenScrollView` sets `bg-background`, default horizontal padding, top padding from header height, and bottom padding from safe-area insets.
-- `SafeAreaView` fills the screen, sets `bg-background`, and applies safe-area bottom padding; on iOS it uses header height for top padding.
+- `ScreenScrollView` currently sets `bg-background`, default horizontal padding, top padding from header/safe-area height, and bottom padding from safe-area insets. This manual inset behavior needs adaptation for the required native scroll integration.
+- `SafeAreaView` fills the screen, sets `bg-background`, and applies manual header/safe-area padding. Do not duplicate these insets when a native container already manages them.
 - Demo cards and component surfaces often use `rounded-2xl` or larger radii, while auth screens use a different early style.
 - Showcases favor full-screen compositions rather than nested page cards.
 
@@ -85,12 +94,12 @@ Current concerns:
 - Some placeholder screens have minimal semantics and no accessibility-specific handling.
 - Several demo actions are simulated and may not represent final accessible product flows.
 
-## Product UX Principles Reflected In Code
+## Product UX Principles
 
 - Keep the main app shell simple until real product behavior exists.
-- Prefer platform-native tab behavior for the main shell; on iOS 26+ the native tab bar provides the Liquid Glass appearance through system tabs.
+- Always use native navigation, tabs, titles, and header actions, with system scroll behavior, as required above; on iOS 26+ the native tab bar provides the Liquid Glass appearance through system tabs.
 - Use tokenized theme classes rather than hard-coded colors for reusable surfaces.
-- Prefer HeroUI Native primitives before custom-building common controls.
+- Prefer HeroUI Native primitives for content controls; navigation chrome must use the native APIs above.
 - Keep demo/showcase state local unless it represents real app data.
 - Use motion and haptics to clarify interactions, but respect reduced-motion state where implemented.
 - Use full-screen mobile compositions for showcase experiences.
